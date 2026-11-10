@@ -89,7 +89,7 @@ input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-
 <div class="wide"><label class="field" for="address">Postal address / room (optional)</label><input id="address" type="text" value="Polhill Avenue, Bedford, MK41 9EA"></div>
 <div><label class="field" for="phone">Telephone</label><input id="phone" type="tel" value="+44 (0)1234 793093"></div>
 <div><label class="field" for="email">Email</label><input id="email" type="email" value="alex.taylor@beds.ac.uk"></div>
-<div><label class="field" for="website">Staff profile URL (optional)</label><input id="website" type="text" value="https://www.beds.ac.uk/"></div>
+<div><label class="field" for="website">Staff profile URL (optional)</label><input id="website" type="text" placeholder="https://www.beds.ac.uk/staff/profile/" value=""></div>
 <div><label class="field" for="orcid">ORCID (optional)</label><input id="orcid" type="text" placeholder="0000-0000-0000-0000"></div>
 </div>
 <div class="section"><h2>02 / Signature format</h2><p class="muted">Choose the right amount of detail for each email.</p><div class="mode-grid">
@@ -114,14 +114,14 @@ input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-
 'use strict';
 var MAX=3, mode='standard', selectedLogos=[],selectedClaims=[];
 var LOGOS=[
-{id:'cases',name:'CASES',file:'assets/logos/cases.png',note:'Chartered Association of Sport and Exercise Sciences. Use only where relevant.'},
-{id:'bases',name:'BASES Accredited Laboratory',file:'assets/logos/bases-accredited-lab.png',note:'Only for laboratories with this accreditation.'},
-{id:'qaa',name:'QAA UK Quality Assured',file:'assets/logos/qaa.png',note:'Quality assurance branding. Check University approval for use.'},
-{id:'people',name:'People & Planet Award',file:'assets/logos/people-and-planet.png',note:'Historical 2023/24 award. Do not imply this is the current year.'},
-{id:'psa',name:'Professional Standards Authority Accredited Register',file:'assets/logos/psa.png',note:'For the relevant accredited-register context only.'},
-{id:'basrat',name:'BASRaT',file:'assets/logos/basrat.png',note:'British Association of Sport Rehabilitators. Relevant programmes only.'},
-{id:'cimspa',name:'CIMSPA Higher Education Partner',file:'assets/logos/cimspa.png',note:'Higher Education Partner status. Relevant programme or school only.'},
-{id:'career',name:'Career Powered Education',file:'assets/logos/career-powered.png',note:'University campaign branding.'}
+{id:'cases',name:'CASES',w:533,h:382,file:'assets/logos/cases.png',note:'Chartered Association of Sport and Exercise Sciences. Use only where relevant.'},
+{id:'bases',name:'BASES Accredited Laboratory',w:476,h:247,file:'assets/logos/bases-accredited-lab.jpg',note:'Only for laboratories with this accreditation.'},
+{id:'qaa',name:'QAA UK Quality Assured',w:149,h:77,file:'assets/logos/qaa.png',note:'Quality assurance branding. Check University approval for use.'},
+{id:'people',name:'People & Planet Award',w:388,h:177,file:'assets/logos/people-and-planet.png',note:'Historical 2023/24 award. Do not imply this is the current year.'},
+{id:'psa',name:'Professional Standards Authority Accredited Register',w:348,h:158,file:'assets/logos/psa.png',note:'For the relevant accredited-register context only.'},
+{id:'basrat',name:'BASRaT',w:314,h:171,file:'assets/logos/basrat.png',note:'British Association of Sport Rehabilitators. Relevant programmes only.'},
+{id:'cimspa',name:'CIMSPA Higher Education Partner',w:506,h:126,file:'assets/logos/cimspa.jpg',note:'Higher Education Partner status. Relevant programme or school only.'},
+{id:'career',name:'Career Powered Education',w:690,h:687,file:'assets/logos/career-powered.jpg',note:'University campaign branding.'}
 ];
 var CLAIMS=[
 {id:'subject15',figure:'15th',headline:'in the UK for Sports Science',source:'Guardian University Guide 2027'},
@@ -181,7 +181,7 @@ if(mode==='compact'||!selectedLogos.length)return '';
 var elems=selectedLogos.map(logoById).filter(Boolean),rows='';
 for(var i=0;i<elems.length;i+=3){
 rows+='<tr>';
-for(var j=0;j<3;j++){var l=elems[i+j];rows+='<td width="33%" style="width:33%;padding:7px 12px 7px 0;vertical-align:middle;">'+(l?'<img src="'+esc(asset(l.file,exported))+'" alt="'+esc(l.name)+'" width="150" style="display:block;max-width:150px;max-height:58px;width:auto;height:auto;border:0;">':'&nbsp;')+'</td>'}
+for(var j=0;j<3;j++){var l=elems[i+j], scale=l?Math.min(150/l.w,58/l.h,1):1, width=l?Math.round(l.w*scale):0, height=l?Math.round(l.h*scale):0;rows+='<td width="33%" style="width:33%;padding:7px 12px 7px 0;vertical-align:middle;">'+(l?'<img src="'+esc(asset(l.file,exported))+'" alt="'+esc(l.name)+'" width="'+width+'" height="'+height+'" style="display:block;width:'+width+'px;height:'+height+'px;border:0;">':'&nbsp;')+'</td>'}
 rows+='</tr>';
 }
 return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:13px;"><tr><td colspan="3" style="height:5px;font-size:1px;">&nbsp;</td></tr>'+rows+'</table>';
