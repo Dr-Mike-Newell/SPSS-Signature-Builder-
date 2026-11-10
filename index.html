@@ -89,7 +89,7 @@ input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-
 <div class="wide"><label class="field" for="address">Postal address / room (optional)</label><input id="address" type="text" value="Polhill Avenue, Bedford, MK41 9EA"></div>
 <div><label class="field" for="phone">Telephone</label><input id="phone" type="tel" value="+44 (0)1234 793093"></div>
 <div><label class="field" for="email">Email</label><input id="email" type="email" value="alex.taylor@beds.ac.uk"></div>
-<div><label class="field" for="website">Staff page / website (optional)</label><input id="website" type="text" value="https://www.beds.ac.uk/"></div>
+<div><label class="field" for="website">Staff profile URL (optional)</label><input id="website" type="text" value="https://www.beds.ac.uk/"></div>
 <div><label class="field" for="orcid">ORCID (optional)</label><input id="orcid" type="text" placeholder="0000-0000-0000-0000"></div>
 </div>
 <div class="section"><h2>02 / Signature format</h2><p class="muted">Choose the right amount of detail for each email.</p><div class="mode-grid">
@@ -114,10 +114,14 @@ input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-
 'use strict';
 var MAX=3, mode='standard', selectedLogos=[],selectedClaims=[];
 var LOGOS=[
-{id:'career',name:'Career Powered Education',file:'assets/logos/career-powered.png',note:'University campaign branding'},
-{id:'cimspa',name:'CIMSPA Higher Education Partner',file:'assets/logos/cimspa.png',note:'Relevant programme / school accreditation'},
-{id:'basrat',name:'BASRaT',file:'assets/logos/basrat.png',note:'Accredited programmes only'},
-{id:'psa',name:'Professional Standards Authority register',file:'assets/logos/psa.png',note:'Appropriate register / programme only'}
+{id:'cases',name:'CASES',file:'assets/logos/cases.png',note:'Chartered Association of Sport and Exercise Sciences. Use only where relevant.'},
+{id:'bases',name:'BASES Accredited Laboratory',file:'assets/logos/bases-accredited-lab.png',note:'Only for laboratories with this accreditation.'},
+{id:'qaa',name:'QAA UK Quality Assured',file:'assets/logos/qaa.png',note:'Quality assurance branding. Check University approval for use.'},
+{id:'people',name:'People & Planet Award',file:'assets/logos/people-and-planet.png',note:'Historical 2023/24 award. Do not imply this is the current year.'},
+{id:'psa',name:'Professional Standards Authority Accredited Register',file:'assets/logos/psa.png',note:'For the relevant accredited-register context only.'},
+{id:'basrat',name:'BASRaT',file:'assets/logos/basrat.png',note:'British Association of Sport Rehabilitators. Relevant programmes only.'},
+{id:'cimspa',name:'CIMSPA Higher Education Partner',file:'assets/logos/cimspa.png',note:'Higher Education Partner status. Relevant programme or school only.'},
+{id:'career',name:'Career Powered Education',file:'assets/logos/career-powered.png',note:'University campaign branding.'}
 ];
 var CLAIMS=[
 {id:'subject15',figure:'15th',headline:'in the UK for Sports Science',source:'Guardian University Guide 2027'},
@@ -168,7 +172,7 @@ function contactRow(){
 var bits=[],phone=value('phone'),email=value('email'),web=safeWebsite(value('website')),orcid=value('orcid').replace(/[^0-9Xx-]/g,'');
 if(phone)bits.push('<span style="color:#707070">T:</span> '+esc(phone));
 if(email)bits.push('<span style="color:#707070">E:</span> <a style="color:#252525;text-decoration:underline;" href="mailto:'+esc(email)+'">'+esc(email)+'</a>');
-if(mode!=='compact'&&web)bits.push('<span style="color:#707070">W:</span> <a href="'+esc(web)+'" style="color:#252525;text-decoration:underline;">'+esc(value('website').replace(/^https?:\/\//i,''))+'</a>');
+if(web)bits.push('<span style="color:#707070">W:</span> <a href="'+esc(web)+'" style="color:#252525;text-decoration:underline;">Staff Weblink</a>');
 if(mode!=='compact'&&orcid)bits.push('<span style="color:#707070">ORCID:</span> <a href="https://orcid.org/'+esc(orcid)+'" style="color:#252525;text-decoration:underline;">'+esc(orcid)+'</a>');
 return bits.join('<span style="padding:0 6px;color:#c8102e;"> | </span>');
 }
