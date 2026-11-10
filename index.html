@@ -125,7 +125,7 @@ var CLAIMS=[
 {id:'career12',figure:'12th',headline:'in the UK for career prospects',source:'Guardian University Guide 2027'},
 {id:'satisfaction13',figure:'13th',headline:'in the UK for student satisfaction',source:'Complete University Guide 2027'},
 {id:'graduate6',figure:'6th',headline:'in the UK for graduate prospects',source:'The Times Good University Guide 2027'},
-{id:'academic91',figure:'91%',headline:'for academic support, Sport and Exercise Sciences',source:'National Student Survey 2026'}
+{id:'academic91',figure:'91%',headline:'of Sport and Exercise Sciences students satisfied with academic support',source:'National Student Survey 2026'}
 ];
 var $=function(id){return document.getElementById(id)};
 var fields=['name','postnominals','job','school','faculty','address','phone','email','website','orcid'];
@@ -151,7 +151,7 @@ CLAIMS.forEach(function(c){
 var picked=selectedClaims.indexOf(c.id)!==-1,btn=document.createElement('button');
 btn.type='button';btn.className='claim'+(picked?' selected':'');btn.setAttribute('aria-pressed',String(picked));
 btn.innerHTML='<strong>'+esc(c.figure)+'</strong><span class="claim-text"><b>'+esc(c.headline)+'</b><span class="claim-source">'+esc(c.source)+'</span></span><span class="tick" aria-hidden="true">'+(picked?'✓':'+')+'</span>';
-btn.onclick=function(){var i=selectedClaims.indexOf(c.id);if(i>=0)selectedClaims.splice(i,1);else if(selectedClaims.length<MAX)selectedClaims.push(c.id);else{setStatus('Select a maximum of three marketing claims. Remove one before adding another.',true);return}if(selectedClaims.length && mode==='standard')mode='promotional';update()};
+btn.onclick=function(){var i=selectedClaims.indexOf(c.id);if(i>=0)selectedClaims.splice(i,1);else if(selectedClaims.length<MAX)selectedClaims.push(c.id);else{setStatus('Select a maximum of three marketing claims. Remove one before adding another.',true);return}if(selectedClaims.length && mode!=='promotional')mode='promotional';update()};
 cg.appendChild(btn);
 });
 var order=$('claimOrder');order.innerHTML='';
