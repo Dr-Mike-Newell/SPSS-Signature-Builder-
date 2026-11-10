@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>SPSS Email Signature Builder | University of Bedfordshire</title>
+<style>
+:root{--red:#c8102e;--red-dark:#9c0b28;--ink:#161616;--muted:#63666a;--line:#dfe1e4;--paper:#fff;--canvas:#f4f5f6;--radius:12px}
+*{box-sizing:border-box}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-size:14px}
+header{background:#0b0b0e;color:#fff;border-bottom:5px solid var(--red);padding:25px clamp(18px,5vw,72px)}
+.header-inner{max-width:1440px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
+header h1{margin:0;font-size:clamp(21px,2.2vw,29px);letter-spacing:-.4px}
+header p{margin:7px 0 0;color:#bfc1c6;font-size:13px;line-height:1.5}
+.kicker{font-size:11px;color:#f7a9bb;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:8px}
+.brand-mark{width:44px;height:44px;background:var(--red);clip-path:polygon(0 12%,21% 12%,21% 68%,47% 68%,47% 0,68% 0,68% 68%,100% 68%,100% 100%,0 100%);flex:none;opacity:.95}
+.shell{max-width:1440px;margin:26px auto 28px;padding:0 20px;display:grid;grid-template-columns:minmax(320px,440px) minmax(0,1fr);gap:22px;align-items:start}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 16px #171b2510}
+.settings{padding:22px}
+.panel-title{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 15px}
+h2{font-size:17px;margin:0;letter-spacing:-.2px}
+small,.muted{font-size:12px;color:var(--muted);line-height:1.5}
+.section{border-top:1px solid var(--line);padding-top:20px;margin-top:22px}
+.section>h2{margin-bottom:7px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.field-grid .wide{grid-column:1/-1}
+label.field{display:block;font-size:12px;font-weight:700;color:#3b3c42;margin:14px 0 5px}
+input[type="text"],input[type="email"],input[type="tel"],select{display:block;width:100%;padding:10px 11px;border:1px solid #c6c8cf;border-radius:6px;font:13px Arial,Helvetica,sans-serif;background:#fff;color:#171717;min-height:40px}
+input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-offset:2px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}
+.mode{background:#f8f8f9;border:1px solid #d7d7da;border-radius:8px;padding:11px 7px;text-align:center;color:#303036;font-size:12px;font-weight:700;cursor:pointer}
+.mode.active{background:#fff0f3;border-color:var(--red);color:var(--red-dark);box-shadow:inset 0 0 0 1px var(--red)}
+.logo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}
+.logo-tile{display:flex;min-height:103px;flex-direction:column;justify-content:center;align-items:center;position:relative;text-align:center;background:#fff;border:1px solid #d6d8db;border-radius:9px;padding:13px 8px 9px;cursor:pointer;overflow:hidden;gap:9px}
+.logo-tile.selected{border-color:var(--red);background:#fff7f8;box-shadow:inset 0 0 0 1px var(--red)}
+.logo-tile img{display:block;max-width:100%;max-height:46px;object-fit:contain}
+.logo-tile .logo-text{font-weight:700;font-size:13px;color:#333;line-height:1.2}
+.logo-tile .tile-name{font-size:11px;line-height:1.25;color:#53565b}
+.logo-tile .tick{position:absolute;right:7px;top:7px;background:#eee;color:#444;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:12px}
+.logo-tile.selected .tick{background:var(--red);color:white}
+.logo-tile:disabled{opacity:.5;cursor:not-allowed}
+.claims{display:grid;gap:8px;margin-top:12px}
+.claim{display:flex;text-align:left;align-items:center;gap:12px;width:100%;border:1px solid #dedfe2;border-radius:8px;background:#fff;padding:11px 10px;color:inherit;cursor:pointer}
+.claim.selected{background:#fff4f6;border-color:var(--red)}
+.claim strong{font-size:21px;font-weight:900;color:var(--red);line-height:1;min-width:60px}
+.claim-text{font-size:12px;line-height:1.4;flex:1}
+.claim-text b{font-size:12px}
+.claim-source{display:block;color:#73747a;font-size:10px;margin-top:3px}
+.claim .tick{border-radius:50%;width:21px;height:21px;background:#e7e7e9;color:#555;display:grid;place-items:center;font-size:12px;flex:none}
+.claim.selected .tick{background:var(--red);color:#fff}
+.order-list{margin-top:14px;padding:12px;border:1px dashed #bbbfc7;border-radius:8px;background:#fafafa;min-height:44px}
+.order-row{display:flex;align-items:center;gap:7px;font-size:12px;padding:4px 0}
+.order-label{flex:1;min-width:0}
+.order-btn{padding:4px 8px;border:1px solid #cfd1d5;border-radius:5px;background:white;cursor:pointer;font-size:12px;color:#222}
+.order-btn:disabled{opacity:.35;cursor:default}
+.notice{font-size:11px;line-height:1.55;color:#52545a;margin:9px 0 0}
+.preview-panel{padding:24px;position:sticky;top:16px}
+.preview-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}
+.tag{font-size:10px;letter-spacing:.5px;color:#a0092d;background:#fff1f4;border-radius:4px;padding:6px 8px;font-weight:700}
+.canvas{background:#fff;min-height:280px;border:1px solid #e5e5e8;border-radius:8px;padding:24px;overflow:auto}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.primary,.secondary{font-size:13px;font-weight:700;border-radius:6px;padding:12px 16px;cursor:pointer;min-height:44px}
+.primary{background:var(--red);border:1px solid var(--red);color:white}
+.primary:hover{background:var(--red-dark)}
+.secondary{background:#202126;border:1px solid #202126;color:white}
+.secondary:hover{background:#000}
+.status{min-height:20px;font-size:12px;color:#11734c;margin-top:12px;line-height:1.5}
+.help{margin-top:22px;border-top:1px solid var(--line);padding-top:17px}
+.help h3{font-size:13px;margin:0 0 9px}
+.help p{font-size:12px;line-height:1.65;color:#555;margin:0 0 9px}
+.help ol{font-size:12px;line-height:1.7;color:#4f5054;margin:5px 0;padding-left:20px}
+.footer{max-width:1440px;margin:8px auto 38px;padding:0 20px;color:#73757a;font-size:11px;line-height:1.65}
+@media(max-width:1020px){.shell{grid-template-columns:1fr}.preview-panel{position:static}}
+@media(max-width:540px){.shell{padding:0 11px;margin-top:13px}.settings,.preview-panel{padding:16px}.canvas{padding:10px}.field-grid{grid-template-columns:1fr}.field-grid .wide{grid-column:auto}.header-inner{align-items:flex-start}.brand-mark{width:32px;height:32px}}
+</style>
+</head>
+<body>
+<header><div class="header-inner"><div><div class="kicker">School identity toolkit</div><h1>SPSS Email Signature Builder</h1><p>University of Bedfordshire &nbsp;|&nbsp; Personalised, consistent, Outlook-ready</p></div><div class="brand-mark" aria-hidden="true"></div></div></header>
+<main class="shell">
+<section class="panel settings" aria-label="Signature settings">
+<div class="panel-title"><h2>01 / Your details</h2><small>Staff-editable</small></div>
+<div class="field-grid">
+<div class="wide"><label class="field" for="name">Full name</label><input id="name" type="text" value="Dr Alex Taylor"></div>
+<div><label class="field" for="postnominals">Postnominals</label><input id="postnominals" type="text" value="PhD FHEA"></div>
+<div><label class="field" for="job">Job title</label><input id="job" type="text" value="Senior Lecturer"></div>
+<div class="wide"><label class="field" for="school">School</label><input id="school" type="text" value="School of Sport, Psychology and Social Sciences"></div>
+<div class="wide"><label class="field" for="faculty">Faculty</label><input id="faculty" type="text" value="Faculty of Technologies, Education and Social Sciences"></div>
+<div class="wide"><label class="field" for="address">Postal address / room (optional)</label><input id="address" type="text" value="Polhill Avenue, Bedford, MK41 9EA"></div>
+<div><label class="field" for="phone">Telephone</label><input id="phone" type="tel" value="+44 (0)1234 793093"></div>
+<div><label class="field" for="email">Email</label><input id="email" type="email" value="alex.taylor@beds.ac.uk"></div>
+<div><label class="field" for="website">Staff page / website (optional)</label><input id="website" type="text" value="https://www.beds.ac.uk/"></div>
+<div><label class="field" for="orcid">ORCID (optional)</label><input id="orcid" type="text" placeholder="0000-0000-0000-0000"></div>
+</div>
+<div class="section"><h2>02 / Signature format</h2><p class="muted">Choose the right amount of detail for each email.</p><div class="mode-grid">
+<button class="mode active" type="button" data-mode="standard" aria-pressed="true">Standard</button>
+<button class="mode" type="button" data-mode="promotional" aria-pressed="false">Promotional</button>
+<button class="mode" type="button" data-mode="compact" aria-pressed="false">Compact</button>
+</div></div>
+<div class="section"><h2>03 / Branding &amp; accreditation logos</h2><p class="muted">Select logos relevant to your role or discipline. Each logo is independent.</p><div id="logoGrid" class="logo-grid" role="group" aria-label="Choose branding logos"></div><p class="notice">The University logo is included automatically. Accreditations and endorsements must only be used where applicable and authorised. Additional logos can be added to the repository without redesigning the signature.</p></div>
+<div class="section"><h2>04 / Marketing claims</h2><p class="muted">Select up to <span id="maxClaims">3</span> claims. They appear as neat, vertically stacked strips on the promotional signature.</p><div id="claimGrid" class="claims" role="group" aria-label="Select marketing claims"></div><div id="claimOrder" class="order-list" aria-live="polite"></div><p class="notice">Claims are drawn from the University marketing materials supplied for 2026/27 and must only be used where relevant. Ranking organisations measure different outcomes; the source stays with each claim.</p></div>
+</section>
+<section class="panel preview-panel" aria-label="Signature preview">
+<div class="preview-head"><h2>Live preview</h2><span class="tag">OUTLOOK-FRIENDLY</span></div>
+<div id="preview" class="canvas" aria-label="Preview of generated email signature"></div>
+<div class="actions"><button type="button" class="primary" id="copy">Copy for Outlook</button><button type="button" class="secondary" id="download">Download HTML</button></div>
+<div id="status" class="status" role="status"></div>
+<div class="help"><h3>Using your signature</h3><ol><li>Enter your details, select a signature format and choose any relevant logos.</li><li>For marketing claims, select Promotional, then choose up to three and reorder them with the arrow buttons.</li><li>Choose Copy for Outlook, then paste into Outlook's signature editor and save.</li><li>Send a test email to an external recipient to check the images and spacing.</li></ol><p>New Outlook and Outlook on the web: Settings &gt; Accounts &gt; Signatures. Classic Outlook (Windows): File &gt; Options &gt; Mail &gt; Signatures. Menu names may vary.</p><p>Images in exported signatures use HTTPS URLs hosted on this repository's GitHub Pages site. GitHub Pages must be enabled before the logos can load for recipients. Logos added later should retain their filenames.</p></div>
+</section>
+</main>
+<footer class="footer">School of Sport, Psychology and Social Sciences &nbsp;|&nbsp; Signature design toolkit. This is an editable proposal for school-wide use and remains subject to University branding approval. No personal details are sent to a server by the builder.</footer>
+<script>
+(function(){
+'use strict';
+var MAX=3, mode='standard', selectedLogos=[],selectedClaims=[];
+var LOGOS=[
+{id:'career',name:'Career Powered Education',file:'assets/logos/career-powered.png',note:'University campaign branding'},
+{id:'cimspa',name:'CIMSPA Higher Education Partner',file:'assets/logos/cimspa.png',note:'Relevant programme / school accreditation'},
+{id:'basrat',name:'BASRaT',file:'assets/logos/basrat.png',note:'Accredited programmes only'},
+{id:'psa',name:'Professional Standards Authority register',file:'assets/logos/psa.png',note:'Appropriate register / programme only'}
+];
+var CLAIMS=[
+{id:'subject15',figure:'15th',headline:'in the UK for Sports Science',source:'Guardian University Guide 2027'},
+{id:'graduate11',figure:'11th',headline:'in the UK for graduate prospects',source:'Complete University Guide 2027'},
+{id:'career12',figure:'12th',headline:'in the UK for career prospects',source:'Guardian University Guide 2027'},
+{id:'satisfaction13',figure:'13th',headline:'in the UK for student satisfaction',source:'Complete University Guide 2027'},
+{id:'graduate6',figure:'6th',headline:'in the UK for graduate prospects',source:'The Times Good University Guide 2027'},
+{id:'academic91',figure:'91%',headline:'for academic support, Sport and Exercise Sciences',source:'National Student Survey 2026'}
+];
+var $=function(id){return document.getElementById(id)};
+var fields=['name','postnominals','job','school','faculty','address','phone','email','website','orcid'];
+function value(id){return $(id).value.trim()}
+function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function safeWebsite(s){if(!s)return '';if(!/^https?:\/\//i.test(s))s='https://'+s;try{var u=new URL(s);return u.protocol==='https:'?u.href:''}catch(e){return ''}}
+function asset(path,exported){var base=window.location.protocol==='https:'?new URL('./',window.location.href).href:'https://mikelnewell.github.io/SPSS-Signature-Builder-/';return exported?new URL(path,base).href:path}
+function logoById(id){return LOGOS.find(function(v){return v.id===id})}
+function claimById(id){return CLAIMS.find(function(v){return v.id===id})}
+function drawChoices(){
+var lg=$('logoGrid');lg.innerHTML='';
+LOGOS.forEach(function(l){
+var btn=document.createElement('button');var picked=selectedLogos.indexOf(l.id)!==-1;
+btn.type='button';btn.className='logo-tile'+(picked?' selected':'');btn.setAttribute('aria-pressed',String(picked));
+btn.innerHTML='<span class="tick" aria-hidden="true">'+(picked?'✓':'+')+'</span><img src="'+esc(asset(l.file,false))+'" alt="" loading="lazy"><span class="tile-name">'+esc(l.name)+'</span>';
+var im=btn.querySelector('img');im.addEventListener('error',function(){im.style.display='none';var label=document.createElement('span');label.className='logo-text';label.textContent=l.name;im.parentNode.insertBefore(label,im)});
+btn.title=l.note;
+btn.onclick=function(){var i=selectedLogos.indexOf(l.id);if(i<0)selectedLogos.push(l.id);else selectedLogos.splice(i,1);update()};
+lg.appendChild(btn);
+});
+var cg=$('claimGrid');cg.innerHTML='';
+CLAIMS.forEach(function(c){
+var picked=selectedClaims.indexOf(c.id)!==-1,btn=document.createElement('button');
+btn.type='button';btn.className='claim'+(picked?' selected':'');btn.setAttribute('aria-pressed',String(picked));
+btn.innerHTML='<strong>'+esc(c.figure)+'</strong><span class="claim-text"><b>'+esc(c.headline)+'</b><span class="claim-source">'+esc(c.source)+'</span></span><span class="tick" aria-hidden="true">'+(picked?'✓':'+')+'</span>';
+btn.onclick=function(){var i=selectedClaims.indexOf(c.id);if(i>=0)selectedClaims.splice(i,1);else if(selectedClaims.length<MAX)selectedClaims.push(c.id);else{setStatus('Select a maximum of three marketing claims. Remove one before adding another.',true);return}if(selectedClaims.length && mode==='standard')mode='promotional';update()};
+cg.appendChild(btn);
+});
+var order=$('claimOrder');order.innerHTML='';
+if(!selectedClaims.length){order.innerHTML='<span class="muted">No marketing claims selected. Choose up to three above.</span>'}
+selectedClaims.forEach(function(id,i){
+var c=claimById(id),row=document.createElement('div');row.className='order-row';
+var label=document.createElement('span');label.className='order-label';label.textContent=(i+1)+'. '+c.figure+' '+c.headline;row.appendChild(label);
+[['↑',-1],['↓',1]].forEach(function(spec){var b=document.createElement('button');b.type='button';b.className='order-btn';b.textContent=spec[0];b.title='Move '+(spec[1]<0?'up':'down');b.setAttribute('aria-label',b.title+' '+c.figure);b.disabled=i+spec[1]<0||i+spec[1]>=selectedClaims.length;b.onclick=function(){var next=i+spec[1];selectedClaims[i]=selectedClaims[next];selectedClaims[next]=id;update()};row.appendChild(b)});
+order.appendChild(row);
+});
+document.querySelectorAll('[data-mode]').forEach(function(b){var active=b.dataset.mode===mode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
+}
+function contactRow(){
+var bits=[],phone=value('phone'),email=value('email'),web=safeWebsite(value('website')),orcid=value('orcid').replace(/[^0-9Xx-]/g,'');
+if(phone)bits.push('<span style="color:#707070">T:</span> '+esc(phone));
+if(email)bits.push('<span style="color:#707070">E:</span> <a style="color:#252525;text-decoration:underline;" href="mailto:'+esc(email)+'">'+esc(email)+'</a>');
+if(mode!=='compact'&&web)bits.push('<span style="color:#707070">W:</span> <a href="'+esc(web)+'" style="color:#252525;text-decoration:underline;">'+esc(value('website').replace(/^https?:\/\//i,''))+'</a>');
+if(mode!=='compact'&&orcid)bits.push('<span style="color:#707070">ORCID:</span> <a href="https://orcid.org/'+esc(orcid)+'" style="color:#252525;text-decoration:underline;">'+esc(orcid)+'</a>');
+return bits.join('<span style="padding:0 6px;color:#c8102e;"> | </span>');
+}
+function logoRow(exported){
+if(mode==='compact'||!selectedLogos.length)return '';
+var elems=selectedLogos.map(logoById).filter(Boolean),rows='';
+for(var i=0;i<elems.length;i+=3){
+rows+='<tr>';
+for(var j=0;j<3;j++){var l=elems[i+j];rows+='<td width="33%" style="width:33%;padding:7px 12px 7px 0;vertical-align:middle;">'+(l?'<img src="'+esc(asset(l.file,exported))+'" alt="'+esc(l.name)+'" width="150" style="display:block;max-width:150px;max-height:58px;width:auto;height:auto;border:0;">':'&nbsp;')+'</td>'}
+rows+='</tr>';
+}
+return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:13px;"><tr><td colspan="3" style="height:5px;font-size:1px;">&nbsp;</td></tr>'+rows+'</table>';
+}
+function claimRow(){
+if(mode!=='promotional'||!selectedClaims.length)return '';
+var out='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;margin-top:12px;">';
+selectedClaims.map(claimById).filter(Boolean).forEach(function(c,i){
+out+='<tr><td style="padding-top:'+(i?5:9)+'px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#111114;"><tr>'+
+'<td width="100" style="width:100px;background:#c8102e;color:#ffffff;vertical-align:middle;text-align:center;padding:10px 8px;font:900 29px Arial,Helvetica,sans-serif;white-space:nowrap;">'+esc(c.figure)+'</td>'+
+'<td style="vertical-align:middle;padding:9px 12px;color:#ffffff;font:700 13px Arial,Helvetica,sans-serif;line-height:17px;">'+esc(c.headline)+'<div style="font:10px Arial,Helvetica,sans-serif;color:#d0d0d0;padding-top:4px;">'+esc(c.source)+'</div></td></tr></table></td></tr>';
+});
+return out+'</table>';
+}
+function signature(exported){
+var compact=mode==='compact', universityLogo='<img src="'+esc(asset('assets/logos/university-of-bedfordshire.png',exported))+'" alt="University of Bedfordshire" width="188" style="display:block;width:188px;max-width:100%;height:auto;border:0;">';
+var heading='<div style="font:700 17px Arial,Helvetica,sans-serif;color:#141414;line-height:21px;">'+esc(value('name'))+' <span style="font:400 12px Arial,Helvetica,sans-serif;color:#555;">'+esc(value('postnominals'))+'</span></div>';
+var role='<div style="font:13px Arial,Helvetica,sans-serif;color:#242424;padding-top:4px;">'+esc(value('job'))+'</div>';
+var school='<div style="font:12px Arial,Helvetica,sans-serif;color:#4e4e4e;padding-top:4px;">'+esc(value('school'))+'</div>';
+var faculty=compact?'':'<div style="font:12px Arial,Helvetica,sans-serif;color:#4e4e4e;padding-top:3px;">'+esc(value('faculty'))+'</div>';
+var address=compact||!value('address')?'':'<div style="font:11px Arial,Helvetica,sans-serif;color:#626262;padding-top:8px;">'+esc(value('address'))+'</div>';
+var inner='<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;"><tr><td style="vertical-align:top;padding-right:12px;">'+heading+role+school+faculty+address+'</td>'+(compact?'':'<td width="188" style="width:188px;vertical-align:top;text-align:right;">'+universityLogo+'</td>')+'</tr></table>';
+var contact=contactRow();
+var main='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;"><tr><td style="border-left:4px solid #c8102e;padding:1px 0 0 14px;">'+inner+(contact?'<div style="font:11px Arial,Helvetica,sans-serif;line-height:17px;padding-top:11px;color:#333;">'+contact+'</div>':'')+(compact?'<div style="font:700 11px Arial,Helvetica,sans-serif;color:#a0092d;padding-top:8px;">UNIVERSITY OF BEDFORDSHIRE</div>':'')+'</td></tr></table>';
+return '<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="560" style="width:560px;max-width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;"><tr><td>'+main+logoRow(exported)+claimRow()+'</td></tr></table>';
+}
+function refresh(){drawChoices();$('preview').innerHTML=signature(false)}
+function update(){refresh();setStatus('',false)}
+function setStatus(s,error){$('status').textContent=s;$('status').style.color=error?'#a31530':'#11734c'}
+function docHtml(){return '<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>Outlook email signature</title></head><body style="margin:10px;">'+signature(true)+'</body></html>'}
+function download(){var blob=new Blob([docHtml()],{type:'text/html;charset=utf-8'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='SPSS-Outlook-signature-'+mode+'.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);setStatus('HTML signature downloaded. Open it in a browser, copy the signature, and paste into Outlook.',false)}
+async function copy(){
+var body=signature(true),plain=$('preview').innerText;
+try{
+if(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem){
+await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob(['<html><body>'+body+'</body></html>'],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);
+setStatus('Rich-text signature copied. Paste into Outlook signature settings, save, then send a test email.',false);return;
+}
+throw new Error('Clipboard API not available');
+}catch(err){
+try{var sel=window.getSelection(),range=document.createRange();range.selectNodeContents($('preview'));sel.removeAllRanges();sel.addRange(range);if(document.execCommand('copy')){sel.removeAllRanges();setStatus('Signature copied using browser fallback. Check pasted images in Outlook.',false);return}}catch(e){}
+download();
+setStatus('Direct copy was blocked by your browser; the HTML file has been downloaded instead.',true);
+}
+}
+fields.forEach(function(id){$(id).addEventListener('input',function(){refresh()})});
+document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){mode=b.dataset.mode;update()})});
+$('copy').addEventListener('click',copy);
+$('download').addEventListener('click',download);
+refresh();
+})();
+</script>
+</body>
+</html>
