@@ -66,6 +66,9 @@
  $("backToDetails").addEventListener("click",()=>showStage(1,{focusTitle:true}));
  $("backToPersonalise").addEventListener("click",()=>showStage(2,{focusTitle:true}));
  $("backToDetailsFromFinish").addEventListener("click",()=>showStage(1,{focusTitle:true}));
+ document.querySelectorAll("[data-jump-preview]").forEach(button=>button.addEventListener("click",()=>{
+  $("previewRail").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});
+ }));
 
  fieldIds.forEach(id=>$(id)?.addEventListener("input",()=>{
   if(stepError.textContent) {
