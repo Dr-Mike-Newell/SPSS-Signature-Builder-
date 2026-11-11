@@ -86,12 +86,13 @@ try{
       };
     });
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
-    assert.equal(report.imageSrc,"https://mikelnewell.github.io/SPSS-Signature-Builder-/assets/logos/career-powered.jpg");
+    assert.equal(report.imageSrc,"https://mikelnewell.github.io/SPSS-Signature-Builder-/assets/logos/career-powered-clean.jpg");
     assert.equal(report.imageWidth,"112");
+    assert.equal(report.imageSrc.endsWith("career-powered-clean.jpg"),true);
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
     assert.ok(!report.compact.includes('alt="Career Powered Education"'));
-    assert.ok(!report.compact.includes("career-powered.jpg"));
+    assert.ok(!report.compact.includes("career-powered-clean.jpg"));
   };
   await inspect(1);
   await page.locator('[data-claim-id="graduate11"]').click();
