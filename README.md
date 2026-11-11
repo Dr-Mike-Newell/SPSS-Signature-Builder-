@@ -21,7 +21,7 @@ This website is a pilot pending approval from the Head of School. It is not evid
 - \`config.js\`: School and Faculty names, University logo path and dimensions, ORCID icon, nine student support contacts, discipline list, affiliation approvals and marketing claim registry.
 - \`app.js\`: display logic, selection controls, input validation and Outlook-compatible HTML generation.
 - \`index.html\`: static user interface and CSS.
-- \`assets/logos/\`: approved or pilot branding assets. Never rename an image file already used in sent email signatures without considering broken image links.
+- \`assets/logos/\`: approved or pilot branding assets. The current wordmark is \`university-of-bedfordshire-master.png\`. The legacy logo file is retained so existing emails do not break. Never rename an image file already used in sent email signatures.
 - \`PILOT_CHECKLIST.md\`: test plan for staff and University Marketing.
 - \`MARKETING_CLAIMS.md\`: source-by-source provenance for the new Psychology and Criminology figures, including marketing artwork filenames.
 
@@ -50,7 +50,7 @@ Accepts the complete identifier or a full ORCID profile link; validates the ISO 
 
 ### Known pilot limitations
 
-- The currently supplied university wordmark is a 170 x 70 px image and is displayed at **150 x 62 px** to avoid upscaling. A suitable approved high-resolution master file is still needed for final deployment.
+- The university wordmark now uses the University-supplied transparent master PNG, trimmed of its surrounding transparent margins and optimised at **1024 × 318 px**, displayed at **176 × 55 px** for sharp high-density rendering. Test image display after pasting into each Outlook client.
 - Approval is still required for applicable programme and institutional accreditation logos, marketing claims and any additional school-wide material.
 - A real desktop/Mac Outlook and external Gmail pilot is needed. The builder generates HTML tables with inline styles and absolute hosted HTTPS asset URLs, but browser testing does not substitute for Outlook paste and send tests.
 - Web browser clipboard behaviour and images being blocked by recipient mail clients cannot be entirely controlled by the site.

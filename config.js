@@ -7,10 +7,10 @@ window.SPSS_CONFIG = Object.freeze({
     faculty:"Faculty of Technologies, Education and Social Sciences",
     university:"University of Bedfordshire",
     colour:"#c8102e",
-    logoPath:"assets/logos/university-of-bedfordshire.png",
-    logoWidth:150,
-    logoHeight:62,
-    logoNote:"Current image is 170x70 pixels; approved higher-resolution master artwork is still required."
+    logoPath:"assets/logos/university-of-bedfordshire-master.png",
+    logoWidth:176,
+    logoHeight:55,
+    logoNote:"University-supplied transparent RGB logo master, cropped and optimised for high-density email display."
   },
   pagesBase:"https://mikelnewell.github.io/SPSS-Signature-Builder-/",
   orcidIcon:"https://info.orcid.org/wp-content/uploads/2020/12/ORCIDiD_icon16x16.png",
