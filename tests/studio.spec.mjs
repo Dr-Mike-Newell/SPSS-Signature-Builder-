@@ -64,6 +64,10 @@ try{
   assert.equal(await page.locator("#copyStandard").isVisible(),true);
   assert.equal(await page.locator("#copyCompact").isVisible(),true);
   assert.equal(await page.locator("#installHelp summary").count(),1);
+  await page.context().grantPermissions(["clipboard-read","clipboard-write"]);
+  await page.locator("#copyStandard").click();
+  await page.locator("#status").waitFor({state:"visible"});
+  assert.match(await page.locator("#status").innerText(),/copied/i);
  });
  await page.screenshot({path:"test-artifacts/desktop.png",fullPage:true});
  await check("Changing subjects clears incompatible selections",async()=>{
@@ -80,6 +84,9 @@ try{
   await page.locator("#preview table").first().waitFor();
   const geometry=await page.evaluate(()=>({w:innerWidth,scroll:document.documentElement.scrollWidth}));
   assert.ok(geometry.scroll<=geometry.w+2,JSON.stringify(geometry));
+  assert.equal(await page.locator('[data-jump-preview]').first().isVisible(),true);
+  await page.locator('[data-jump-preview]').first().click();
+  assert.equal(await page.locator("#previewRail").isVisible(),true);
   await page.screenshot({path:"test-artifacts/mobile.png",fullPage:true});
  });
  assert.deepEqual(errors,[],"Browser errors");
