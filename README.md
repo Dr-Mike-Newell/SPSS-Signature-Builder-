@@ -1,28 +1,63 @@
 # SPSS Email Signature Builder
 
-A static, GitHub Pages-friendly signature builder for staff in the School of Sport, Psychology and Social Sciences, University of Bedfordshire.
+School-wide signature pilot for the University of Bedfordshire School of Sport, Psychology and Social Science.
 
-## Features
-- Editable staff details; standard, promotional and compact formats
-- Individual accreditation and branding logo selection
-- Up to three stackable, reorderable marketing claims
-- Outlook-compatible HTML-table output and live preview
-- Copy-to-clipboard and HTML download
-- No backend, tracking, accounts or submitted personal details
+Live site: https://mikelnewell.github.io/SPSS-Signature-Builder-/
 
-## Launch using GitHub Pages
-1. In the repository open **Settings > Pages**.
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Choose **main**, **/(root)**, and save.
-4. Once live, open https://mikelnewell.github.io/SPSS-Signature-Builder-/ .
-5. Keep this repository public if external email recipients need to load its images.
+## How staff use the builder
 
-## Maintaining logos and claims
-Edit the `LOGOS` and `CLAIMS` arrays within `index.html`. Add images to `assets/logos/` and reference their relative paths. To add a logo, copy the structure of an existing entry, providing a unique ID, label, file and a specific applicability note.
+1. Enter your name, job title, contact details, and optional profile/ORCID links.
+2. Choose the subject area relevant to your role. The School and Faculty names are fixed.
+3. Select optional professional affiliation logos that genuinely apply to your role.
+4. Select and reorder up to three appropriate marketing claims. Sport-only rankings must never be presented as school-wide.
+5. Select **Copy standard signature** for new messages, or **Copy compact reply signature** for replies. Both versions contain all nine mandatory student-support contacts.
+6. Paste into Outlook > Settings > Accounts > Signatures (new Outlook / web) or File > Options > Mail > Signatures (classic Outlook).
+7. Send a test message to an external address. Check layout, images, links and mobile display. You may use the HTML download fallback if your browser blocks clipboard access.
 
-Each image is referenced using a hosted HTTPS URL in exported signatures. Avoid renaming existing image files after publication because older signatures may break. For new ranking cycles, update the claim text and source, and remove outdated claims.
+This website is a pilot pending approval from the Head of School. It is not evidence of current accreditation or institutional marketing approval.
 
-Logo selection does not mean a qualification or accreditation applies to every member of staff. Staff must only include relevant approved logos. Please get University Marketing approval before institutional rollout.
+## Maintainers
 
-## Using the builder
-Staff enter their own details, select which logos apply to them, then optionally select and order up to three marketing claims. Click Copy for Outlook; paste into Outlook's signature editor and test externally. A compact variant is provided for replies.
+- \`config.js\`: School and Faculty names, University logo path and dimensions, ORCID icon, nine student support contacts, discipline list, affiliation approvals and marketing claim registry.
+- \`app.js\`: display logic, selection controls, input validation and Outlook-compatible HTML generation.
+- \`index.html\`: static user interface and CSS.
+- \`assets/logos/\`: approved or pilot branding assets. Never rename an image file already used in sent email signatures without considering broken image links.
+- \`PILOT_CHECKLIST.md\`: test plan for staff and University Marketing.
+
+The source branch is \`main\`, publishing from repository root via GitHub Pages. Do not change the repository name or the GitHub Pages path.
+
+### Adding an affiliation
+
+Upload the original colour logo to \`assets/logos/\` and add an entry to \`config.js > affiliations\`, supplying a unique \`id\`, \`name\`, \`path\`, \`w\`, \`h\`, \`audience\`, \`status\` and \`note\`. Use \`status: "pending-asset"\` and \`path: null\` until the official asset and permission are confirmed. Rendered logos preserve aspect ratio and are limited to the email-friendly box.
+
+The BASES Accredited Laboratory claim/logo has been withdrawn pending a review of accreditation. The CASES logo remains available. The AHCS entry is intentionally disabled until an official asset and permission are supplied. The People & Planet logo explicitly states its historical 2023/24 year.
+
+### Adding a ranking
+
+Add a new item to \`config.js > claims\` with:
+\`id\`, \`discipline\` (one of \`all\`, \`sport\`, \`psychology\`, \`social\`), \`category\`, \`figure\`, \`headline\`, \`source\`, \`year\`, \`review\`, \`status\`, \`priority\`.
+
+Do not invent claims, conflate competing guide categories, or treat a discipline ranking as school-wide. The existing figures come from University marketing graphics and are labelled \`pilot-review\`. Confirm the appropriateness, accuracy and current status before rollout. \`status: "withdrawn"\` hides a claim from the selector.
+
+### Student support information
+
+The nine addresses and exact descriptions supplied by the Head of School are centrally maintained in \`config.js\`, always printed in both signature variants and never editable by staff.
+
+### ORCID iDs
+
+Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Uses the official green ORCID iD icon URL, hyperlinked to the person's profile. As entries are manually supplied, the signature labels them unauthenticated according to ORCID display guidance.
+
+### Known pilot limitations
+
+- The currently supplied university wordmark is a 170 x 70 px image and is displayed at **150 x 62 px** to avoid upscaling. A suitable approved high-resolution master file is still needed for final deployment.
+- Approval is still required for applicable programme and institutional accreditation logos, marketing claims and any additional school-wide material.
+- A real desktop/Mac Outlook and external Gmail pilot is needed. The builder generates HTML tables with inline styles and absolute hosted HTTPS asset URLs, but browser testing does not substitute for Outlook paste and send tests.
+- Web browser clipboard behaviour and images being blocked by recipient mail clients cannot be entirely controlled by the site.
+- Form entries are generated client-side and not stored or transmitted to an application backend; normal remote image requests still occur.
+
+## Change control
+
+Staff pilot sign-off: Head of School and University Marketing.
+Update the marketing claim registry and institutional images whenever a new annual guide or survey is released.
+
+Do not announce the signature as an officially approved institution-wide standard until approval has been explicitly granted.
