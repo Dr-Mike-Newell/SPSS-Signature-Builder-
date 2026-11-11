@@ -73,166 +73,94 @@ input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-
 .footer{max-width:1440px;margin:8px auto 38px;padding:0 20px;color:#73757a;font-size:11px;line-height:1.65}
 @media(max-width:1020px){.shell{grid-template-columns:1fr}.preview-panel{position:static}}
 @media(max-width:540px){.shell{padding:0 11px;margin-top:13px}.settings,.preview-panel{padding:16px}.canvas{padding:10px}.field-grid{grid-template-columns:1fr}.field-grid .wide{grid-column:auto}.header-inner{align-items:flex-start}.brand-mark{width:32px;height:32px}}
+
+/* School-wide pilot: accessible inputs and predictable export controls */
+.field-grid input{border:1px solid #c5c7cd}
+.section-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#a91132;font-weight:700}
+.tile-sub{font-size:10px;line-height:1.2;color:#787b80}
+fieldset{padding:0;margin:0;border:0}
+legend{font-weight:700;color:#35373b;font-size:13px;margin:0 0 4px}
+#discipline,#category{margin:9px 0 12px}
+.info{padding:10px 12px;margin:10px 0 0;background:#f7f7f8;border-left:3px solid #a90e2e;color:#4e5054;font:12px/1.55 Arial,Helvetica,sans-serif}
+.pilot{color:#9a2d3e;background:#fff5f6;border:1px solid #f3c5cd;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.5;margin:14px 0 2px}
+.actions .primary,.actions .secondary{flex:1;min-width:180px}
+.textbutton{border:0;background:transparent;text-decoration:underline;color:#8b102e;font-size:12px;cursor:pointer;padding:5px 8px}
+#claimCounter{display:inline-block;margin-top:7px;font-weight:700;color:#a01b30}
+#validation{font-size:12px;line-height:1.6;margin-top:10px;min-height:20px}
+.preview-note{font-size:12px;line-height:1.6;margin:12px 0;color:#62656a}
+.logo-tile:disabled{opacity:.57}
+@media(max-width:540px){.actions .primary,.actions .secondary{min-width:100%}}
+
 </style>
 </head>
 <body>
-<header><div class="header-inner"><div><div class="kicker">School identity toolkit</div><h1>SPSS Email Signature Builder</h1><p>University of Bedfordshire &nbsp;|&nbsp; Personalised, consistent, Outlook-ready</p></div><div class="brand-mark" aria-hidden="true"></div></div></header>
+<header><div class="header-inner"><div><div class="kicker">School identity toolkit</div><h1>SPSS Email Signature Builder</h1><p>University of Bedfordshire &nbsp;|&nbsp; One unified design for Sport, Psychology and Social Science</p></div><div class="brand-mark" aria-hidden="true"></div></div></header>
 <main class="shell">
-<section class="panel settings" aria-label="Signature settings">
-<div class="panel-title"><h2>01 / Your details</h2><small>Staff-editable</small></div>
+<section class="panel settings" aria-label="Signature builder settings">
+<div class="panel-title"><h2>01 / Your details</h2><small>Personal details only</small></div>
 <div class="field-grid">
-<div class="wide"><label class="field" for="name">Full name</label><input id="name" type="text" value="Dr Alex Taylor"></div>
-<div><label class="field" for="postnominals">Postnominals</label><input id="postnominals" type="text" value="PhD FHEA"></div>
-<div><label class="field" for="job">Job title</label><input id="job" type="text" value="Senior Lecturer"></div>
-<div class="wide"><label class="field" for="school">School</label><input id="school" type="text" value="School of Sport, Psychology and Social Sciences"></div>
-<div class="wide"><label class="field" for="faculty">Faculty</label><input id="faculty" type="text" value="Faculty of Technologies, Education and Social Sciences"></div>
-<div class="wide"><label class="field" for="address">Postal address / room (optional)</label><input id="address" type="text" value="Polhill Avenue, Bedford, MK41 9EA"></div>
-<div><label class="field" for="phone">Telephone</label><input id="phone" type="tel" value="+44 (0)1234 793093"></div>
-<div><label class="field" for="email">Email</label><input id="email" type="email" value="alex.taylor@beds.ac.uk"></div>
-<div><label class="field" for="website">Staff profile URL (optional)</label><input id="website" type="text" placeholder="https://www.beds.ac.uk/staff/profile/" value=""></div>
-<div><label class="field" for="orcid">ORCID (optional)</label><input id="orcid" type="text" placeholder="0000-0000-0000-0000"></div>
+<div class="wide"><label class="field" for="name">Full name</label><input id="name" type="text" value="" placeholder="Dr Alex Taylor" autocomplete="name"></div>
+<div><label class="field" for="postnominals">Postnominals</label><input id="postnominals" type="text" placeholder="PhD FHEA"></div>
+<div><label class="field" for="job">Job title</label><input id="job" type="text" placeholder="Senior Lecturer"></div>
+<div class="wide"><label class="field" for="address">Office / postal address (optional)</label><input id="address" type="text" placeholder="Polhill Avenue, Bedford, MK41 9EA"></div>
+<div><label class="field" for="phone">Telephone (optional)</label><input id="phone" type="tel" placeholder="+44 (0)1234 793093"></div>
+<div><label class="field" for="email">Staff email address</label><input id="email" type="email" placeholder="alex.taylor@beds.ac.uk" autocomplete="email"></div>
+<div class="wide"><label class="field" for="website">Staff profile URL (optional)</label><input id="website" type="text" placeholder="https://www.beds.ac.uk/staff/..." inputmode="url"><small>Displays as the hyperlink “Staff Weblink” in the signature.</small></div>
+<div class="wide"><label class="field" for="orcid">ORCID iD (optional)</label><input id="orcid" type="text" placeholder="0000-0002-1825-0097 or https://orcid.org/..."><small>Accepts an identifier or full ORCID profile URL, checked for a valid check digit.</small></div>
 </div>
-<div class="section"><h2>02 / Signature format</h2><p class="muted">Choose the right amount of detail for each email.</p><div class="mode-grid">
-<button class="mode active" type="button" data-mode="standard" aria-pressed="true">Standard</button>
-<button class="mode" type="button" data-mode="promotional" aria-pressed="false">Promotional</button>
-<button class="mode" type="button" data-mode="compact" aria-pressed="false">Compact</button>
-</div></div>
-<div class="section"><h2>03 / Branding &amp; accreditation logos</h2><p class="muted">Select logos relevant to your role or discipline. Each logo is independent.</p><div id="logoGrid" class="logo-grid" role="group" aria-label="Choose branding logos"></div><p class="notice">The University logo is included automatically. Accreditations and endorsements must only be used where applicable and authorised. Additional logos can be added to the repository without redesigning the signature.</p></div>
-<div class="section"><h2>04 / Marketing claims</h2><p class="muted">Select up to <span id="maxClaims">3</span> claims. They appear as neat, vertically stacked strips on the promotional signature.</p><div id="claimGrid" class="claims" role="group" aria-label="Select marketing claims"></div><div id="claimOrder" class="order-list" aria-live="polite"></div><p class="notice">Claims are drawn from the University marketing materials supplied for 2026/27 and must only be used where relevant. Ranking organisations measure different outcomes; the source stays with each claim.</p></div>
+<div class="info">The School and Faculty names are fixed centrally and cannot be edited. All staff receive the same University signature layout and student support information.</div>
+<div class="section">
+<h2>02 / Professional affiliations</h2>
+<p class="muted">Select only those logos that relate to your role or programme. The BASES Accredited Laboratory logo is withdrawn while the labs are under review.</p>
+<label class="field" for="discipline">Your subject area</label>
+<select id="discipline"><option value="">Select your discipline</option></select>
+<div id="logoGrid" class="logo-grid" role="group" aria-label="Optional professional affiliations"></div>
+<p class="notice">CASE​S is the sport and exercise sciences association logo. AHCS is shown as pending and cannot be selected until an official image and permitted-use confirmation are supplied. Historic and restricted logos are clearly labelled.</p>
+</div>
+<div class="section">
+<h2>03 / School achievements &amp; claims</h2>
+<p class="muted">Select up to three claims applicable to your discipline. Their source and year remain visible in every generated signature.</p>
+<label class="field" for="category">Category</label>
+<select id="category"><option value="">All categories</option></select>
+<span id="claimCounter" aria-live="polite">0 / 3 claims selected</span>
+<div id="claimGrid" class="claims" role="group" aria-label="Marketing claims"></div>
+<div id="claimOrder" class="order-list" aria-live="polite"></div>
+<p class="notice">The existing 2026/27 sport statistics are retained for pilot review. No Psychology, Social Science or school-wide ranking figures have been supplied yet, so none have been invented.</p>
+</div>
+<div class="section">
+<h2>Student support contacts</h2>
+<p class="muted">The full nine-address contact list is automatically included in both standard and compact reply signatures and cannot be disabled.</p>
+</div>
 </section>
 <section class="panel preview-panel" aria-label="Signature preview">
-<div class="preview-head"><h2>Live preview</h2><span class="tag">OUTLOOK-FRIENDLY</span></div>
-<div id="preview" class="canvas" aria-label="Preview of generated email signature"></div>
-<div class="actions"><button type="button" class="primary" id="copy">Copy for Outlook</button><button type="button" class="secondary" id="download">Download HTML</button></div>
+<div class="preview-head"><h2>04 / Live signature preview</h2><span class="tag">PILOT · V2</span></div>
+<div id="preview" class="canvas" aria-label="Standard signature preview"></div>
+<div id="validation" role="status"></div>
+<div class="actions">
+<button type="button" class="primary" id="copyStandard">Copy standard signature</button>
+<button type="button" class="secondary" id="copyCompact">Copy compact reply signature</button>
+</div>
+<div class="actions">
+<button type="button" class="textbutton" id="downloadStandard">Download standard HTML</button>
+<button type="button" class="textbutton" id="downloadCompact">Download reply HTML</button>
+</div>
 <div id="status" class="status" role="status"></div>
-<div class="help"><h3>Using your signature</h3><ol><li>Enter your details, select a signature format and choose any relevant logos.</li><li>For marketing claims, select Promotional, then choose up to three and reorder them with the arrow buttons.</li><li>Choose Copy for Outlook, then paste into Outlook's signature editor and save.</li><li>Send a test email to an external recipient to check the images and spacing.</li></ol><p>New Outlook and Outlook on the web: Settings &gt; Accounts &gt; Signatures. Classic Outlook (Windows): File &gt; Options &gt; Mail &gt; Signatures. Menu names may vary.</p><p>Images in exported signatures use HTTPS URLs hosted on this repository's GitHub Pages site. GitHub Pages must be enabled before the logos can load for recipients. Logos added later should retain their filenames.</p></div>
+<div class="pilot">School-wide pilot for Head of School review. Please do not circulate as an approved institutional signature until branding, logo permissions, and the Outlook pilot have been signed off.</div>
+<div class="help">
+<h3>Install in Microsoft Outlook</h3>
+<ol>
+<li>Enter your details and choose relevant affiliations and claims.</li>
+<li>Click <b>Copy standard signature</b> to use for new emails, or <b>Copy compact reply signature</b> for replies. Both retain the required support contacts.</li>
+<li>Paste into your Outlook signature editor and save. New Outlook and Outlook on the web: Settings &gt; Accounts &gt; Signatures. Classic Outlook: File &gt; Options &gt; Mail &gt; Signatures.</li>
+<li>Send an external test email and check the logos, support links, spacing and mobile appearance.</li>
+</ol>
+<p>The builder does not send entered staff information to a server. Image assets load from HTTPS URLs and external recipients may need to allow images. Copy results will vary slightly by Outlook version.</p>
+<p>University wordmark: an approved high-resolution replacement is still needed for final rollout. The current image is displayed below its native width to reduce pixelation.</p>
+</div>
 </section>
 </main>
-<footer class="footer">School of Sport, Psychology and Social Sciences &nbsp;|&nbsp; Signature design toolkit. This is an editable proposal for school-wide use and remains subject to University branding approval. No personal details are sent to a server by the builder.</footer>
-<script>
-(function(){
-'use strict';
-var MAX=3, mode='standard', selectedLogos=[],selectedClaims=[];
-var LOGOS=[
-{id:'cases',name:'CASES',w:533,h:382,file:'assets/logos/cases.png',note:'Chartered Association of Sport and Exercise Sciences. Use only where relevant.'},
-{id:'bases',name:'BASES Accredited Laboratory',w:476,h:247,file:'assets/logos/bases-accredited-lab.jpg',note:'Only for laboratories with this accreditation.'},
-{id:'qaa',name:'QAA UK Quality Assured',w:149,h:77,file:'assets/logos/qaa.png',note:'Quality assurance branding. Check University approval for use.'},
-{id:'people',name:'People & Planet Award',w:388,h:177,file:'assets/logos/people-and-planet.png',note:'Historical 2023/24 award. Do not imply this is the current year.'},
-{id:'psa',name:'Professional Standards Authority Accredited Register',w:348,h:158,file:'assets/logos/psa.png',note:'For the relevant accredited-register context only.'},
-{id:'basrat',name:'BASRaT',w:314,h:171,file:'assets/logos/basrat.png',note:'British Association of Sport Rehabilitators. Relevant programmes only.'},
-{id:'cimspa',name:'CIMSPA Higher Education Partner',w:506,h:126,file:'assets/logos/cimspa.jpg',note:'Higher Education Partner status. Relevant programme or school only.'},
-{id:'career',name:'Career Powered Education',w:690,h:687,file:'assets/logos/career-powered.jpg',note:'University campaign branding.'}
-];
-var CLAIMS=[
-{id:'subject15',figure:'15th',headline:'in the UK for Sports Science',source:'Guardian University Guide 2027'},
-{id:'graduate11',figure:'11th',headline:'in the UK for graduate prospects',source:'Complete University Guide 2027'},
-{id:'career12',figure:'12th',headline:'in the UK for career prospects',source:'Guardian University Guide 2027'},
-{id:'satisfaction13',figure:'13th',headline:'in the UK for student satisfaction',source:'Complete University Guide 2027'},
-{id:'graduate6',figure:'6th',headline:'in the UK for graduate prospects',source:'The Times Good University Guide 2027'},
-{id:'academic91',figure:'91%',headline:'of Sport and Exercise Sciences students satisfied with academic support',source:'National Student Survey 2026'}
-];
-var $=function(id){return document.getElementById(id)};
-var fields=['name','postnominals','job','school','faculty','address','phone','email','website','orcid'];
-function value(id){return $(id).value.trim()}
-function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
-function safeWebsite(s){if(!s)return '';if(!/^https?:\/\//i.test(s))s='https://'+s;try{var u=new URL(s);return u.protocol==='https:'?u.href:''}catch(e){return ''}}
-function asset(path,exported){var base=window.location.protocol==='https:'?new URL('./',window.location.href).href:'https://mikelnewell.github.io/SPSS-Signature-Builder-/';return exported?new URL(path,base).href:path}
-function logoById(id){return LOGOS.find(function(v){return v.id===id})}
-function claimById(id){return CLAIMS.find(function(v){return v.id===id})}
-function drawChoices(){
-var lg=$('logoGrid');lg.innerHTML='';
-LOGOS.forEach(function(l){
-var btn=document.createElement('button');var picked=selectedLogos.indexOf(l.id)!==-1;
-btn.type='button';btn.className='logo-tile'+(picked?' selected':'');btn.setAttribute('aria-pressed',String(picked));
-btn.innerHTML='<span class="tick" aria-hidden="true">'+(picked?'✓':'+')+'</span><img src="'+esc(asset(l.file,false))+'" alt="" loading="lazy"><span class="tile-name">'+esc(l.name)+'</span>';
-var im=btn.querySelector('img');im.addEventListener('error',function(){im.style.display='none';var label=document.createElement('span');label.className='logo-text';label.textContent=l.name;im.parentNode.insertBefore(label,im)});
-btn.title=l.note;
-btn.onclick=function(){var i=selectedLogos.indexOf(l.id);if(i<0)selectedLogos.push(l.id);else selectedLogos.splice(i,1);update()};
-lg.appendChild(btn);
-});
-var cg=$('claimGrid');cg.innerHTML='';
-CLAIMS.forEach(function(c){
-var picked=selectedClaims.indexOf(c.id)!==-1,btn=document.createElement('button');
-btn.type='button';btn.className='claim'+(picked?' selected':'');btn.setAttribute('aria-pressed',String(picked));
-btn.innerHTML='<strong>'+esc(c.figure)+'</strong><span class="claim-text"><b>'+esc(c.headline)+'</b><span class="claim-source">'+esc(c.source)+'</span></span><span class="tick" aria-hidden="true">'+(picked?'✓':'+')+'</span>';
-btn.onclick=function(){var i=selectedClaims.indexOf(c.id);if(i>=0)selectedClaims.splice(i,1);else if(selectedClaims.length<MAX)selectedClaims.push(c.id);else{setStatus('Select a maximum of three marketing claims. Remove one before adding another.',true);return}if(selectedClaims.length && mode!=='promotional')mode='promotional';update()};
-cg.appendChild(btn);
-});
-var order=$('claimOrder');order.innerHTML='';
-if(!selectedClaims.length){order.innerHTML='<span class="muted">No marketing claims selected. Choose up to three above.</span>'}
-selectedClaims.forEach(function(id,i){
-var c=claimById(id),row=document.createElement('div');row.className='order-row';
-var label=document.createElement('span');label.className='order-label';label.textContent=(i+1)+'. '+c.figure+' '+c.headline;row.appendChild(label);
-[['↑',-1],['↓',1]].forEach(function(spec){var b=document.createElement('button');b.type='button';b.className='order-btn';b.textContent=spec[0];b.title='Move '+(spec[1]<0?'up':'down');b.setAttribute('aria-label',b.title+' '+c.figure);b.disabled=i+spec[1]<0||i+spec[1]>=selectedClaims.length;b.onclick=function(){var next=i+spec[1];selectedClaims[i]=selectedClaims[next];selectedClaims[next]=id;update()};row.appendChild(b)});
-order.appendChild(row);
-});
-document.querySelectorAll('[data-mode]').forEach(function(b){var active=b.dataset.mode===mode;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});
-}
-function contactRow(){
-var bits=[],phone=value('phone'),email=value('email'),web=safeWebsite(value('website')),orcid=value('orcid').replace(/[^0-9Xx-]/g,'');
-if(phone)bits.push('<span style="color:#707070">T:</span> '+esc(phone));
-if(email)bits.push('<span style="color:#707070">E:</span> <a style="color:#252525;text-decoration:underline;" href="mailto:'+esc(email)+'">'+esc(email)+'</a>');
-if(web)bits.push('<span style="color:#707070">W:</span> <a href="'+esc(web)+'" style="color:#252525;text-decoration:underline;">Staff Weblink</a>');
-if(mode!=='compact'&&orcid)bits.push('<span style="color:#707070">ORCID:</span> <a href="https://orcid.org/'+esc(orcid)+'" style="color:#252525;text-decoration:underline;">'+esc(orcid)+'</a>');
-return bits.join('<span style="padding:0 6px;color:#c8102e;"> | </span>');
-}
-function logoRow(exported){
-if(mode==='compact'||!selectedLogos.length)return '';
-var elems=selectedLogos.map(logoById).filter(Boolean),rows='';
-for(var i=0;i<elems.length;i+=3){
-rows+='<tr>';
-for(var j=0;j<3;j++){var l=elems[i+j], scale=l?Math.min(150/l.w,58/l.h,1):1, width=l?Math.round(l.w*scale):0, height=l?Math.round(l.h*scale):0;rows+='<td width="33%" style="width:33%;padding:7px 12px 7px 0;vertical-align:middle;">'+(l?'<img src="'+esc(asset(l.file,exported))+'" alt="'+esc(l.name)+'" width="'+width+'" height="'+height+'" style="display:block;width:'+width+'px;height:'+height+'px;border:0;">':'&nbsp;')+'</td>'}
-rows+='</tr>';
-}
-return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:13px;"><tr><td colspan="3" style="height:5px;font-size:1px;">&nbsp;</td></tr>'+rows+'</table>';
-}
-function claimRow(){
-if(mode!=='promotional'||!selectedClaims.length)return '';
-var out='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;margin-top:12px;">';
-selectedClaims.map(claimById).filter(Boolean).forEach(function(c,i){
-out+='<tr><td style="padding-top:'+(i?5:9)+'px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background:#111114;"><tr>'+
-'<td width="100" style="width:100px;background:#c8102e;color:#ffffff;vertical-align:middle;text-align:center;padding:10px 8px;font:900 29px Arial,Helvetica,sans-serif;white-space:nowrap;">'+esc(c.figure)+'</td>'+
-'<td style="vertical-align:middle;padding:9px 12px;color:#ffffff;font:700 13px Arial,Helvetica,sans-serif;line-height:17px;">'+esc(c.headline)+'<div style="font:10px Arial,Helvetica,sans-serif;color:#d0d0d0;padding-top:4px;">'+esc(c.source)+'</div></td></tr></table></td></tr>';
-});
-return out+'</table>';
-}
-function signature(exported){
-var compact=mode==='compact', universityLogo='<img src="'+esc(asset('assets/logos/university-of-bedfordshire.png',exported))+'" alt="University of Bedfordshire" width="188" style="display:block;width:188px;max-width:100%;height:auto;border:0;">';
-var heading='<div style="font:700 17px Arial,Helvetica,sans-serif;color:#141414;line-height:21px;">'+esc(value('name'))+' <span style="font:400 12px Arial,Helvetica,sans-serif;color:#555;">'+esc(value('postnominals'))+'</span></div>';
-var role='<div style="font:13px Arial,Helvetica,sans-serif;color:#242424;padding-top:4px;">'+esc(value('job'))+'</div>';
-var school='<div style="font:12px Arial,Helvetica,sans-serif;color:#4e4e4e;padding-top:4px;">'+esc(value('school'))+'</div>';
-var faculty=compact?'':'<div style="font:12px Arial,Helvetica,sans-serif;color:#4e4e4e;padding-top:3px;">'+esc(value('faculty'))+'</div>';
-var address=compact||!value('address')?'':'<div style="font:11px Arial,Helvetica,sans-serif;color:#626262;padding-top:8px;">'+esc(value('address'))+'</div>';
-var inner='<table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-collapse:collapse;"><tr><td style="vertical-align:top;padding-right:12px;">'+heading+role+school+faculty+address+'</td>'+(compact?'':'<td width="188" style="width:188px;vertical-align:top;text-align:right;">'+universityLogo+'</td>')+'</tr></table>';
-var contact=contactRow();
-var main='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;"><tr><td style="border-left:4px solid #c8102e;padding:1px 0 0 14px;">'+inner+(contact?'<div style="font:11px Arial,Helvetica,sans-serif;line-height:17px;padding-top:11px;color:#333;">'+contact+'</div>':'')+(compact?'<div style="font:700 11px Arial,Helvetica,sans-serif;color:#a0092d;padding-top:8px;">UNIVERSITY OF BEDFORDSHIRE</div>':'')+'</td></tr></table>';
-return '<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="560" style="width:560px;max-width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;"><tr><td>'+main+logoRow(exported)+claimRow()+'</td></tr></table>';
-}
-function refresh(){drawChoices();$('preview').innerHTML=signature(false)}
-function update(){refresh();setStatus('',false)}
-function setStatus(s,error){$('status').textContent=s;$('status').style.color=error?'#a31530':'#11734c'}
-function docHtml(){return '<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>Outlook email signature</title></head><body style="margin:10px;">'+signature(true)+'</body></html>'}
-function download(){var blob=new Blob([docHtml()],{type:'text/html;charset=utf-8'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='SPSS-Outlook-signature-'+mode+'.html';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1500);setStatus('HTML signature downloaded. Open it in a browser, copy the signature, and paste into Outlook.',false)}
-async function copy(){
-var body=signature(true),plain=$('preview').innerText;
-try{
-if(navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem){
-await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob(['<html><body>'+body+'</body></html>'],{type:'text/html'}),'text/plain':new Blob([plain],{type:'text/plain'})})]);
-setStatus('Rich-text signature copied. Paste into Outlook signature settings, save, then send a test email.',false);return;
-}
-throw new Error('Clipboard API not available');
-}catch(err){
-try{var sel=window.getSelection(),range=document.createRange();range.selectNodeContents($('preview'));sel.removeAllRanges();sel.addRange(range);if(document.execCommand('copy')){sel.removeAllRanges();setStatus('Signature copied using browser fallback. Check pasted images in Outlook.',false);return}}catch(e){}
-download();
-setStatus('Direct copy was blocked by your browser; the HTML file has been downloaded instead.',true);
-}
-}
-fields.forEach(function(id){$(id).addEventListener('input',function(){refresh()})});
-document.querySelectorAll('[data-mode]').forEach(function(b){b.addEventListener('click',function(){mode=b.dataset.mode;update()})});
-$('copy').addEventListener('click',copy);
-$('download').addEventListener('click',download);
-refresh();
-})();
-</script>
+<footer class="footer">School of Sport, Psychology and Social Science | University of Bedfordshire | Signature Builder v2.0 pilot. All personalisation occurs in your browser. </footer>
+<script src="config.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
