@@ -37,7 +37,9 @@ try{
   assert.equal(await page.locator("#preview").locator('img[alt="CASES"]').count(),1);
   assert.equal(await page.locator('[data-logo-id="ahcs"]').isDisabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
-  assert.equal(await page.locator('[data-logo-id="cases"]').evaluate(x=>document.activeElement===x),false); // click moves focus onto recreated tile unless pointer focus differs
+  await page.locator('[data-logo-id="cases"]').focus();
+  await page.keyboard.press("Enter");
+  assert.equal(await page.locator('[data-logo-id="cases"]').evaluate(x=>document.activeElement===x),true);
  });
  await check("Preserved HTML generation for Outlook",async()=>{
   const generated=await page.evaluate(()=>({
