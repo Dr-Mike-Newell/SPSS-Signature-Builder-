@@ -78,6 +78,10 @@
    const b=event.target.closest('button');
    if(!b || b.disabled)return;
    const previouslySelected=b.getAttribute("aria-pressed")==="true";
+   if(group==="claimGrid" && !previouslySelected && !window.SPSS_QA.selectedClaims().includes(b.dataset.claimId)){
+    $("selectionFeedback").textContent="You can select up to three claims. Remove one before adding another.";
+    return;
+   }
    $("selectionFeedback").textContent=previouslySelected?
     "Removed from your signature." : "Added to your signature.";
   });
