@@ -66,7 +66,7 @@ try{
   assert.equal(await page.locator("#installHelp summary").count(),1);
   await page.context().grantPermissions(["clipboard-read","clipboard-write"]);
   await page.locator("#copyStandard").click();
-  await page.locator("#status").waitFor({state:"visible"});
+  await page.waitForFunction(()=>/copied|blocked|download/i.test(document.querySelector("#status")?.textContent||""),{},{timeout:10000});
   assert.match(await page.locator("#status").innerText(),/copied/i);
  });
  await page.screenshot({path:"test-artifacts/desktop.png",fullPage:true});
