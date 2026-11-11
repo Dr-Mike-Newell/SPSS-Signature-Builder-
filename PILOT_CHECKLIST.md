@@ -12,10 +12,14 @@ Complete these checks with the Head of School, at least one colleague from each 
 - [ ] Full staff link appears only as "Staff Weblink"; links to the correct submitted URL.
 - [ ] Valid ORCID, entered as URL or formatted ID, generates the official green iD icon and correct link. Invalid ORCID does not generate a false link.
 - [ ] Exactly nine supplied student support email addresses and descriptions appear as mailto links in standard AND compact signatures.
-- [ ] The BASES Accredited Laboratory logo cannot be selected.
+- [ ] The BASES Accredited Laboratory logo cannot be selected, and its outdated image file is absent from the repository.
 - [ ] CASES appears; AHCS is shown as pending, disabled until approved image and permission are supplied.
 - [ ] Existing logos can be selected individually and retain original colour and aspect ratio.
 - [ ] Selecting a different subject area filters discipline-specific claims; Psychology and Social Science are not shown sport rankings.
+- [ ] Psychology selection shows +45 league rise, 96% support, 90% teaching, and Top 10 teaching quality; no Criminology figures leak into the selection.
+- [ ] Criminology selection shows 4th student satisfaction, Top 20 subject field, 1st teaching quality, and 3rd satisfaction with teaching; no Psychology figures leak into the selection.
+- [ ] General Social Science displays no Criminology figures.
+- [ ] Switching subjects clears previously selected incompatible claims and resets claim categories.
 - [ ] No more than three claims can be selected; they can be reordered and source/year remain visible.
 - [ ] A historical award is explicitly identified as historical.
 - [ ] Standard and compact exports show the same institution identity and support contacts; compact omits elective affiliations/claims.
@@ -38,7 +42,8 @@ Complete these checks with the Head of School, at least one colleague from each 
 - [ ] School name and student contacts confirmed by Head of School.
 - [ ] University Marketing approves visual identity and logo usage.
 - [ ] Any AHCS image and permitted-use terms confirmed with the course team.
-- [ ] Psychology, Social Science and school-wide metrics supplied, dated and checked before being activated.
+- [ ] Psychology and Criminology claims checked against the supplied 2026/27 marketing artwork, including the separate 90% teaching callout.
+- [ ] Any further general Social Science and school-wide metrics supplied, dated and checked before activation.
 - [ ] Completed pilot is returned to Head of School for final review.
 
 Record tester, Outlook version, date and any screenshots in the review notes. A browser preview alone is not evidence of Outlook compatibility.
