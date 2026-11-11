@@ -29,7 +29,8 @@ window.SPSS_CONFIG = Object.freeze({
   disciplines:[
     {id:"sport",name:"Sport and Exercise Science"},
     {id:"psychology",name:"Psychology"},
-    {id:"social",name:"Social Science"}
+    {id:"criminology",name:"Criminology"},
+    {id:"social",name:"Social Science (other subjects)"}
   ],
   affiliations:[
     {id:"cases",name:"CASES",path:"assets/logos/cases.png",w:533,h:382,audience:["sport"],status:"pilot-review",note:"Chartered Association of Sport and Exercise Sciences. Relevant staff only."},
@@ -47,7 +48,17 @@ window.SPSS_CONFIG = Object.freeze({
     {id:"career12",discipline:"sport",category:"Graduate outcomes",figure:"12th",headline:"in the UK for career prospects",source:"Guardian University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:3},
     {id:"satisfaction13",discipline:"sport",category:"Student experience",figure:"13th",headline:"in the UK for student satisfaction",source:"Complete University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:4},
     {id:"graduate6",discipline:"sport",category:"Graduate outcomes",figure:"6th",headline:"in the UK for graduate prospects",source:"The Times Good University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:5},
-    {id:"academic91",discipline:"sport",category:"Student experience",figure:"91%",headline:"for academic support in Sport and Exercise Sciences",source:"National Student Survey 2026",year:2026,review:"2026 annual survey",status:"pilot-review",priority:6}
+    {id:"academic91",discipline:"sport",category:"Student experience",figure:"91%",headline:"for academic support in Sport and Exercise Sciences",source:"National Student Survey 2026",year:2026,review:"2026 annual survey",status:"pilot-review",priority:6},
+    // Psychology subject-specific claims supplied in University marketing graphics, November 2026.
+    {id:"psych-rise45",discipline:"psychology",category:"Rankings",figure:"+45",headline:"places climbed in the Psychology league table",source:"Guardian University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:10,sourceAsset:"UoB_Psychology_plus-45-places-league-rise_Guardian-2027_Dark.png"},
+    {id:"psych-support96",discipline:"psychology",category:"Student experience",figure:"96%",headline:"for academic support in Psychology",source:"National Student Survey 2026",year:2026,review:"2026 annual survey",status:"pilot-review",priority:11,sourceAsset:"UoB_Psychology_96-percent-for-academic-support_NSS-2026_Dark.png"},
+    {id:"psych-teaching90",discipline:"psychology",category:"Student experience",figure:"90%",headline:"for teaching in Psychology",source:"National Student Survey 2026",year:2026,review:"2026 annual survey; secondary statistic in 96% academic support artwork",status:"pilot-review",priority:12,sourceAsset:"UoB_Psychology_96-percent-for-academic-support_NSS-2026_Dark.png"},
+    {id:"psych-teach-top10",discipline:"psychology",category:"Teaching quality",figure:"Top 10",headline:"in the UK for teaching quality in Psychology",source:"The Times Good University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:13,sourceAsset:"UoB_Psychology_top-10-in-the-uk-for-teaching-quality_Times-2027_Dark.png"},
+    // Criminology claims are deliberately restricted to Criminology, not all Social Science staff.
+    {id:"crim-satisf4",discipline:"criminology",category:"Student experience",figure:"4th",headline:"in the UK for student satisfaction in Criminology",source:"The Times Good University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:20,sourceAsset:"UoB_Criminology_4th-in-the-uk-for-student-satisfaction_Times-2027_Dark.png"},
+    {id:"crim-top20",discipline:"criminology",category:"Rankings",figure:"Top 20",headline:"in their subject field for Criminology",source:"Guardian University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:21,sourceAsset:"UoB_Criminology_top-20-in-their-subject-field_Guardian-2027_Dark.png"},
+    {id:"crim-teaching1",discipline:"criminology",category:"Teaching quality",figure:"1st",headline:"in the UK for teaching quality in Criminology",source:"The Times Good University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:22,sourceAsset:"UoB_Criminology_1st-in-the-uk-for-teaching-quality_Times-2027_Dark.png"},
+    {id:"crim-teach-satisf3",discipline:"criminology",category:"Student experience",figure:"3rd",headline:"in the UK for satisfaction with teaching in Criminology",source:"Guardian University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:23,sourceAsset:"UoB_Criminology_3rd-in-the-uk-for-satisfaction-with-teaching_Guardian-2027_Dark.png"}
   ],
   maxClaims:3
 });
