@@ -167,8 +167,10 @@ function signature(kind="standard",exported=false){
 }
 function refreshPreview(){
  draw();$("preview").innerHTML=signature("standard",false);
- const warning=staffValid();$("validation").textContent=warning||"Signature details are ready for copying.";
- $("validation").style.color=warning?"#a91b30":"#237352";
+ const warning=staffValid();
+ const awaitingBasics=!val("name")||!val("email");
+ $("validation").textContent=awaitingBasics?"Your signature updates as you enter your details.":(warning||"Your signature details are ready.");
+ $("validation").style.color=awaitingBasics?"#666d73":(warning?"#a91b30":"#237352");
 }
 function render(){refreshPreview();}
 function fileHtml(kind){return '<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>SPSS Outlook signature</title></head><body style="margin:8px;background:#fff;">'+signature(kind,true)+'</body></html>';}
