@@ -106,17 +106,23 @@ function logos(exported){
  const chosen=selectedLogos.map(id=>C.affiliations.find(a=>a.id===id)).filter(x=>x&&x.path&&x.status!=="pending-asset");
  if(!chosen.length)return "";
  let rows="";
- for(let i=0;i<chosen.length;i+=3){
-  rows+='<tr>';
-  for(let j=0;j<3;j++){
-   const l=chosen[i+j];if(!l){rows+='<td width="33%" style="width:33%;"></td>';continue;}
-   const k=Math.min(145/l.w,54/l.h,1),w=Math.max(1,Math.round(l.w*k)),h=Math.max(1,Math.round(l.h*k));
-   rows+='<td width="33%" style="width:33%;vertical-align:middle;padding:8px 12px 6px 0;">'+
+ // At most four independently selected logos per row. Natural-width cells keep
+ // the logos together instead of stretching them over the signature's full width.
+ for(let i=0;i<chosen.length;i+=4){
+  const group=chosen.slice(i,i+4);
+  let cells="";
+  for(const l of group){
+   const scale=Math.min(120/l.w,50/l.h,1);
+   const w=Math.max(1,Math.round(l.w*scale)),h=Math.max(1,Math.round(l.h*scale));
+   cells+='<td valign="middle" style="vertical-align:middle;padding:0 7px 0 0;white-space:nowrap;">'+
     '<img src="'+E(imageUrl(l.path,exported))+'" alt="'+E(l.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;"></td>';
   }
-  rows+='</tr>';
+  // Separate nested table per row prevents a sparse final row from spreading
+  // the other columns; tables and inline styles remain Outlook compatible.
+  rows+='<tr><td style="padding:6px 0 2px 0;vertical-align:middle;">'+
+   '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;table-layout:auto;"><tr>'+cells+'</tr></table></td></tr>';
  }
- return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:12px;">'+rows+'</table>';
+ return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:10px;">'+rows+'</table>';
 }
 function claims(){
  if(!selectedClaims.length)return "";
