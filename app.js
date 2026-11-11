@@ -35,10 +35,10 @@ function staffValid(){
 function notice(message,problem=false){$("status").textContent=message;$("status").style.color=problem?"#b01c30":"#147450";}
 function eligible(logo){const d=val("discipline");return logo.audience.includes("all")||logo.audience.includes(d);}
 function logoTile(l){
- const picked=selectedLogos.includes(l.id),disabled=l.status==="pending-asset";
+ const picked=selectedLogos.includes(l.id),disabled=l.status==="pending-asset"||!eligible(l);
  const b=document.createElement("button");
  b.type="button";b.className="logo-tile"+(picked?" selected":"");
- b.disabled=disabled;b.setAttribute("aria-pressed",String(picked));b.title=l.note;
+ b.disabled=disabled;b.dataset.logoId=l.id;b.setAttribute("aria-pressed",String(picked));b.title=l.note;
  const img=l.path?'<img src="'+E(imageUrl(l.path,false))+'" alt="" loading="lazy">':'<span class="logo-text">Image pending</span>';
  b.innerHTML='<span class="tick" aria-hidden="true">'+(picked?"✓":disabled?"–":"+")+'</span>'+img+
  '<span class="tile-name">'+E(l.name)+'</span><span class="tile-sub">'+E(l.status==="pending-asset"?"Awaiting approved logo":l.status==="historical"?"Historical 2023/24":l.status==="restricted"?"Restricted use":"For pilot review")+'</span>';
@@ -50,19 +50,21 @@ function logoTile(l){
    selectedLogos.push(l.id);
   }
   render();
+  document.querySelector('[data-logo-id="'+l.id+'"]')?.focus({preventScroll:true});
  });
  return b;
 }
 function claimTile(c){
  const picked=selectedClaims.includes(c.id);
  const b=document.createElement("button");b.type="button";
- b.className="claim"+(picked?" selected":"");b.setAttribute("aria-pressed",String(picked));
+ b.className="claim"+(picked?" selected":"");b.dataset.claimId=c.id;b.setAttribute("aria-pressed",String(picked));
  b.innerHTML='<strong>'+E(c.figure)+'</strong><span class="claim-text"><b>'+E(c.headline)+'</b><span class="claim-source">'+E(c.source)+' · '+E(C.disciplines.find(d=>d.id===c.discipline)?.name || "School-wide")+" · "+E(c.status==="pilot-review"?"Pilot review":"Approved")+'</span></span><span class="tick" aria-hidden="true">'+(picked?"✓":"+")+'</span>';
  b.addEventListener("click",()=>{
   if(picked)selectedClaims=selectedClaims.filter(x=>x!==c.id);
   else if(selectedClaims.length<C.maxClaims)selectedClaims.push(c.id);
   else{notice("You can select up to "+C.maxClaims+" marketing claims. Remove one first.",true);return;}
   render();
+  document.querySelector('[data-claim-id="'+c.id+'"]')?.focus({preventScroll:true});
  });
  return b;
 }
@@ -165,8 +167,10 @@ function signature(kind="standard",exported=false){
 }
 function refreshPreview(){
  draw();$("preview").innerHTML=signature("standard",false);
- const warning=staffValid();$("validation").textContent=warning||"Signature details are ready for copying.";
- $("validation").style.color=warning?"#a91b30":"#237352";
+ const warning=staffValid();
+ const awaitingBasics=!val("name")||!val("email");
+ $("validation").textContent=awaitingBasics?"Your signature updates as you enter your details.":(warning||"Your signature details are ready.");
+ $("validation").style.color=awaitingBasics?"#666d73":(warning?"#a91b30":"#237352");
 }
 function render(){refreshPreview();}
 function fileHtml(kind){return '<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><title>SPSS Outlook signature</title></head><body style="margin:8px;background:#fff;">'+signature(kind,true)+'</body></html>';}

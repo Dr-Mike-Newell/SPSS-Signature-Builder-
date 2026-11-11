@@ -4,163 +4,155 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light">
-<title>SPSS Email Signature Builder | University of Bedfordshire</title>
-<style>
-:root{--red:#c8102e;--red-dark:#9c0b28;--ink:#161616;--muted:#63666a;--line:#dfe1e4;--paper:#fff;--canvas:#f4f5f6;--radius:12px}
-*{box-sizing:border-box}
-body{margin:0;background:var(--canvas);color:var(--ink);font-family:Arial,Helvetica,sans-serif;font-size:14px}
-header{background:#0b0b0e;color:#fff;border-bottom:5px solid var(--red);padding:25px clamp(18px,5vw,72px)}
-.header-inner{max-width:1440px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px}
-header h1{margin:0;font-size:clamp(21px,2.2vw,29px);letter-spacing:-.4px}
-header p{margin:7px 0 0;color:#bfc1c6;font-size:13px;line-height:1.5}
-.kicker{font-size:11px;color:#f7a9bb;letter-spacing:2px;font-weight:700;text-transform:uppercase;margin-bottom:8px}
-.brand-mark{width:44px;height:44px;background:var(--red);clip-path:polygon(0 12%,21% 12%,21% 68%,47% 68%,47% 0,68% 0,68% 68%,100% 68%,100% 100%,0 100%);flex:none;opacity:.95}
-.shell{max-width:1440px;margin:26px auto 28px;padding:0 20px;display:grid;grid-template-columns:minmax(320px,440px) minmax(0,1fr);gap:22px;align-items:start}
-.panel{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 4px 16px #171b2510}
-.settings{padding:22px}
-.panel-title{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 15px}
-h2{font-size:17px;margin:0;letter-spacing:-.2px}
-small,.muted{font-size:12px;color:var(--muted);line-height:1.5}
-.section{border-top:1px solid var(--line);padding-top:20px;margin-top:22px}
-.section>h2{margin-bottom:7px}
-.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
-.field-grid .wide{grid-column:1/-1}
-label.field{display:block;font-size:12px;font-weight:700;color:#3b3c42;margin:14px 0 5px}
-input[type="text"],input[type="email"],input[type="tel"],select{display:block;width:100%;padding:10px 11px;border:1px solid #c6c8cf;border-radius:6px;font:13px Arial,Helvetica,sans-serif;background:#fff;color:#171717;min-height:40px}
-input:focus,select:focus,button:focus-visible{outline:3px solid #e86c86;outline-offset:2px}
-.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}
-.mode{background:#f8f8f9;border:1px solid #d7d7da;border-radius:8px;padding:11px 7px;text-align:center;color:#303036;font-size:12px;font-weight:700;cursor:pointer}
-.mode.active{background:#fff0f3;border-color:var(--red);color:var(--red-dark);box-shadow:inset 0 0 0 1px var(--red)}
-.logo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:13px}
-.logo-tile{display:flex;min-height:103px;flex-direction:column;justify-content:center;align-items:center;position:relative;text-align:center;background:#fff;border:1px solid #d6d8db;border-radius:9px;padding:13px 8px 9px;cursor:pointer;overflow:hidden;gap:9px}
-.logo-tile.selected{border-color:var(--red);background:#fff7f8;box-shadow:inset 0 0 0 1px var(--red)}
-.logo-tile img{display:block;max-width:100%;max-height:46px;object-fit:contain}
-.logo-tile .logo-text{font-weight:700;font-size:13px;color:#333;line-height:1.2}
-.logo-tile .tile-name{font-size:11px;line-height:1.25;color:#53565b}
-.logo-tile .tick{position:absolute;right:7px;top:7px;background:#eee;color:#444;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:12px}
-.logo-tile.selected .tick{background:var(--red);color:white}
-.logo-tile:disabled{opacity:.5;cursor:not-allowed}
-.claims{display:grid;gap:8px;margin-top:12px}
-.claim{display:flex;text-align:left;align-items:center;gap:12px;width:100%;border:1px solid #dedfe2;border-radius:8px;background:#fff;padding:11px 10px;color:inherit;cursor:pointer}
-.claim.selected{background:#fff4f6;border-color:var(--red)}
-.claim strong{font-size:21px;font-weight:900;color:var(--red);line-height:1;min-width:60px}
-.claim-text{font-size:12px;line-height:1.4;flex:1}
-.claim-text b{font-size:12px}
-.claim-source{display:block;color:#73747a;font-size:10px;margin-top:3px}
-.claim .tick{border-radius:50%;width:21px;height:21px;background:#e7e7e9;color:#555;display:grid;place-items:center;font-size:12px;flex:none}
-.claim.selected .tick{background:var(--red);color:#fff}
-.order-list{margin-top:14px;padding:12px;border:1px dashed #bbbfc7;border-radius:8px;background:#fafafa;min-height:44px}
-.order-row{display:flex;align-items:center;gap:7px;font-size:12px;padding:4px 0}
-.order-label{flex:1;min-width:0}
-.order-btn{padding:4px 8px;border:1px solid #cfd1d5;border-radius:5px;background:white;cursor:pointer;font-size:12px;color:#222}
-.order-btn:disabled{opacity:.35;cursor:default}
-.notice{font-size:11px;line-height:1.55;color:#52545a;margin:9px 0 0}
-.preview-panel{padding:24px;position:sticky;top:16px}
-.preview-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}
-.tag{font-size:10px;letter-spacing:.5px;color:#a0092d;background:#fff1f4;border-radius:4px;padding:6px 8px;font-weight:700}
-.canvas{background:#fff;min-height:280px;border:1px solid #e5e5e8;border-radius:8px;padding:24px;overflow:auto}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
-.primary,.secondary{font-size:13px;font-weight:700;border-radius:6px;padding:12px 16px;cursor:pointer;min-height:44px}
-.primary{background:var(--red);border:1px solid var(--red);color:white}
-.primary:hover{background:var(--red-dark)}
-.secondary{background:#202126;border:1px solid #202126;color:white}
-.secondary:hover{background:#000}
-.status{min-height:20px;font-size:12px;color:#11734c;margin-top:12px;line-height:1.5}
-.help{margin-top:22px;border-top:1px solid var(--line);padding-top:17px}
-.help h3{font-size:13px;margin:0 0 9px}
-.help p{font-size:12px;line-height:1.65;color:#555;margin:0 0 9px}
-.help ol{font-size:12px;line-height:1.7;color:#4f5054;margin:5px 0;padding-left:20px}
-.footer{max-width:1440px;margin:8px auto 38px;padding:0 20px;color:#73757a;font-size:11px;line-height:1.65}
-@media(max-width:1020px){.shell{grid-template-columns:1fr}.preview-panel{position:static}}
-@media(max-width:540px){.shell{padding:0 11px;margin-top:13px}.settings,.preview-panel{padding:16px}.canvas{padding:10px}.field-grid{grid-template-columns:1fr}.field-grid .wide{grid-column:auto}.header-inner{align-items:flex-start}.brand-mark{width:32px;height:32px}}
-
-/* School-wide pilot: accessible inputs and predictable export controls */
-.field-grid input{border:1px solid #c5c7cd}
-.section-label{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:#a91132;font-weight:700}
-.tile-sub{font-size:10px;line-height:1.2;color:#787b80}
-fieldset{padding:0;margin:0;border:0}
-legend{font-weight:700;color:#35373b;font-size:13px;margin:0 0 4px}
-#discipline,#category{margin:9px 0 12px}
-.info{padding:10px 12px;margin:10px 0 0;background:#f7f7f8;border-left:3px solid #a90e2e;color:#4e5054;font:12px/1.55 Arial,Helvetica,sans-serif}
-.pilot{color:#9a2d3e;background:#fff5f6;border:1px solid #f3c5cd;padding:10px 12px;border-radius:6px;font-size:12px;line-height:1.5;margin:14px 0 2px}
-.actions .primary,.actions .secondary{flex:1;min-width:180px}
-.textbutton{border:0;background:transparent;text-decoration:underline;color:#8b102e;font-size:12px;cursor:pointer;padding:5px 8px}
-#claimCounter{display:inline-block;margin-top:7px;font-weight:700;color:#a01b30}
-#validation{font-size:12px;line-height:1.6;margin-top:10px;min-height:20px}
-.preview-note{font-size:12px;line-height:1.6;margin:12px 0;color:#62656a}
-.logo-tile:disabled{opacity:.57}
-@media(max-width:540px){.actions .primary,.actions .secondary{min-width:100%}}
-
-</style>
+<meta name="description" content="Create your professional University of Bedfordshire email signature.">
+<title>University Signature Studio | University of Bedfordshire</title>
+<link rel="stylesheet" href="studio.css">
 </head>
 <body>
-<header><div class="header-inner"><div><div class="kicker">School identity toolkit</div><h1>SPSS Email Signature Builder</h1><p>University of Bedfordshire &nbsp;|&nbsp; One unified design for Sport, Psychology and Social Science</p></div><div class="brand-mark" aria-hidden="true"></div></div></header>
-<main class="shell">
-<section class="panel settings" aria-label="Signature builder settings">
-<div class="panel-title"><h2>01 / Your details</h2><small>Personal details only</small></div>
-<div class="field-grid">
-<div class="wide"><label class="field" for="name">Full name</label><input id="name" type="text" value="" placeholder="Dr Alex Taylor" autocomplete="name"></div>
-<div><label class="field" for="postnominals">Postnominals</label><input id="postnominals" type="text" placeholder="PhD FHEA"></div>
-<div><label class="field" for="job">Job title</label><input id="job" type="text" placeholder="Senior Lecturer"></div>
-<div class="wide"><label class="field" for="address">Office / postal address (optional)</label><input id="address" type="text" placeholder="Polhill Avenue, Bedford, MK41 9EA"></div>
-<div><label class="field" for="phone">Telephone (optional)</label><input id="phone" type="tel" placeholder="+44 (0)1234 793093"></div>
-<div><label class="field" for="email">Staff email address</label><input id="email" type="email" placeholder="alex.taylor@beds.ac.uk" autocomplete="email"></div>
-<div class="wide"><label class="field" for="website">Staff profile URL (optional)</label><input id="website" type="text" placeholder="https://www.beds.ac.uk/staff/..." inputmode="url"><small>Displays as the hyperlink “Staff Weblink” in the signature.</small></div>
-<div class="wide"><label class="field" for="orcid">ORCID iD (optional)</label><input id="orcid" type="text" placeholder="0000-0002-1825-0097 or https://orcid.org/..."><small>Accepts an identifier or full ORCID profile URL, checked for a valid check digit.</small></div>
-</div>
-<div class="info">The School and Faculty names are fixed centrally and cannot be edited. All staff receive the same University signature layout and student support information.</div>
-<div class="section">
-<h2>02 / Professional affiliations</h2>
-<p class="muted">Select only those logos that relate to your role or programme. The BASES Accredited Laboratory logo is withdrawn while the labs are under review.</p>
-<label class="field" for="discipline">Your subject area</label>
-<select id="discipline"><option value="">Select your discipline</option></select>
-<div id="logoGrid" class="logo-grid" role="group" aria-label="Optional professional affiliations"></div>
-<p class="notice">CASE​S is the sport and exercise sciences association logo. AHCS is shown as pending and cannot be selected until an official image and permitted-use confirmation are supplied. Historic and restricted logos are clearly labelled.</p>
-</div>
-<div class="section">
-<h2>03 / School achievements &amp; claims</h2>
-<p class="muted">Select up to three claims applicable to your discipline. Their source and year remain visible in every generated signature.</p>
-<label class="field" for="category">Category</label>
-<select id="category"><option value="">All categories</option></select>
-<span id="claimCounter" aria-live="polite">0 / 3 claims selected</span>
-<div id="claimGrid" class="claims" role="group" aria-label="Marketing claims"></div>
-<div id="claimOrder" class="order-list" aria-live="polite"></div>
-<p class="notice">Sport, Psychology and Criminology have separate, sourced marketing claims for pilot review. No other Social Science or school-wide ranking figures have been supplied. Only claims relevant to the selected subject will appear.</p>
-</div>
-<div class="section">
-<h2>Student support contacts</h2>
-<p class="muted">The full nine-address contact list is automatically included in both standard and compact reply signatures and cannot be disabled.</p>
-</div>
-</section>
-<section class="panel preview-panel" aria-label="Signature preview">
-<div class="preview-head"><h2>04 / Live signature preview</h2><span class="tag">PILOT · V2</span></div>
-<div id="preview" class="canvas" aria-label="Standard signature preview"></div>
-<div id="validation" role="status"></div>
-<div class="actions">
-<button type="button" class="primary" id="copyStandard">Copy standard signature</button>
-<button type="button" class="secondary" id="copyCompact">Copy compact reply signature</button>
-</div>
-<div class="actions">
-<button type="button" class="textbutton" id="downloadStandard">Download standard HTML</button>
-<button type="button" class="textbutton" id="downloadCompact">Download reply HTML</button>
-</div>
-<div id="status" class="status" role="status"></div>
-<div class="pilot">School-wide pilot for Head of School review. Please do not circulate as an approved institutional signature until branding, logo permissions, and the Outlook pilot have been signed off.</div>
-<div class="help">
-<h3>Install in Microsoft Outlook</h3>
-<ol>
-<li>Enter your details and choose relevant affiliations and claims.</li>
-<li>Click <b>Copy standard signature</b> to use for new emails, or <b>Copy compact reply signature</b> for replies. Both retain the required support contacts.</li>
-<li>Paste into your Outlook signature editor and save. New Outlook and Outlook on the web: Settings &gt; Accounts &gt; Signatures. Classic Outlook: File &gt; Options &gt; Mail &gt; Signatures.</li>
-<li>Send an external test email and check the logos, support links, spacing and mobile appearance.</li>
-</ol>
-<p>The builder does not send entered staff information to a server. Image assets load from HTTPS URLs and external recipients may need to allow images. Copy results will vary slightly by Outlook version.</p>
-<p>University wordmark: an approved high-resolution replacement is still needed for final rollout. The current image is displayed below its native width to reduce pixelation.</p>
-</div>
-</section>
+<a class="skip-link" href="#builder">Skip to signature builder</a>
+<header class="site-header">
+ <div class="header-inner">
+  <div class="header-brand">
+   <img src="assets/logos/university-of-bedfordshire-master.png" alt="University of Bedfordshire" width="178">
+   <span class="header-divider" aria-hidden="true"></span>
+   <div class="header-title"><span>School identity toolkit</span>Signature Studio</div>
+  </div>
+  <span class="pilot-pill">School pilot</span>
+ </div>
+</header>
+<main id="builder" class="main-wrap">
+ <section class="intro" aria-labelledby="welcome">
+  <span class="eyebrow">Your identity, beautifully presented</span>
+  <h1 id="welcome">Make your signature <em>yours.</em></h1>
+  <p>Create a professional University of Bedfordshire email signature that reflects your role, expertise and achievements. Three simple steps, one consistent University identity.</p>
+ </section>
+ <nav class="progress-nav" aria-label="Signature creation stages">
+  <button type="button" class="progress-step active" data-step="1" aria-current="step"><span class="number">1</span><span>Your details</span></button>
+  <span class="progress-line" aria-hidden="true"></span>
+  <button type="button" class="progress-step" data-step="2"><span class="number">2</span><span>Personalise</span></button>
+  <span class="progress-line" aria-hidden="true"></span>
+  <button type="button" class="progress-step" data-step="3"><span class="number">3</span><span>Ready to copy</span></button>
+ </nav>
+ <div class="workspace">
+  <section class="builder-card" aria-label="Guided signature creator">
+   <div class="step-panel" data-panel="1" aria-labelledby="step1Title">
+    <span class="step-kicker">STEP 01 / 03</span>
+    <h2 id="step1Title">First, the essentials.</h2>
+    <p class="lead">Start with your details. Your signature takes shape in the preview as you type.</p>
+    <div class="field-grid">
+     <label class="field wide" for="name">Full name <span class="required">Required</span>
+      <input id="name" name="name" type="text" autocomplete="name" placeholder="Dr Alex Taylor" required aria-describedby="nameHint">
+      <small id="nameHint">Enter your name as it should appear in professional correspondence.</small>
+     </label>
+     <label class="field" for="job">Job title
+      <input id="job" type="text" placeholder="Senior Lecturer" autocomplete="organization-title">
+     </label>
+     <label class="field" for="postnominals">Postnominals <span class="optional">Optional</span>
+      <input id="postnominals" type="text" placeholder="PhD FHEA">
+     </label>
+     <label class="field wide" for="email">Staff email <span class="required">Required</span>
+      <input id="email" name="email" type="email" placeholder="alex.taylor@beds.ac.uk" autocomplete="email" required>
+     </label>
+     <label class="field" for="phone">Telephone <span class="optional">Optional</span>
+      <input id="phone" type="tel" placeholder="+44 (0)1234 793093" autocomplete="tel">
+     </label>
+     <label class="field" for="address">Office / postal address <span class="optional">Optional</span>
+      <input id="address" type="text" placeholder="Polhill Avenue, Bedford">
+     </label>
+     <label class="field wide" for="website">Staff profile URL <span class="optional">Optional</span>
+      <input id="website" type="text" placeholder="https://www.beds.ac.uk/staff/..." inputmode="url" aria-describedby="websiteHint">
+      <small id="websiteHint">Long URLs appear neatly as “Staff Weblink”.</small>
+     </label>
+     <label class="field wide" for="orcid">ORCID iD <span class="optional">Optional</span>
+      <input id="orcid" type="text" placeholder="0000-0002-1825-0097" aria-describedby="orcidHint">
+      <small id="orcidHint">Paste your 16-digit identifier or ORCID profile URL.</small>
+     </label>
+    </div>
+    <div class="privacy-note"><span class="symbol" aria-hidden="true">✓</span> Your details stay in this browser. No account or sign-in is required.</div>
+    <button type="button" class="preview-jump" data-jump-preview>View live preview ↓</button>
+    <div id="stepError" class="error" role="alert" aria-live="polite"></div>
+    <div class="step-footer">
+     <span class="context">School and Faculty details are included automatically.</span>
+     <button class="btn btn-primary" id="goPersonalise" type="button">Continue <span aria-hidden="true">→</span></button>
+    </div>
+   </div>
+   <div class="step-panel" data-panel="2" aria-labelledby="step2Title" hidden>
+    <span class="step-kicker">STEP 02 / 03</span>
+    <h2 id="step2Title">Show what makes your work distinctive.</h2>
+    <p class="lead">Select relevant affiliations and achievements. This entire step is optional.</p>
+    <div class="select-field">
+     <label for="discipline">Your subject area</label>
+     <select id="discipline"><option value="">Choose your subject (optional)</option></select>
+    </div>
+    <div class="section-title"><h3>Professional affiliations</h3><span>Choose what applies to you</span></div>
+    <div id="logoGrid" class="logo-grid" role="group" aria-label="Optional affiliation logos"></div>
+    <p class="notice">Only include affiliations relevant to your role or programme. Restricted and historical logos are labelled, and unavailable options cannot be selected.</p>
+    <div class="section-title"><h3>School achievements</h3><span id="claimCounter" aria-live="polite">0 / 3 claims selected</span></div>
+    <div class="select-field">
+     <label for="category">Filter achievements</label>
+     <select id="category"><option value="">All categories</option></select>
+    </div>
+    <div id="claimGrid" class="claims" role="group" aria-label="Subject-specific marketing claims"></div>
+    <div id="claimOrder" class="order-list" aria-live="polite"></div>
+    <div id="selectionFeedback" role="status" aria-live="polite"></div>
+    <div class="automatic"><strong>Automatically included</strong>The University logo, the correct School and Faculty names, and all nine student support contacts are included in every signature. No need to add them yourself.</div>
+    <button type="button" class="preview-jump" data-jump-preview>View live preview ↓</button>
+    <div class="step-footer">
+     <button class="btn btn-secondary" id="backToDetails" type="button">← Back</button>
+     <button class="btn btn-primary" id="goReady" type="button">See my signature <span aria-hidden="true">→</span></button>
+    </div>
+   </div>
+   <div class="step-panel" data-panel="3" aria-labelledby="step3Title" hidden>
+    <span class="step-kicker">STEP 03 / 03</span>
+    <div class="completion-badge" aria-hidden="true">✓</div>
+    <h2 id="step3Title">Your signature is ready.</h2>
+    <p class="lead">You've created a signature that reflects you and stays consistent with our University identity. Copy it directly into Outlook.</p>
+    <div class="action-stack">
+     <button id="copyStandard" class="btn btn-primary" type="button">Copy my signature <span aria-hidden="true">↗</span></button>
+     <button id="copyCompact" class="btn btn-secondary" type="button">Copy compact reply signature</button>
+    </div>
+    <p class="finish-note">The compact version keeps University identity and student support contacts but omits promotional logos and claims.</p>
+    <div class="download-links">
+     <button id="downloadStandard" class="btn-link" type="button">Download standard HTML</button>
+     <button id="downloadCompact" class="btn-link" type="button">Download reply HTML</button>
+    </div>
+    <div id="status" role="status" aria-live="polite"></div>
+    <details class="install-help" id="installHelp">
+     <summary>How do I add this to Outlook?</summary>
+     <ol>
+      <li>Click “Copy my signature” above.</li>
+      <li>In New Outlook or Outlook on the web, open Settings → Accounts → Signatures. In classic Outlook, use File → Options → Mail → Signatures.</li>
+      <li>Paste the signature into the editor and save.</li>
+      <li>Send yourself a test email, ideally to an external address, to check the links and images.</li>
+     </ol>
+    </details>
+    <div class="step-footer">
+     <button class="btn btn-secondary" id="backToPersonalise" type="button">← Change selections</button>
+     <button class="btn btn-quiet" id="backToDetailsFromFinish" type="button">Edit my details</button>
+    </div>
+   </div>
+  </section>
+  <aside class="preview-rail" id="previewRail" aria-label="Live Outlook signature preview">
+   <div class="preview-heading">
+    <h2>Your signature, taking shape</h2>
+    <span><span class="live">● LIVE</span> · Preview</span>
+   </div>
+   <div class="email-shell">
+    <div class="email-bar"><b>Signature preview · not an Outlook screenshot</b><span class="dots" aria-hidden="true">● ● ●</span></div>
+    <div class="email-content">
+     <p class="salutation">Kind regards,</p>
+     <div id="preview" aria-label="Generated standard signature preview"></div>
+    </div>
+   </div>
+   <div id="validation" role="status" aria-live="polite"></div>
+   <div class="preview-footer"><span class="check" aria-hidden="true">✓</span><span>University branding and student support contacts are automatically included.</span></div>
+  </aside>
+ </div>
+ <p class="pilot-note">School pilot: professional affiliations, promotional claims and email-client compatibility remain subject to school approval and testing before wider roll-out.</p>
 </main>
-<footer class="footer">School of Sport, Psychology and Social Science | University of Bedfordshire | Signature Builder v2.0 pilot. All personalisation occurs in your browser. </footer>
+<footer class="site-footer">University of Bedfordshire · School of Sport, Psychology and Social Science · Built for staff, with care. Your personal details are processed locally in your browser.</footer>
 <script src="config.js"></script>
 <script src="app.js"></script>
+<script src="studio.js"></script>
 </body>
 </html>

@@ -2,6 +2,8 @@
 
 School-wide signature pilot for the University of Bedfordshire School of Sport, Psychology and Social Science.
 
+The current interface is the **University Signature Studio**, a three-stage guided journey: Your details → Personalise → Ready to copy. The live preview continues using the existing Outlook-compatible renderer.
+
 Live site: https://mikelnewell.github.io/SPSS-Signature-Builder-/
 
 ## How staff use the builder
@@ -10,7 +12,7 @@ Live site: https://mikelnewell.github.io/SPSS-Signature-Builder-/
 2. Choose the subject area relevant to your role. The School and Faculty names are fixed.
 3. Select optional professional affiliation logos that genuinely apply to your role.
 4. Select and reorder up to three appropriate marketing claims. Sport, Psychology and Criminology claims are subject-specific and must never be presented as school-wide. Criminology is a separate subject from general Social Science.
-5. Select **Copy standard signature** for new messages, or **Copy compact reply signature** for replies. Both versions contain all nine mandatory student-support contacts.
+5. Select **Copy my signature** for new messages, or **Copy compact reply signature** for replies. Both versions contain all nine mandatory student-support contacts.
 6. Paste into Outlook > Settings > Accounts > Signatures (new Outlook / web) or File > Options > Mail > Signatures (classic Outlook).
 7. Send a test message to an external address. Check layout, images, links and mobile display. You may use the HTML download fallback if your browser blocks clipboard access.
 
@@ -20,7 +22,11 @@ This website is a pilot pending approval from the Head of School. It is not evid
 
 - \`config.js\`: School and Faculty names, University logo path and dimensions, ORCID icon, nine student support contacts, discipline list, affiliation approvals and marketing claim registry.
 - \`app.js\`: display logic, selection controls, input validation and Outlook-compatible HTML generation.
-- \`index.html\`: static user interface and CSS.
+- \`index.html\`: branded three-stage interface and accessible structure.
+- \`studio.css\`: central interface design tokens, responsive typography, panels and interaction styles.
+- \`studio.js\`: step navigation, accessible focus, inline guidance and restrained selection feedback. Does not change the signature HTML renderer.
+- \`tests/studio.spec.mjs\`: Chromium regression checks for the journey, subject filters, required support contacts, signature HTML and mobile layout.
+- \`.github/workflows/studio-qa.yml\`: automatic browser QA for the feature branch and pull requests.
 - \`assets/logos/\`: approved or pilot branding assets. The current wordmark is \`university-of-bedfordshire-master.png\`. The legacy logo file is retained so existing emails do not break. Never rename an image file already used in sent email signatures.
 - \`PILOT_CHECKLIST.md\`: test plan for staff and University Marketing.
 - \`MARKETING_CLAIMS.md\`: source-by-source provenance for the new Psychology and Criminology figures, including marketing artwork filenames.
@@ -46,7 +52,7 @@ The nine addresses and exact descriptions supplied by the Head of School are cen
 
 ### ORCID iDs
 
-Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Uses the official green ORCID iD icon URL, hyperlinked to the person's profile. As entries are manually supplied, the signature labels them unauthenticated according to ORCID display guidance.
+Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Uses the official green ORCID iD icon URL, hyperlinked to the person's profile. Identifiers are manually entered and are not authenticated through ORCID OAuth; only the linked green icon and identifier appear in the signature, without an authentication label.
 
 ### Known pilot limitations
 
@@ -68,3 +74,12 @@ Do not announce the signature as an officially approved institution-wide standar
 Eight claims were added to the central registry: four Psychology claims (including the 90% teaching statistic within the 96% support artwork), and four Criminology claims. Staff select Psychology or Criminology to see only relevant marketing claims; general Social Science remains separate. Source files and exact wording are recorded in \`MARKETING_CLAIMS.md\`.
 
 The original 2048-pixel artwork was supplied by the requester but is not hosted in the repository; only the statistics are rendered as compact email-safe cards. No full-resolution images are embedded in email signatures.
+
+
+## Signature Studio visual approach
+
+The interactive builder adopts the **Guided Signature Journey** concept with editorial typography informed by the Editorial Signature Studio. Staff work through details, optional personalisation and a clear final copy step. The Outlook HTML itself retains one institutionally consistent design. The email-style preview frame is interface-only and is never part of the copied signature. No new server, sign-in, tracking or personal data storage has been added.
+
+The application uses a small named token scale in `studio.css`, explicit responsive breakpoints and a reduced-motion fallback. All nine support contacts are mandatory and remain in both outputs. The School-wide pilot notice remains until approval.
+
+Browser tests run in the feature branch and on pull requests. Passing automated browser checks does not substitute for an Outlook Windows/Mac and external-recipient test before general staff rollout.
