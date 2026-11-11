@@ -98,7 +98,7 @@ function contact(){
  if(val("email"))items.push('<span style="color:#777;">E:</span> <a href="mailto:'+E(val("email"))+'" style="color:#252525;text-decoration:underline;">'+E(val("email"))+'</a>');
  if(url(val("website")))items.push('<span style="color:#777;">W:</span> <a href="'+E(url(val("website")))+'" style="color:#252525;text-decoration:underline;">Staff Weblink</a>');
  const o=orcid(val("orcid"));
- if(o&&typeof o==="object")items.push('<a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;"><img src="'+E(C.orcidIcon)+'" alt="ORCID iD" width="16" height="16" style="display:inline-block;width:16px;height:16px;vertical-align:middle;border:0;margin-right:5px;">'+E(o.id)+'</a><span style="font-size:9px;color:#777;"> (unauthenticated)</span>');
+ if(o&&typeof o==="object")items.push('<a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;"><img src="'+E(C.orcidIcon)+'" alt="ORCID iD" width="16" height="16" style="display:inline-block;width:16px;height:16px;vertical-align:middle;border:0;margin-right:5px;">'+E(o.id)+'</a>');
  return items.length?'<div style="font:11px/18px Arial,Helvetica,sans-serif;color:#303030;padding-top:9px;">'+items.join('<span style="color:#c8102e;padding:0 6px;"> | </span>')+'</div>':"";
 }
 function logos(exported){
