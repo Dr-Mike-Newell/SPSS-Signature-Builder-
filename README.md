@@ -85,3 +85,15 @@ The interactive builder adopts the **Guided Signature Journey** concept with edi
 The application uses a small named token scale in `studio.css`, explicit responsive breakpoints and a reduced-motion fallback. All nine support contacts are mandatory and remain in both outputs. The School-wide pilot notice remains until approval.
 
 Browser tests run in the feature branch and on pull requests. Passing automated browser checks does not substitute for an Outlook Windows/Mac and external-recipient test before general staff rollout.
+
+
+## Netlify hosting
+
+The repository is ready for a Git-connected Netlify deployment. Netlify build settings are stored in `netlify.toml`, so no framework or package installation is required.
+
+1. Sign in to Netlify and select **Add new project > Import an existing project > GitHub**.
+2. Select `MikeLNewell/SPSS-Signature-Builder-` and set the production branch to `main`.
+3. Confirm that the build command and publish directory are supplied by `netlify.toml` (output directory `dist`).
+4. Deploy and test the Netlify URL, including the three stages, logo images, claim selection and Outlook copying.
+
+Only the website files and `assets/logos/` are copied to the public `dist` directory, not the repository's tests and documentation. GitHub Pages remains available as a fallback. At present the generated email signature's absolute image URLs use the existing GitHub Pages address in `config.js`; this intentionally preserves an established image host and can be changed to a verified permanent Netlify domain during a later migration if desired.
