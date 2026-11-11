@@ -35,9 +35,9 @@ window.SPSS_CONFIG = Object.freeze({
   // Fixed institutional promotional branding, shown only beside selected marketing claims.
   promotionalBrand:{
     name:"Career Powered Education",
-    path:"assets/logos/career-powered.jpg",
-    nativeWidth:690,
-    nativeHeight:687,
+    path:"assets/logos/career-powered-clean.jpg",
+    nativeWidth:685,
+    nativeHeight:685,
     displayWidth:112,
     displayHeight:112
   },
