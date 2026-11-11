@@ -40,6 +40,7 @@ try{
   await page.locator('[data-logo-id="cases"]').focus();
   await page.keyboard.press("Enter");
   assert.equal(await page.locator('[data-logo-id="cases"]').evaluate(x=>document.activeElement===x),true);
+  await page.keyboard.press("Enter"); // Restore the selection for the export tests.
  });
  await check("Preserved HTML generation for Outlook",async()=>{
   const generated=await page.evaluate(()=>({
