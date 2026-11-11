@@ -128,14 +128,26 @@ function logos(exported){
 }
 function claims(){
  if(!selectedClaims.length)return "";
- let html='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;margin-top:10px;">';
+ let html='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;">';
  for(const [i,id] of selectedClaims.entries()){
   const c=C.claims.find(x=>x.id===id);if(!c)continue;
-  html+='<tr><td style="padding-top:'+(i?4:8)+'px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background-color:#151519;"><tr>'+
+  html+='<tr><td style="padding-top:'+(i?5:0)+'px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background-color:#151519;"><tr>'+
   '<td width="90" style="width:90px;background-color:#c8102e;color:#fff;vertical-align:middle;text-align:center;padding:9px 7px;font:900 25px Arial,Helvetica,sans-serif;">'+E(c.figure)+'</td>'+
   '<td style="vertical-align:middle;padding:8px 12px;color:#fff;font:700 12px/16px Arial,Helvetica,sans-serif;">'+E(c.headline)+'<div style="padding-top:3px;color:#d8d8d8;font:10px/14px Arial,Helvetica,sans-serif;">'+E(c.source)+'</div></td></tr></table></td></tr>';
  }
  return html+'</table>';
+}
+// The University promotional campaign is fixed alongside the selected claims,
+// rather than offered as a selectable professional affiliation. The layout uses
+// nested presentation tables and inline CSS for classic and modern Outlook.
+function promotionalClaims(exported){
+ if(!selectedClaims.length)return "";
+ const brand=C.promotionalBrand;
+ const w=brand.displayWidth,h=brand.displayHeight;
+ const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;">';
+ return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-top:12px;">'+
+  '<tr><td width="128" valign="middle" style="width:128px;background-color:#090909;padding:8px;vertical-align:middle;text-align:center;">'+artwork+'</td>'+
+  '<td valign="middle" style="vertical-align:middle;padding:0 0 0 7px;">'+claims()+'</td></tr></table>';
 }
 function studentSupport(){
  let h='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-top:14px;border-top:2px solid #c8102e;">'+
@@ -162,7 +174,7 @@ function signature(kind="standard",exported=false){
  '<td width="'+(b.logoWidth+4)+'" style="width:'+(b.logoWidth+4)+'px;vertical-align:top;text-align:right;">'+image+'</td></tr></table>';
  const identity='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>'+
  '<td style="border-left:4px solid '+b.colour+';padding:0 0 0 13px;">'+top+contact()+'</td></tr></table>';
- const promo=compact?"":logos(exported)+claims();
+ const promo=compact?"":logos(exported)+promotionalClaims(exported);
  return '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px;max-width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;background:#fff;"><tr><td>'+identity+promo+studentSupport()+'</td></tr></table>';
 }
 function refreshPreview(){

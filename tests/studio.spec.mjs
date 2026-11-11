@@ -27,6 +27,15 @@ try{
   assert.equal(await page.locator('[data-panel="2"]').isVisible(),true);
   assert.equal(await page.locator('[data-panel="1"]').isVisible(),false);
  });
+ await check("Career Powered branding is fixed and hidden without claims",async()=>{
+  assert.equal(await page.locator('[data-logo-id="career"]').count(),0);
+  const empty=await page.evaluate(()=>({
+    standard:window.SPSS_QA.signature("standard",true),
+    compact:window.SPSS_QA.signature("compact",true)
+  }));
+  assert.ok(!empty.standard.includes('alt="Career Powered Education"'));
+  assert.ok(!empty.compact.includes('alt="Career Powered Education"'));
+ });
  await check("Discipline-specific affiliations and claims",async()=>{
   await page.locator("#discipline").selectOption("sport");
   await page.locator('[data-logo-id="cases"]').click();
@@ -58,6 +67,41 @@ try{
   assert.ok(generated.standard.includes("https://mikelnewell.github.io/SPSS-Signature-Builder-/assets/"));
   assert.ok(!generated.standard.includes("(unauthenticated)"));
  });
+ await check("Fixed Career Powered logo sits beside one, two or three marketing claims",async()=>{
+  const inspect=async expected=>{
+    const report=await page.evaluate(()=>{
+      const standard=window.SPSS_QA.signature("standard",true);
+      const compact=window.SPSS_QA.signature("compact",true);
+      const element=new DOMParser().parseFromString(standard,"text/html");
+      const image=element.querySelector('img[alt="Career Powered Education"]');
+      const row=image?.closest("tr");
+      const cells=row?[...row.children]:[];
+      return {
+        standard,compact,
+        count:element.querySelectorAll('img[alt="Career Powered Education"]').length,
+        imageSrc:image?.getAttribute("src"),
+        imageWidth:image?.getAttribute("width"),
+        sameRow:cells.length===2 && cells[1].textContent.includes("15th"),
+        selected:window.SPSS_QA.selectedClaims()
+      };
+    });
+    assert.equal(report.count,1,"Exactly one fixed promotional logo");
+    assert.equal(report.imageSrc,"https://mikelnewell.github.io/SPSS-Signature-Builder-/assets/logos/career-powered.jpg");
+    assert.equal(report.imageWidth,"112");
+    assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
+    assert.equal(report.selected.length,expected);
+    assert.ok(!report.compact.includes('alt="Career Powered Education"'));
+    assert.ok(!report.compact.includes("career-powered.jpg"));
+  };
+  await inspect(1);
+  await page.locator('[data-claim-id="graduate11"]').click();
+  await inspect(2);
+  await page.locator('[data-claim-id="career12"]').click();
+  await inspect(3);
+  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
+  await page.locator('[data-claim-id="graduate6"]').click();
+  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
+ });
  await check("Completion and Outlook actions",async()=>{
   await page.locator("#goReady").click();
   assert.equal(await page.locator('[data-panel="3"]').isVisible(),true);
@@ -74,6 +118,7 @@ try{
   await page.locator("#backToPersonalise").click();
   await page.locator("#discipline").selectOption("psychology");
   assert.equal(await page.locator("#claimCounter").innerText(),"0 / 3 claims selected");
+  assert.equal(await page.locator('#preview img[alt="Career Powered Education"]').count(),0);
   assert.equal(await page.locator('[data-logo-id="cases"]').isDisabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isEnabled(),true);
   assert.equal(await page.locator('[data-claim-id="psych-support96"]').isVisible(),true);

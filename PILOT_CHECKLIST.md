@@ -20,6 +20,10 @@ Complete these checks with the Head of School, at least one colleague from each 
 - [ ] Criminology selection shows 4th student satisfaction, Top 20 subject field, 1st teaching quality, and 3rd satisfaction with teaching; no Psychology figures leak into the selection.
 - [ ] General Social Science displays no Criminology figures.
 - [ ] Switching subjects clears previously selected incompatible claims and resets claim categories.
+- [ ] Career Powered Education is absent from the affiliation picker and is displayed automatically to the left of selected claims in the standard signature.
+- [ ] With zero marketing claims, neither the Career Powered logo nor the promotional panel appears.
+- [ ] With one, two and three marketing claims, one fixed Career Powered logo appears beside the claims, with correct colours and aspect ratio.
+- [ ] The compact reply signature never includes Career Powered or marketing claims.
 - [ ] No more than three claims can be selected; they can be reordered and source/year remain visible.
 - [ ] A historical award is explicitly identified as historical.
 - [ ] Standard and compact exports show the same institution identity and support contacts; compact omits elective affiliations/claims.
