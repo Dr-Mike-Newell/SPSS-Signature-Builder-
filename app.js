@@ -46,7 +46,7 @@ function logoTile(l){
  b.addEventListener("click",()=>{
   if(selectedLogos.includes(l.id))selectedLogos=selectedLogos.filter(x=>x!==l.id);
   else {
-   if(!eligible(l)){notice("This affiliation is primarily for "+l.audience.join(", ")+". Please use it only if your role genuinely qualifies.",true);}
+   if(!eligible(l)){notice("This affiliation is not listed for your selected subject. Choose the appropriate subject area or contact the School administrator.",true);return;}
    selectedLogos.push(l.id);
   }
   render();
@@ -57,7 +57,7 @@ function claimTile(c){
  const picked=selectedClaims.includes(c.id);
  const b=document.createElement("button");b.type="button";
  b.className="claim"+(picked?" selected":"");b.setAttribute("aria-pressed",String(picked));
- b.innerHTML='<strong>'+E(c.figure)+'</strong><span class="claim-text"><b>'+E(c.headline)+'</b><span class="claim-source">'+E(c.source)+' · '+E(c.discipline==="sport"?"Sport and Exercise Science":c.discipline)+" · "+E(c.status==="pilot-review"?"Pilot review":"Approved")+'</span></span><span class="tick" aria-hidden="true">'+(picked?"✓":"+")+'</span>';
+ b.innerHTML='<strong>'+E(c.figure)+'</strong><span class="claim-text"><b>'+E(c.headline)+'</b><span class="claim-source">'+E(c.source)+' · '+E(C.disciplines.find(d=>d.id===c.discipline)?.name || "School-wide")+" · "+E(c.status==="pilot-review"?"Pilot review":"Approved")+'</span></span><span class="tick" aria-hidden="true">'+(picked?"✓":"+")+'</span>';
  b.addEventListener("click",()=>{
   if(picked)selectedClaims=selectedClaims.filter(x=>x!==c.id);
   else if(selectedClaims.length<C.maxClaims)selectedClaims.push(c.id);
@@ -76,7 +76,7 @@ function draw(){
  const cg=$("claimGrid");cg.replaceChildren();
  const visible=claimsVisible();
  if(!val("discipline"))cg.innerHTML='<p class="muted">Choose your discipline above to see applicable marketing claims. School-wide claims will be added as supplied.</p>';
- else if(!visible.length)cg.innerHTML='<p class="muted">No approved promotional statistics have been supplied for this selection. The signature can still be generated without claims.</p>';
+ else if(!visible.length)cg.innerHTML='<p class="muted">No marketing statistics have been supplied for this selection. The signature can still be generated without claims.</p>';
  else visible.forEach(x=>cg.appendChild(claimTile(x)));
  $("claimCounter").textContent=selectedClaims.length+" / "+C.maxClaims+" claims selected";
  const order=$("claimOrder");order.replaceChildren();
@@ -200,7 +200,12 @@ function start(){
  const disc=$("discipline"),cats=$("category");
  C.disciplines.forEach(d=>{const o=document.createElement("option");o.value=d.id;o.textContent=d.name;disc.append(o);});
  [...new Set(C.claims.map(x=>x.category))].forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;cats.append(o);});
- disc.addEventListener("change",()=>{selectedClaims=selectedClaims.filter(k=>{const c=C.claims.find(x=>x.id===k);return c&&(c.discipline==="all"||c.discipline===disc.value);});notice("");render();});
+ disc.addEventListener("change",()=>{
+  selectedClaims=selectedClaims.filter(k=>{const c=C.claims.find(x=>x.id===k);return c&&(c.discipline==="all"||c.discipline===disc.value);});
+  selectedLogos=selectedLogos.filter(k=>{const l=C.affiliations.find(x=>x.id===k);return l&&eligible(l);});
+  cats.value=""; // Clear category filters when switching subjects.
+  notice("");render();
+ });
  cats.addEventListener("change",render);
  fields.forEach(id=>$(id).addEventListener("input",()=>{notice("");render();}));
  $("copyStandard").addEventListener("click",()=>copy("standard"));
