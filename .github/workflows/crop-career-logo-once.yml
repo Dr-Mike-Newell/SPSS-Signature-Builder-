@@ -1,0 +1,46 @@
+name: Clean Career Powered logo (one-off)
+on:
+  push:
+    branches:
+      - feature/crop-career-powered-logo-2026-11
+    paths:
+      - .github/workflows/crop-career-logo-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  crop:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install Pillow
+        run: python3 -m pip install --break-system-packages pillow
+      - name: Crop unwanted image borders
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          source = Path('assets/logos/career-powered.jpg')
+          img = Image.open(source).convert('RGB')
+          assert img.size == (690,687), f'Unexpected source dimensions: {img.size}'
+          # Leftmost columns 0-1 are white, 2 is grey; rightmost 689 is grey.
+          # Crop cleanly without changing the source's content/visual identity.
+          cropped = img.crop((4,1,689,686))
+          assert cropped.size == (685,685)
+          for p in [(0,0),(0,340),(684,340),(684,684)]:
+              assert max(cropped.getpixel(p)) < 20, (p,cropped.getpixel(p))
+          target = Path('assets/logos/career-powered-clean.jpg')
+          cropped.save(target, 'JPEG', quality=95, subsampling=0, optimize=True)
+          print(f'Created {target} ({target.stat().st_size} bytes); dimensions {cropped.size}; white edge cropped away.')
+          PY
+      - name: Commit corrected image to feature branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/logos/career-powered-clean.jpg
+          git commit -m "Crop white and grey edge artifacts from Career Powered logo"
+          git push origin HEAD:feature/crop-career-powered-logo-2026-11
