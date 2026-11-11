@@ -1,7 +1,7 @@
 // Central content registry: all staff-facing institutional content lives here.
 // Statuses describe pilot eligibility, not a claim of third-party accreditation approval.
 window.SPSS_CONFIG = Object.freeze({
-  version:"2.0.0-pilot",
+  version:"3.0.0-pilot",
   brand:{
     school:"School of Sport, Psychology and Social Science",
     faculty:"Faculty of Technologies, Education and Social Sciences",
