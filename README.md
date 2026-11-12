@@ -4,7 +4,7 @@ School-wide signature pilot for the University of Bedfordshire School of Sport, 
 
 The current interface is the **University Signature Studio**, a three-stage guided journey: Your details → Personalise → Ready to copy. The live preview continues using the existing Outlook-compatible renderer.
 
-Live site: https://mikelnewell.github.io/SPSS-Signature-Builder-/
+Live site: https://spss-signature-studio.netlify.app/
 
 ## How staff use the builder
 
@@ -92,8 +92,13 @@ Browser tests run in the feature branch and on pull requests. Passing automated 
 The repository is ready for a Git-connected Netlify deployment. Netlify build settings are stored in `netlify.toml`, so no framework or package installation is required.
 
 1. Sign in to Netlify and select **Add new project > Import an existing project > GitHub**.
-2. Select `MikeLNewell/SPSS-Signature-Builder-` and set the production branch to `main`.
+2. Select `Dr-Mike-Newell/SPSS-Signature-Builder-` and set the production branch to `main`.
 3. Confirm that the build command and publish directory are supplied by `netlify.toml` (output directory `dist`).
 4. Deploy and test the Netlify URL, including the three stages, logo images, claim selection and Outlook copying.
 
-Only the website files and `assets/logos/` are copied to the public `dist` directory, not the repository's tests and documentation. GitHub Pages remains available as a fallback. At present the generated email signature's absolute image URLs use the existing GitHub Pages address in `config.js`; this intentionally preserves an established image host and can be changed to a verified permanent Netlify domain during a later migration if desired.
+Only website files and `assets/logos/` are copied to the public `dist` directory. Outlook exports use absolute HTTPS logo URLs on `https://spss-signature-studio.netlify.app/` from `config.js > emailImageBase`. Visitor access must remain set to **Public** in Netlify (Project configuration > General > Visitor access); otherwise staff outside the Netlify team and email recipients cannot see the website or its images. The builder has no staff sign-in or data storage. Before wider distribution, test a signature by pasting it into desktop Outlook, Outlook on the web, and an external recipient mailbox. Replacing the public image base later will not automatically update signatures previously sent.
+
+
+## Signature output quality
+
+Standard signatures include a clean two-line contact block, optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to three claims, and a compact two-column directory containing all nine student support contacts. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.

@@ -1,5 +1,5 @@
 # Signature Studio: deploy the existing static app directly from GitHub.
-# Netlify > Add new project > Import an existing project > GitHub > MikeLNewell/SPSS-Signature-Builder-
+# Netlify > Add new project > Import an existing project > GitHub > Dr-Mike-Newell/SPSS-Signature-Builder-
 # Production branch: main. All personal information is processed in the browser.
 [build]
   command = "mkdir -p dist/assets && cp index.html app.js config.js studio.js studio.css dist/ && cp -R assets/logos dist/assets/"

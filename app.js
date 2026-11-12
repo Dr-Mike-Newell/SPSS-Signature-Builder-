@@ -10,7 +10,7 @@ const E=x=>String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").repla
 const val=x=>($(x)?.value||"").trim();
 const url=(text)=>{let s=(text||"").trim();if(!s)return "";if(!/^https?:\/\//i.test(s))s="https://"+s;try{const u=new URL(s);return u.protocol==="https:"&&u.hostname&&u.username===""&&u.password===""?u.href:"";}catch(_){return "";}};
 const emailValid=x=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
-const imageUrl=(path,exported)=>{if(!path)return "";return exported?new URL(path,C.pagesBase).href:path;};
+const imageUrl=(path,exported)=>{if(!path)return "";return exported?new URL(path,C.emailImageBase||C.pagesBase).href:path;};
 function orcid(input){
  let value=(input||"").trim().replace(/\/$/,"");
  if(!value)return null;
@@ -95,13 +95,18 @@ function draw(){
  });
 }
 function contact(){
- const items=[];
- if(val("phone"))items.push('<span style="color:#777;">T:</span> '+E(val("phone")));
- if(val("email"))items.push('<span style="color:#777;">E:</span> <a href="mailto:'+E(val("email"))+'" style="color:#252525;text-decoration:underline;">'+E(val("email"))+'</a>');
- if(url(val("website")))items.push('<span style="color:#777;">W:</span> <a href="'+E(url(val("website")))+'" style="color:#252525;text-decoration:underline;">Staff Weblink</a>');
+ // Separate primary and secondary contact details to avoid unreadable
+ // single-line runs on Outlook and narrow preview panels.
+ const primary=[],secondary=[];
+ if(val("phone"))primary.push('<span style="color:#717171;">T:</span> '+E(val("phone")));
+ if(val("email"))primary.push('<span style="color:#717171;">E:</span> <a href="mailto:'+E(val("email"))+'" style="color:#252525;text-decoration:underline;">'+E(val("email"))+'</a>');
+ if(url(val("website")))secondary.push('<span style="color:#717171;">W:</span> <a href="'+E(url(val("website")))+'" style="color:#252525;text-decoration:underline;">Staff profile</a>');
  const o=orcid(val("orcid"));
- if(o&&typeof o==="object")items.push('<a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;"><img src="'+E(C.orcidIcon)+'" alt="ORCID iD" width="16" height="16" style="display:inline-block;width:16px;height:16px;vertical-align:middle;border:0;margin-right:5px;">'+E(o.id)+'</a>');
- return items.length?'<div style="font:11px/18px Arial,Helvetica,sans-serif;color:#303030;padding-top:9px;">'+items.join('<span style="color:#c8102e;padding:0 6px;"> | </span>')+'</div>':"";
+ if(o&&typeof o==="object")secondary.push('<a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;"><img src="'+E(C.orcidIcon)+'" alt="ORCID iD" width="16" height="16" style="display:inline-block;width:16px;height:16px;vertical-align:middle;border:0;margin-right:5px;">'+E(o.id)+'</a>');
+ if(!primary.length&&!secondary.length)return "";
+ const divider='<span style="color:#c8102e;padding:0 7px;"> | </span>';
+ const line=(cells,padding)=>cells.length?'<tr><td style="padding-top:'+padding+'px;font:11px/17px Arial,Helvetica,sans-serif;color:#303030;word-wrap:break-word;">'+cells.join(divider)+'</td></tr>':"";
+ return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">'+line(primary,9)+line(secondary,3)+'</table>';
 }
 function logos(exported){
  if(!selectedLogos.length)return "";
@@ -143,21 +148,32 @@ function claims(){
 function promotionalClaims(exported){
  if(!selectedClaims.length)return "";
  const brand=C.promotionalBrand;
- const w=brand.displayWidth,h=brand.displayHeight;
+ // Match artwork size to one, two or three ranking bars so one chosen
+ // achievement does not leave a large empty black promo column.
+ const w=selectedClaims.length===1?88:selectedClaims.length===2?100:brand.displayWidth;
+ const h=w,colWidth=w+16;
  const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;">';
  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-top:12px;">'+
-  '<tr><td width="128" valign="middle" style="width:128px;background-color:#090909;padding:8px;vertical-align:middle;text-align:center;">'+artwork+'</td>'+
+  '<tr><td width="'+colWidth+'" valign="middle" style="width:'+colWidth+'px;background-color:#090909;padding:8px;vertical-align:middle;text-align:center;">'+artwork+'</td>'+
   '<td valign="middle" style="vertical-align:middle;padding:0 0 0 7px;">'+claims()+'</td></tr></table>';
 }
 function studentSupport(){
- let h='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-top:14px;border-top:2px solid #c8102e;">'+
- '<tr><td style="padding:9px 0 5px 0;font:700 11px/15px Arial,Helvetica,sans-serif;color:#c8102e;">STUDENT SUPPORT CONTACTS</td></tr>'+
- '<tr><td style="padding:2px 0 7px 0;font:11px/16px Arial,Helvetica,sans-serif;color:#444;">'+E(C.supportIntro)+'</td></tr><tr><td>'+
- '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">';
- for(const item of C.support){
-  h+='<tr><td style="vertical-align:top;padding:2px 0 3px 0;font:10.5px/15px Arial,Helvetica,sans-serif;color:#474747;">'+
-    '<a href="mailto:'+E(item.email)+'" style="color:#222;text-decoration:underline;">'+E(item.email)+'</a>'+
-    '<span style="color:#858585;"> &nbsp;–&nbsp; </span>'+E(item.description)+'</td></tr>';
+ // Two-column, readable, table-only support directory. Retains every
+ // mandatory contact and description in standard and compact signatures.
+ let h='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-top:13px;border-top:2px solid #c8102e;">'+
+ '<tr><td style="padding:9px 0 3px;font:700 11px/15px Arial,Helvetica,sans-serif;color:#c8102e;letter-spacing:0.3px;">STUDENT SUPPORT CONTACTS</td></tr>'+
+ '<tr><td style="padding:2px 0 7px;font:10.5px/15px Arial,Helvetica,sans-serif;color:#595959;">'+E(C.supportIntro)+'</td></tr><tr><td>'+
+ '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">';
+ for(let i=0;i<C.support.length;i+=2){
+  h+='<tr>';
+  for(let j=0;j<2;j++){
+   const item=C.support[i+j];
+   if(!item){h+='<td width="50%" style="width:50%;">&nbsp;</td>';continue;}
+   h+='<td width="50%" valign="top" style="width:50%;vertical-align:top;padding:4px '+(j===0?12:0)+'px 6px '+(j===0?0:7)+'px;font:10.5px/15px Arial,Helvetica,sans-serif;color:#484848;word-wrap:break-word;">'+
+   '<a href="mailto:'+E(item.email)+'" style="color:#222;text-decoration:underline;font-weight:700;">'+E(item.email)+'</a>'+
+   '<div style="padding-top:1px;font:10px/14px Arial,Helvetica,sans-serif;color:#6b6b6b;">'+E(item.description)+'</div></td>';
+  }
+  h+='</tr>';
  }
  return h+'</table></td></tr></table>';
 }
@@ -194,7 +210,7 @@ function download(kind){
 }
 async function copy(kind){
  const invalid=staffValid();if(invalid){notice(invalid,true);return;}
- const html=signature(kind,true),plain=kind==="standard"?$("preview").innerText:"SPSS Email Signature";
+ const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),val("job"),C.brand.school,C.brand.faculty,val("phone"),val("email"),url(val("website")),orcid(val("orcid"))?.url||"",...C.support.map(x=>x.email)].filter(Boolean).join("\n");
  try {
   if(navigator.clipboard&&window.ClipboardItem&&navigator.clipboard.write){
    const item=new ClipboardItem({"text/html":new Blob([fileHtml(kind)],{type:"text/html"}),"text/plain":new Blob([plain],{type:"text/plain"})});
