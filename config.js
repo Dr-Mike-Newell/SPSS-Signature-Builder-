@@ -1,7 +1,7 @@
 // Central content registry: all staff-facing institutional content lives here.
 // Statuses describe pilot eligibility, not a claim of third-party accreditation approval.
 window.SPSS_CONFIG = Object.freeze({
-  version:"3.0.0-pilot",
+  version:"3.1.0-pilot",
   brand:{
     school:"School of Sport, Psychology and Social Science",
     faculty:"Faculty of Technologies, Education and Social Sciences",
@@ -12,9 +12,12 @@ window.SPSS_CONFIG = Object.freeze({
     logoHeight:55,
     logoNote:"University-supplied transparent RGB logo master, cropped and optimised for high-density email display."
   },
-  pagesBase:"https://mikelnewell.github.io/SPSS-Signature-Builder-/",
+  pagesBase:"https://spss-signature-studio.netlify.app/",
+  // Email recipients must be able to fetch signature images without Netlify sign-in.
+  // The repository is public; export images use the public GitHub raw host instead.
+  emailImageBase:"https://raw.githubusercontent.com/Dr-Mike-Newell/SPSS-Signature-Builder-/main/",
   orcidIcon:"https://info.orcid.org/wp-content/uploads/2020/12/ORCIDiD_icon16x16.png",
-  supportIntro:"Remember, you can contact our teams directly on the following emails and you can arrange a telephone appointment if you want to have a chat about support:",
+  supportIntro:"Students can contact these specialist support teams directly by email and request a telephone appointment where appropriate:",
   support:[
     {email:"student.engagement@beds.ac.uk",description:"complex issues, withdrawals and interruptions"},
     {email:"mitigation@beds.ac.uk",description:"extensions on assessment deadlines"},
