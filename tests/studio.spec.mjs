@@ -97,6 +97,7 @@ try{
         count:element.querySelectorAll('img[alt="Career Powered Education"]').length,
         imageSrc:image?.getAttribute("src"),
         imageWidth:image?.getAttribute("width"),
+        imageHeight:image?.getAttribute("height"),
         sameRow:cells.length===2 && cells[1].textContent.includes("15th"),
         selected:window.SPSS_QA.selectedClaims()
       };
@@ -104,6 +105,7 @@ try{
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
     assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg");
     assert.equal(report.imageWidth,String(expected===1?88:expected===2?100:112),"Campaign artwork scales with number of selected claims");
+    assert.equal(report.imageHeight,String(Math.round(Number(report.imageWidth)*167/160)),"2026 artwork keeps original proportions");
     assert.equal(report.imageSrc.endsWith("career-powered-2026.jpg"),true);
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
