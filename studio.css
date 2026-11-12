@@ -146,6 +146,8 @@ a{color:var(--brand-dark)}
  .builder-card{max-width:720px;margin:auto;width:100%;order:1}.main-wrap{max-width:800px}.preview-jump{display:inline-flex}
 }
 @media(max-width:600px){
+ .header-actions .pilot-pill{display:none}.header-brand img{width:119px}.header-brand{gap:8px}.sign-out-btn{padding:6px 8px;font-size:11px}
+
  .header-inner{padding:13px 16px;min-height:74px}.header-brand{gap:10px}.header-brand img{width:137px}.header-divider{height:31px}.header-title{font-size:11px}.header-title span{font-size:9px}.pilot-pill{font-size:9px;padding:6px 9px}
  .main-wrap{padding:26px 13px 53px}.intro h1{font-size:39px;letter-spacing:-1.8px}.intro h1 em{letter-spacing:-1.5px}.intro p{font-size:14px}
  .progress-nav{gap:2px;margin-bottom:23px;justify-content:space-between}.progress-step{font-size:11px;gap:5px;padding:5px 2px}.progress-step .number{width:25px;height:25px}.progress-line{width:13px}
