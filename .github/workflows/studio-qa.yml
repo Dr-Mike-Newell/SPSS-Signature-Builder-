@@ -29,6 +29,7 @@ jobs:
         run: |
           python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/spss-http.log 2>&1 &
           sleep 2
+          node tests/studio-auth.spec.mjs
           node tests/studio.spec.mjs
       - uses: actions/upload-artifact@v4
         if: always()
