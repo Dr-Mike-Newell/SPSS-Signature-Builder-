@@ -151,7 +151,7 @@ function promotionalClaims(exported){
  // Match artwork size to one, two or three ranking bars so one chosen
  // achievement does not leave a large empty black promo column.
  const w=selectedClaims.length===1?88:selectedClaims.length===2?100:brand.displayWidth;
- const h=w,colWidth=w+16;
+ const h=Math.round(w*brand.nativeHeight/brand.nativeWidth),colWidth=w+16;
  const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;">';
  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-top:12px;">'+
   '<tr><td width="'+colWidth+'" valign="middle" style="width:'+colWidth+'px;background-color:#090909;padding:8px;vertical-align:middle;text-align:center;">'+artwork+'</td>'+
