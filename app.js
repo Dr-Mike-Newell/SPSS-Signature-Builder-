@@ -33,7 +33,7 @@ function staffValid(){
  return "";
 }
 function notice(message,problem=false){$("status").textContent=message;$("status").style.color=problem?"#b01c30":"#147450";}
-function eligible(logo){const d=val("discipline");return logo.audience.includes("all")||logo.audience.includes(d);}
+function eligible(logo){const d=val("discipline");return d==="head"||logo.audience.includes("all")||logo.audience.includes(d);}
 function logoTile(l){
  const picked=selectedLogos.includes(l.id),disabled=l.status==="pending-asset"||!eligible(l);
  const b=document.createElement("button");
@@ -70,7 +70,7 @@ function claimTile(c){
 }
 function claimsVisible(){
  const d=val("discipline"),cat=val("category");
- return C.claims.filter(x=>(x.discipline==="all"||x.discipline===d)&&x.status!=="withdrawn"&&(!cat||x.category===cat)).sort((a,b)=>a.priority-b.priority);
+ return C.claims.filter(x=>(d==="head"||x.discipline==="all"||x.discipline===d)&&x.status!=="withdrawn"&&(!cat||x.category===cat)).sort((a,b)=>a.priority-b.priority);
 }
 function draw(){
  const lg=$("logoGrid");lg.replaceChildren();
@@ -113,15 +113,15 @@ function logos(exported){
  const chosen=selectedLogos.map(id=>C.affiliations.find(a=>a.id===id)).filter(x=>x&&x.path&&x.status!=="pending-asset");
  if(!chosen.length)return "";
  let rows="";
- // At most four independently selected logos per row. Natural-width cells keep
+ // At most five independently selected logos per row. Natural-width cells keep
  // the logos together instead of stretching them over the signature's full width.
- for(let i=0;i<chosen.length;i+=4){
-  const group=chosen.slice(i,i+4);
+ for(let i=0;i<chosen.length;i+=5){
+  const group=chosen.slice(i,i+5);
   let cells="";
   for(const l of group){
-   const scale=Math.min(120/l.w,50/l.h,1);
+   const scale=Math.min(96/l.w,44/l.h,1);
    const w=Math.max(1,Math.round(l.w*scale)),h=Math.max(1,Math.round(l.h*scale));
-   cells+='<td valign="middle" style="vertical-align:middle;padding:0 7px 0 0;white-space:nowrap;">'+
+   cells+='<td valign="middle" style="vertical-align:middle;padding:0 8px 0 0;white-space:nowrap;">'+
     '<img src="'+E(imageUrl(l.path,exported))+'" alt="'+E(l.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;"></td>';
   }
   // Separate nested table per row prevents a sparse final row from spreading
@@ -158,22 +158,16 @@ function promotionalClaims(exported){
   '<td valign="middle" style="vertical-align:middle;padding:0 0 0 7px;">'+claims()+'</td></tr></table>';
 }
 function studentSupport(){
- // Two-column, readable, table-only support directory. Retains every
- // mandatory contact and description in standard and compact signatures.
+ // Single-column contact directory, readable in Outlook and mobile email.
+ // All nine addresses remain present in both standard and compact signatures.
  let h='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-top:13px;border-top:2px solid #c8102e;">'+
  '<tr><td style="padding:9px 0 3px;font:700 11px/15px Arial,Helvetica,sans-serif;color:#c8102e;letter-spacing:0.3px;">STUDENT SUPPORT CONTACTS</td></tr>'+
  '<tr><td style="padding:2px 0 7px;font:10.5px/15px Arial,Helvetica,sans-serif;color:#595959;">'+E(C.supportIntro)+'</td></tr><tr><td>'+
  '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">';
- for(let i=0;i<C.support.length;i+=2){
-  h+='<tr>';
-  for(let j=0;j<2;j++){
-   const item=C.support[i+j];
-   if(!item){h+='<td width="50%" style="width:50%;">&nbsp;</td>';continue;}
-   h+='<td width="50%" valign="top" style="width:50%;vertical-align:top;padding:4px '+(j===0?12:0)+'px 6px '+(j===0?0:7)+'px;font:10.5px/15px Arial,Helvetica,sans-serif;color:#484848;word-wrap:break-word;">'+
-   '<a href="mailto:'+E(item.email)+'" style="color:#222;text-decoration:underline;font-weight:700;">'+E(item.email)+'</a>'+
-   '<div style="padding-top:1px;font:10px/14px Arial,Helvetica,sans-serif;color:#6b6b6b;">'+E(item.description)+'</div></td>';
-  }
-  h+='</tr>';
+ for(const item of C.support){
+  h+='<tr><td valign="top" style="vertical-align:top;padding:3px 0 5px;font:10.5px/15px Arial,Helvetica,sans-serif;color:#484848;word-wrap:break-word;">'+
+   '<a href="mailto:'+E(item.email)+'" style="color:#c8102e;text-decoration:underline;font-weight:700;">'+E(item.email)+'</a>'+
+   '<span style="color:#777;"> &nbsp;–&nbsp; </span>'+E(item.description)+'</td></tr>';
  }
  return h+'</table></td></tr></table>';
 }
@@ -239,7 +233,7 @@ function start(){
  C.disciplines.forEach(d=>{const o=document.createElement("option");o.value=d.id;o.textContent=d.name;disc.append(o);});
  [...new Set(C.claims.map(x=>x.category))].forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;cats.append(o);});
  disc.addEventListener("change",()=>{
-  selectedClaims=selectedClaims.filter(k=>{const c=C.claims.find(x=>x.id===k);return c&&(c.discipline==="all"||c.discipline===disc.value);});
+  selectedClaims=selectedClaims.filter(k=>{const c=C.claims.find(x=>x.id===k);return c&&(disc.value==="head"||c.discipline==="all"||c.discipline===disc.value);});
   selectedLogos=selectedLogos.filter(k=>{const l=C.affiliations.find(x=>x.id===k);return l&&eligible(l);});
   cats.value=""; // Clear category filters when switching subjects.
   notice("");render();

@@ -17,7 +17,7 @@
    <span class="header-divider" aria-hidden="true"></span>
    <div class="header-title"><span>School identity toolkit</span>Signature Studio</div>
   </div>
-  <span class="pilot-pill">School pilot</span>
+  <div class="header-actions"><span class="pilot-pill">School pilot</span><button id="signOut" type="button" class="sign-out-btn" title="End this session on shared computers">Sign out</button></div>
  </div>
 </header>
 <main id="builder" class="main-wrap">
@@ -81,12 +81,12 @@
     <h2 id="step2Title">Show what makes your work distinctive.</h2>
     <p class="lead">Select relevant affiliations and achievements. This entire step is optional.</p>
     <div class="select-field">
-     <label for="discipline">Your subject area</label>
-     <select id="discipline"><option value="">Choose your subject (optional)</option></select>
+     <label for="discipline">Your subject area or role</label>
+     <select id="discipline"><option value="">Choose your subject or Head of School role</option></select>
     </div>
     <div class="section-title"><h3>Professional affiliations</h3><span>Choose what applies to you</span></div>
     <div id="logoGrid" class="logo-grid" role="group" aria-label="Optional affiliation logos"></div>
-    <p class="notice">Only include affiliations relevant to your role or programme. Restricted and historical logos are labelled, and unavailable options cannot be selected.</p>
+    <p class="notice">The Head of School option shows all disciplines\u2019 affiliations and achievements. Only use logos and claims that are accurate, appropriate and authorised. Restricted and historical logos remain labelled.</p>
     <div class="section-title"><h3>School achievements</h3><span id="claimCounter" aria-live="polite">0 / 3 claims selected</span></div>
     <p class="notice">The Career Powered Education logo will appear automatically beside any marketing claims you select.</p>
     <div class="select-field">
@@ -152,6 +152,12 @@
  <p class="pilot-note">School pilot: professional affiliations, promotional claims and email-client compatibility remain subject to school approval and testing before wider roll-out.</p>
 </main>
 <footer class="site-footer">University of Bedfordshire · School of Sport, Psychology and Social Science · Built for staff, with care. Your personal details are processed locally in your browser.</footer>
+<script>
+document.getElementById("signOut").addEventListener("click",async()=>{
+ try{await fetch("/studio-logout",{method:"POST",credentials:"same-origin",cache:"no-store"});}
+ finally{location.replace("/access.html");}
+});
+</script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 <script src="studio.js"></script>

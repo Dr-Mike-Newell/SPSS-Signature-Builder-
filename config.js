@@ -1,7 +1,7 @@
 // Central content registry: all staff-facing institutional content lives here.
 // Statuses describe pilot eligibility, not a claim of third-party accreditation approval.
 window.SPSS_CONFIG = Object.freeze({
-  version:"3.1.1-pilot",
+  version:"3.2.0-pilot",
   brand:{
     school:"School of Sport, Psychology and Social Science",
     faculty:"Faculty of Technologies, Education and Social Sciences",
@@ -33,7 +33,7 @@ window.SPSS_CONFIG = Object.freeze({
     {id:"sport",name:"Sport and Exercise Science"},
     {id:"psychology",name:"Psychology"},
     {id:"criminology",name:"Criminology"},
-    {id:"social",name:"Social Science (other subjects)"}
+    {id:"head",name:"Head of School (all disciplines)"}
   ],
   // Fixed institutional promotional branding, shown only beside selected marketing claims.
   promotionalBrand:{

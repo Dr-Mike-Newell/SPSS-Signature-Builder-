@@ -78,8 +78,23 @@ try{
   assert.ok(!generated.standard.includes("mikelnewell.github.io"),"No references to old hosting");
   assert.ok(!generated.compact.includes("mikelnewell.github.io"),"Compact output must use new hosting");
   assert.equal((generated.standard.match(/href="mailto:/g)||[]).length,10,"Nine support links plus staff email");
-  assert.ok(generated.standard.includes("width:50%"),"Student support contacts use a two-column layout");
-  assert.ok(generated.compact.includes("width:50%"),"Reply signature also uses a readable support layout");
+  const directory=await page.evaluate(()=>{
+    const parse=kind=>new DOMParser().parseFromString(window.SPSS_QA.signature(kind,true),"text/html");
+    return ["standard","compact"].map(kind=>{
+      const doc=parse(kind),header=[...doc.querySelectorAll("td")].find(x=>x.textContent.trim()==="STUDENT SUPPORT CONTACTS");
+      const table=header?.closest("table");
+      const mails=[...table?.querySelectorAll('a[href^="mailto:"]')||[]];
+      return {kind,rows:mails.map(link=>({
+        href:link.getAttribute("href"),color:link.style.color,
+        cellCount:link.closest("tr")?.querySelectorAll(":scope > td").length
+      }))};
+    });
+  });
+  for(const version of directory){
+    assert.equal(version.rows.length,9,version.kind+" should have nine support email links");
+    assert.ok(version.rows.every(x=>x.color==="rgb(200, 16, 46)"),"Support links use University red");
+    assert.ok(version.rows.every(x=>x.cellCount===1),"Each support contact occupies a full-width row");
+  }
   assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/cases.png"));
   assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/university-of-bedfordshire-master.png"));
  });
@@ -162,6 +177,40 @@ try{
   assert.equal(await page.locator('[data-logo-id="bps"]').isEnabled(),true);
   assert.equal(await page.locator('[data-claim-id="psych-support96"]').isVisible(),true);
  });
+ await check("Head of School can mix claims and select five logos on one row",async()=>{
+  const subjects=await page.locator("#discipline option").evaluateAll(nodes=>nodes.map(n=>n.value));
+  assert.ok(subjects.includes("head"));
+  assert.ok(!subjects.includes("social"));
+  await page.locator("#discipline").selectOption("head");
+  assert.equal(await page.locator('[data-logo-id="cases"]').isEnabled(),true);
+  assert.equal(await page.locator('[data-logo-id="bps"]').isEnabled(),true);
+  assert.equal(await page.locator('[data-logo-id="ahcs"]').isDisabled(),true,"Missing AHCS asset stays unavailable");
+  for(const id of ["cases","qaa","people","psa","cimspa"]){
+    await page.locator('[data-logo-id="'+id+'"]').click();
+  }
+  const grouped=await page.evaluate(()=>{
+    const doc=new DOMParser().parseFromString(window.SPSS_QA.signature("standard",true),"text/html");
+    const alts=["CASES","QAA UK Quality Assured","People & Planet award (2023/24)",
+      "Professional Standards Authority Accredited Register","CIMSPA Higher Education Partner"];
+    const images=alts.map(alt=>doc.querySelector('img[alt="'+alt+'"]'));
+    return {
+      allFound:images.every(Boolean),
+      sameRow:images.every(x=>x?.closest("tr")===images[0]?.closest("tr")),
+      sizes:images.map(x=>Number(x?.getAttribute("width")))
+    };
+  });
+  assert.ok(grouped.allFound&&grouped.sameRow,"Five affiliations must appear on one signature row: "+JSON.stringify(grouped));
+  assert.ok(grouped.sizes.every(x=>x<=96));
+  await page.locator('[data-claim-id="subject15"]').click();
+  await page.locator('[data-claim-id="psych-support96"]').click();
+  await page.locator('[data-claim-id="crim-satisf4"]').click();
+  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
+  const html=await page.evaluate(()=>window.SPSS_QA.signature("standard",true));
+  for(const figure of ["15th","96%","4th"])assert.ok(html.includes(figure));
+  await page.locator("#discipline").selectOption("sport");
+  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
+  assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
+ });
  await check("Mobile layout stays within viewport",async()=>{
   await page.setViewportSize({width:390,height:844});
   await page.reload({waitUntil:"domcontentloaded"});
@@ -172,6 +221,14 @@ try{
   await page.locator('[data-jump-preview]').first().click();
   assert.equal(await page.locator("#previewRail").isVisible(),true);
   await page.screenshot({path:"test-artifacts/mobile.png",fullPage:true});
+ });
+ await check("Password landing page is present and does not embed a password",async()=>{
+  await page.goto("http://127.0.0.1:8765/access.html",{waitUntil:"domcontentloaded"});
+  assert.match(await page.locator("h1").innerText(),/Our School, your signature/);
+  assert.equal(await page.locator('input[type="password"]').count(),1);
+  assert.equal(await page.locator('input[type="password"]').getAttribute("minlength"),"12");
+  const html=await page.content();
+  assert.ok(!html.includes("SIGNATURE_STUDIO_PASSWORD"),"Netlify secret name must not be exposed to visitors");
  });
  assert.deepEqual(errors,[],"Browser errors");
  console.log("PASS: No uncaught browser errors");
