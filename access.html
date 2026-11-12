@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="robots" content="noindex,nofollow">
+<title>Staff access | University Signature Studio</title>
+<meta name="description" content="Staff access to the University of Bedfordshire School Signature Studio.">
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#1c1e22;background:#f6f5f4}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px}
+main{max-width:490px;width:100%;background:#fff;border:1px solid #e7e3e4;border-radius:19px;padding:38px;box-shadow:0 18px 60px #241b2110}
+.brand{max-width:210px;width:100%;height:auto;margin-bottom:34px}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:2px;color:#c8102e;text-transform:uppercase}
+h1{font-size:clamp(29px,5vw,38px);letter-spacing:-1.5px;line-height:1.15;margin:14px 0 13px}
+p{font-size:14px;color:#60646a;line-height:1.65;margin:0 0 22px}
+label{display:block;font-size:13px;font-weight:700;color:#303338;margin-bottom:8px}
+input{width:100%;border:1px solid #bfc3c6;border-radius:9px;padding:13px 14px;font:16px Arial,Helvetica,sans-serif;min-height:48px}
+input:focus-visible{outline:3px solid #c8102e66;outline-offset:1px;border-color:#c8102e}
+button{width:100%;border:0;border-radius:9px;background:#c8102e;color:#fff;padding:14px;font:700 15px Arial,Helvetica,sans-serif;margin-top:16px;cursor:pointer}
+button:hover{background:#9e0c26}
+button:disabled{opacity:.65;cursor:wait}
+#message{min-height:24px;margin:15px 0 0;font-size:13px;color:#a11b2b;line-height:1.5}
+footer{font-size:12px;color:#74787d;line-height:1.6;margin-top:23px;border-top:1px solid #eceaeb;padding-top:17px}
+footer a{color:#b00e2d}
+@media(max-width:550px){main{padding:28px 23px}.brand{max-width:175px;margin-bottom:25px}}
+</style>
+</head>
+<body>
+<main>
+<img class="brand" src="/assets/logos/university-of-bedfordshire-master.png" alt="University of Bedfordshire" width="210">
+<div class="eyebrow">School identity toolkit · Restricted access</div>
+<h1>Our School, your signature.</h1>
+<p>Enter the staff access password to use the University Signature Studio. This school pilot is intended for authorised colleagues only.</p>
+<form id="accessForm" autocomplete="on">
+<label for="password">Staff access password</label>
+<input id="password" name="password" type="password" autocomplete="current-password" required autofocus minlength="12">
+<button id="enter" type="submit">Enter Signature Studio</button>
+<div id="message" role="alert" aria-live="polite"></div>
+</form>
+<footer>Passwords are checked securely by the hosting service, not stored in the page. Your signature details remain in your browser.</footer>
+</main>
+<script>
+(function(){
+ "use strict";
+ const form=document.getElementById("accessForm");
+ const button=document.getElementById("enter");
+ const message=document.getElementById("message");
+ if(new URLSearchParams(location.search).get("setup")==="required"){
+  message.textContent="Access is not yet configured. The site administrator must set the password in Netlify.";
+ }
+ form.addEventListener("submit",async function(event){
+  event.preventDefault();button.disabled=true;message.textContent="";
+  try{
+   const response=await fetch("/studio-auth",{
+    method:"POST",
+    headers:{"content-type":"application/x-www-form-urlencoded"},
+    credentials:"same-origin",
+    cache:"no-store",
+    body:new URLSearchParams(new FormData(form)).toString()
+   });
+   if(response.ok){form.reset();location.replace("/");return;}
+   const result=await response.json();
+   message.textContent=result.message||"Unable to sign in. Please try again.";
+  }catch(_){message.textContent="Connection error. Please try again.";}
+  finally{button.disabled=false;}
+ });
+})();
+</script>
+</body>
+</html>
