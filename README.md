@@ -35,7 +35,7 @@ The source branch is \`main\`, publishing from repository root via GitHub Pages.
 
 ### Adding an affiliation
 
-Upload the original colour logo to \`assets/logos/\` and add an entry to \`config.js > affiliations\`, supplying a unique \`id\`, \`name\`, \`path\`, \`w\`, \`h\`, \`audience\`, \`status\` and \`note\`. Use \`status: "pending-asset"\` and \`path: null\` until the official asset and permission are confirmed. Rendered logos preserve aspect ratio, display in compact groups of up to four per row and use Outlook-compatible tables.
+Upload the original colour logo to \`assets/logos/\` and add an entry to \`config.js > affiliations\`, supplying a unique \`id\`, \`name\`, \`path\`, \`w\`, \`h\`, \`audience\`, \`status\` and \`note\`. Use \`status: "pending-asset"\` and \`path: null\` until the official asset and permission are confirmed. Rendered logos preserve aspect ratio, display in compact groups of up to five per row and use Outlook-compatible tables.
 
 The Career Powered Education logo is not a selectable affiliation. It is a fixed promotional image (the supplied 2026 artwork, email-optimised at 160 × 167 pixels and hosted at `assets/logos/career-powered-2026.jpg`) displayed on the left of a table-based promotional panel only when one to three marketing claims are selected. No claims means no promotional panel; the compact reply signature never includes it. The logo and claims appear side-by-side in both the preview and Outlook HTML. The image URL is absolute HTTPS in exported signatures.
 
@@ -44,7 +44,7 @@ The BASES Accredited Laboratory claim/logo has been withdrawn pending a review o
 ### Adding a ranking
 
 Add a new item to \`config.js > claims\` with:
-\`id\`, \`discipline\` (one of \`all\`, \`sport\`, \`psychology\`, \`criminology\`, \`social\`), \`category\`, \`figure\`, \`headline\`, \`source\`, \`year\`, \`review\`, \`status\`, \`priority\`.
+\`id\`, \`discipline\` (one of \`all\`, \`sport\`, \`psychology\`, \`criminology\`; selecting Head of School in the UI exposes all permitted disciplines without creating new claim categories), \`category\`, \`figure\`, \`headline\`, \`source\`, \`year\`, \`review\`, \`status\`, \`priority\`.
 
 Do not invent claims, conflate competing guide categories, or treat a discipline ranking as school-wide. The existing figures come from University marketing graphics and are labelled \`pilot-review\`. Confirm the appropriateness, accuracy and current status before rollout. \`status: "withdrawn"\` hides a claim from the selector.
 
@@ -73,14 +73,14 @@ Do not announce the signature as an officially approved institution-wide standar
 
 ## Psychology and Criminology update (11 November 2026)
 
-Eight claims were added to the central registry: four Psychology claims (including the 90% teaching statistic within the 96% support artwork), and four Criminology claims. Staff select Psychology or Criminology to see only relevant marketing claims; general Social Science remains separate. Source files and exact wording are recorded in \`MARKETING_CLAIMS.md\`.
+Eight claims were added to the central registry: four Psychology claims (including the 90% teaching statistic within the 96% support artwork), and four Criminology claims. Staff select Psychology or Criminology to see only relevant marketing claims; the Head of School selector now offers school-wide access to Sport, Psychology and Criminology choices, and the generic Social Science selector has been removed. Source files and exact wording are recorded in \`MARKETING_CLAIMS.md\`.
 
 The original 2048-pixel artwork was supplied by the requester but is not hosted in the repository; only the statistics are rendered as compact email-safe cards. No full-resolution images are embedded in email signatures.
 
 
 ## Signature Studio visual approach
 
-The interactive builder adopts the **Guided Signature Journey** concept with editorial typography informed by the Editorial Signature Studio. Staff work through details, optional personalisation and a clear final copy step. The Outlook HTML itself retains one institutionally consistent design. The email-style preview frame is interface-only and is never part of the copied signature. No new server, sign-in, tracking or personal data storage has been added.
+The interactive builder adopts the **Guided Signature Journey** concept with editorial typography informed by the Editorial Signature Studio. Staff work through details, optional personalisation and a clear final copy step. The Outlook HTML itself retains one institutionally consistent design. The email-style preview frame is interface-only and is never part of the copied signature. No personal data storage has been added. The application is protected by a Netlify Edge password gate using a short-lived, signed, HTTP-only session cookie; staff details and the generated signature remain in the browser.
 
 The application uses a small named token scale in `studio.css`, explicit responsive breakpoints and a reduced-motion fallback. All nine support contacts are mandatory and remain in both outputs. The School-wide pilot notice remains until approval.
 
@@ -96,9 +96,26 @@ The repository is ready for a Git-connected Netlify deployment. Netlify build se
 3. Confirm that the build command and publish directory are supplied by `netlify.toml` (output directory `dist`).
 4. Deploy and test the Netlify URL, including the three stages, logo images, claim selection and Outlook copying.
 
-Only website files and `assets/logos/` are copied to the public `dist` directory. Outlook exports use absolute HTTPS logo URLs on `https://spss-signature-studio.netlify.app/` from `config.js > emailImageBase`. Visitor access must remain set to **Public** in Netlify (Project configuration > General > Visitor access); otherwise staff outside the Netlify team and email recipients cannot see the website or its images. The builder has no staff sign-in or data storage. Before wider distribution, test a signature by pasting it into desktop Outlook, Outlook on the web, and an external recipient mailbox. Replacing the public image base later will not automatically update signatures previously sent.
+Only website files and `assets/logos/` are copied to the public `dist` directory. Outlook exports use absolute HTTPS logo URLs on `https://spss-signature-studio.netlify.app/` from `config.js > emailImageBase`. Visitor access must remain set to **Public** in Netlify (Project configuration > General > Visitor access); otherwise staff outside the Netlify team and email recipients cannot see the website or its images. The builder requires a staff access password at a dedicated landing page, with a signed session cookie, and does not store signature form details. Before wider distribution, test a signature by pasting it into desktop Outlook, Outlook on the web, and an external recipient mailbox. Replacing the public image base later will not automatically update signatures previously sent.
 
+
+## Restricted staff access and rollout instructions
+
+The Studio uses a real Netlify Edge Function as a password gate. This is not a cosmetic JavaScript-only lock. The `access.html` page accepts the shared password; `netlify/edge-functions/studio-gate.js` checks it against a secret held in Netlify's environment variables, and issues a signed, secure, HTTP-only 8-hour cookie. The password is NEVER checked or embedded in client-side JavaScript. The application fails closed if no password is configured.
+
+**Essential Netlify set-up, once per site:**
+1. In Netlify, open `spss-signature-studio` then `Project configuration > Environment variables`.
+2. Add a new secret variable named `SIGNATURE_STUDIO_PASSWORD` with a strong shared password (minimum 12 characters). Use the **Functions** scope, and apply it to Production (and Deploy Previews if staff need to test previews). Do not put this value in GitHub, `netlify.toml`, a chat message, or source code.
+3. Trigger a **new production deployment** after setting the variable. Edge functions only receive values applied at build/deploy time.
+4. Keep **Netlify project visibility Public**; otherwise its platform login gate will prevent staff entering the custom password and block images used by email recipients. The custom Edge gateway protects app pages, JS and CSS.
+5. Open a private/incognito browser: the root address must redirect to `/access.html`, incorrect passwords must fail, a correct password must open the builder, and `Sign out` must return to the landing page. Check direct requests to `/app.js` and `/config.js` also redirect when unauthenticated.
+
+**Important public image exception:** `/assets/logos/*.png|jpg|jpeg|webp` remains publicly accessible so logos in signatures already sent to external recipients can load. These images are non-sensitive institutional branding. The app itself, form, scripts, and data registry require a valid password.
+
+**Security limitation:** This GitHub repository is currently public, and an earlier GitHub Pages deployment may still provide an unrestricted copy of the builder. A password-protected Netlify site alone cannot prevent someone from copying public source or imitating a signature. Before claiming the site is access-controlled across all distribution routes, make the GitHub repository private where feasible and **disable GitHub Pages** under repository `Settings > Pages`. Review downstream effects before changing repository visibility. Protect against spoofed emails using the University's SPF, DKIM and DMARC policies, with IT approval; this builder cannot authenticate sender identity.
+
+No passwords, full names, staff addresses or signature-builder inputs are transmitted or stored on the builder's servers, except that the password is submitted to the Netlify Edge gateway for verification and the browser stores the signed access cookie.
 
 ## Signature output quality
 
-Standard signatures include a clean two-line contact block, optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to three claims, and a compact two-column directory containing all nine student support contacts. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
+Standard signatures include a clean two-line contact block, optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to three claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
