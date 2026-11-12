@@ -17,7 +17,7 @@
    <span class="header-divider" aria-hidden="true"></span>
    <div class="header-title"><span>School identity toolkit</span>Signature Studio</div>
   </div>
-  <span class="pilot-pill">School pilot</span>
+  <div class="header-actions"><span class="pilot-pill">School pilot</span><button id="signOut" type="button" class="sign-out-btn" title="End this session on shared computers">Sign out</button></div>
  </div>
 </header>
 <main id="builder" class="main-wrap">
@@ -152,6 +152,12 @@
  <p class="pilot-note">School pilot: professional affiliations, promotional claims and email-client compatibility remain subject to school approval and testing before wider roll-out.</p>
 </main>
 <footer class="site-footer">University of Bedfordshire · School of Sport, Psychology and Social Science · Built for staff, with care. Your personal details are processed locally in your browser.</footer>
+<script>
+document.getElementById("signOut").addEventListener("click",async()=>{
+ try{await fetch("/studio-logout",{method:"POST",credentials:"same-origin",cache:"no-store"});}
+ finally{location.replace("/access.html");}
+});
+</script>
 <script src="config.js"></script>
 <script src="app.js"></script>
 <script src="studio.js"></script>
