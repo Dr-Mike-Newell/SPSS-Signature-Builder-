@@ -44,6 +44,15 @@ try{
   assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
   assert.match(await page.locator("#preview").innerText(),/15th/);
   assert.equal(await page.locator("#preview").locator('img[alt="CASES"]').count(),1);
+  const imageHealth=await page.evaluate(async()=>{
+    const images=[...document.querySelectorAll("#preview img")];
+    await Promise.all(images.map(img=>img.decode().catch(()=>{})));
+    return images.map(img=>({
+      alt:img.alt,src:img.getAttribute("src"),loaded:img.complete&&img.naturalWidth>0,
+      visible:img.getBoundingClientRect().width>0&&img.getBoundingClientRect().height>0
+    }));
+  });
+  assert.ok(imageHealth.every(x=>x.loaded&&x.visible),"All preview logos must load and have visible dimensions: "+JSON.stringify(imageHealth));
   assert.equal(await page.locator('[data-logo-id="ahcs"]').isDisabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
   await page.locator('[data-logo-id="cases"]').focus();
@@ -64,8 +73,15 @@ try{
   assert.ok(generated.standard.includes("15th"));
   assert.ok(!generated.compact.includes("15th"));
   assert.ok(generated.standard.includes('width="176"'));
-  assert.ok(generated.standard.includes("https://mikelnewell.github.io/SPSS-Signature-Builder-/assets/"));
+  assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/"));
   assert.ok(!generated.standard.includes("(unauthenticated)"));
+  assert.ok(!generated.standard.includes("mikelnewell.github.io"),"No references to old hosting");
+  assert.ok(!generated.compact.includes("mikelnewell.github.io"),"Compact output must use new hosting");
+  assert.equal((generated.standard.match(/href="mailto:/g)||[]).length,10,"Nine support links plus staff email");
+  assert.ok(generated.standard.includes("width:50%"),"Student support contacts use a two-column layout");
+  assert.ok(generated.compact.includes("width:50%"),"Reply signature also uses a readable support layout");
+  assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/cases.png"));
+  assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/university-of-bedfordshire-master.png"));
  });
  await check("Fixed Career Powered logo sits beside one, two or three marketing claims",async()=>{
   const inspect=async expected=>{
@@ -86,8 +102,8 @@ try{
       };
     });
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
-    assert.equal(report.imageSrc,"https://mikelnewell.github.io/SPSS-Signature-Builder-/assets/logos/career-powered-clean.jpg");
-    assert.equal(report.imageWidth,"112");
+    assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-clean.jpg");
+    assert.equal(report.imageWidth,String(expected===1?88:expected===2?100:112),"Campaign artwork scales with number of selected claims");
     assert.equal(report.imageSrc.endsWith("career-powered-clean.jpg"),true);
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
@@ -111,6 +127,16 @@ try{
   assert.equal(await page.locator("#installHelp summary").count(),1);
   await page.context().grantPermissions(["clipboard-read","clipboard-write"]);
   await page.locator("#copyStandard").click();
+  const clipboard=await page.evaluate(async()=>{
+    const entries=await navigator.clipboard.read();
+    const html=await (await entries[0].getType("text/html")).text();
+    const plain=await (await entries[0].getType("text/plain")).text();
+    return {html,plain};
+  });
+  assert.ok(clipboard.html.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-clean.jpg"),"Copied HTML must use new public logo URL");
+  assert.ok(!clipboard.html.includes("mikelnewell.github.io"));
+  assert.ok(clipboard.plain.includes("Dr Alex Taylor"));
+  assert.ok(clipboard.plain.includes("\nstudent.engagement@beds.ac.uk"),"Plain text includes support on new lines");
   await page.waitForFunction(()=>/copied|blocked|download/i.test(document.querySelector("#status")?.textContent||""),{},{timeout:10000});
   assert.match(await page.locator("#status").innerText(),/copied/i);
  });
