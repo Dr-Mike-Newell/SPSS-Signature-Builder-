@@ -2,7 +2,7 @@
 # Netlify > Add new project > Import an existing project > GitHub > Dr-Mike-Newell/SPSS-Signature-Builder-
 # Production branch: main. All personal information is processed in the browser.
 [build]
-  command = "mkdir -p dist/assets && cp index.html app.js config.js studio.js studio.css dist/ && cp -R assets/logos dist/assets/"
+  command = "mkdir -p dist/assets && cp index.html access.html app.js config.js studio.js studio.css dist/ && cp -R assets/logos dist/assets/"
   publish = "dist"
 
 [build.environment]
@@ -18,3 +18,22 @@
   for = "/*.html"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
+
+# Run before any application page or JS/CSS is served. The only unauthenticated
+# paths are the sign-in page and hosted logos used by delivered email signatures.
+# Configure SIGNATURE_STUDIO_PASSWORD (Functions scope) in the Netlify UI,
+# with at least 12 characters, and redeploy. When unset the app fails closed.
+[[edge_functions]]
+  function = "studio-gate"
+  path = "/*"
+
+[[headers]]
+  for = "/access.html"
+  [headers.values]
+    Cache-Control = "private, no-store, max-age=0"
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/studio-auth"
+  [headers.values]
+    Cache-Control = "private, no-store, max-age=0"
