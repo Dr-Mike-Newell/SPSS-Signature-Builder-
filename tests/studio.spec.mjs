@@ -222,6 +222,14 @@ try{
   assert.equal(await page.locator("#previewRail").isVisible(),true);
   await page.screenshot({path:"test-artifacts/mobile.png",fullPage:true});
  });
+ await check("Password landing page is present and does not embed a password",async()=>{
+  await page.goto("http://127.0.0.1:8765/access.html",{waitUntil:"domcontentloaded"});
+  assert.match(await page.locator("h1").innerText(),/Our School, your signature/);
+  assert.equal(await page.locator('input[type="password"]').count(),1);
+  assert.equal(await page.locator('input[type="password"]').getAttribute("minlength"),"12");
+  const html=await page.content();
+  assert.ok(!html.includes("SIGNATURE_STUDIO_PASSWORD"),"Netlify secret name must not be exposed to visitors");
+ });
  assert.deepEqual(errors,[],"Browser errors");
  console.log("PASS: No uncaught browser errors");
 }finally{
