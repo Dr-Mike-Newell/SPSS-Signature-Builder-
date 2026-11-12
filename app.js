@@ -210,7 +210,7 @@ function download(kind){
 }
 async function copy(kind){
  const invalid=staffValid();if(invalid){notice(invalid,true);return;}
- const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),val("job"),C.brand.school,C.brand.faculty,val("phone"),val("email"),url(val("website")),orcid(val("orcid"))?.url||"",...C.support.map(x=>x.email)].filter(Boolean).join("\\n");
+ const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),val("job"),C.brand.school,C.brand.faculty,val("phone"),val("email"),url(val("website")),orcid(val("orcid"))?.url||"",...C.support.map(x=>x.email)].filter(Boolean).join("\n");
  try {
   if(navigator.clipboard&&window.ClipboardItem&&navigator.clipboard.write){
    const item=new ClipboardItem({"text/html":new Blob([fileHtml(kind)],{type:"text/html"}),"text/plain":new Blob([plain],{type:"text/plain"})});
