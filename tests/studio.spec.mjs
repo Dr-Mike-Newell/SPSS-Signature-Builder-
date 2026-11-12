@@ -102,13 +102,13 @@ try{
       };
     });
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
-    assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-clean.jpg");
+    assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg");
     assert.equal(report.imageWidth,String(expected===1?88:expected===2?100:112),"Campaign artwork scales with number of selected claims");
-    assert.equal(report.imageSrc.endsWith("career-powered-clean.jpg"),true);
+    assert.equal(report.imageSrc.endsWith("career-powered-2026.jpg"),true);
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
     assert.ok(!report.compact.includes('alt="Career Powered Education"'));
-    assert.ok(!report.compact.includes("career-powered-clean.jpg"));
+    assert.ok(!report.compact.includes("career-powered-2026.jpg"));
   };
   await inspect(1);
   await page.locator('[data-claim-id="graduate11"]').click();
@@ -139,10 +139,10 @@ try{
   // Chromium's execCommand compatibility copy can expose only text/plain
   // when running a local CI HTTP server; exported HTML is tested directly.
   const exported=await page.evaluate(()=>window.SPSS_QA.signature("standard",true));
-  assert.ok(exported.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-clean.jpg"),"Generated Outlook HTML must use public assets");
+  assert.ok(exported.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg"),"Generated Outlook HTML must use public assets");
   assert.ok(!exported.includes("mikelnewell.github.io"));
   if(clipboard.html){
-    assert.ok(clipboard.html.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-clean.jpg"));
+    assert.ok(clipboard.html.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg"));
   }
   if(clipboard.plain){
     assert.ok(clipboard.plain.includes("Dr Alex Taylor"));
