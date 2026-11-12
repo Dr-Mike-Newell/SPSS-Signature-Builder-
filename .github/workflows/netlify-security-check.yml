@@ -1,0 +1,46 @@
+name: Verify Netlify staff access
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - name: Probe published Netlify access control
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://spss-signature-studio.netlify.app"
+          # The Netlify deployment starts in parallel with the GitHub push.
+          # Poll until the Edge gateway is live instead of judging the old deploy.
+          for i in {1..18}; do
+            status=$(curl --retry 2 --retry-delay 2 --max-time 15 -sS -D /tmp/root.headers -o /dev/null -w "%{http_code}" "$base/" || true)
+            location=$(grep -i "^location:" /tmp/root.headers 2>/dev/null | tail -1 | tr -d '\r' || true)
+            echo "Attempt $i: root=$status redirect=$location"
+            if [[ "$status" == "302" && "$location" == *"/access.html"* ]]; then break; fi
+            sleep 6
+          done
+          if [[ "$status" != "302" || "$location" != *"/access.html"* ]]; then
+            echo "::error::Live root is not behind the Edge password landing page."
+            exit 1
+          fi
+          access=$(curl --max-time 15 -sS -o /tmp/access.html -w "%{http_code}" "$base/access.html")
+          script=$(curl --max-time 15 -sS -o /dev/null -w "%{http_code}" "$base/app.js")
+          logo=$(curl --max-time 15 -sS -o /dev/null -w "%{http_code}" "$base/assets/logos/career-powered-2026.jpg")
+          wrong=$(curl --max-time 15 -sS -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "password=definitely-wrong" -o /dev/null -w "%{http_code}" "$base/studio-auth")
+          echo "Login page: $access | Protected script: $script | Public email logo: $logo | Invalid password: $wrong"
+          [[ "$access" == "200" && "$script" == "302" && "$logo" == "200" ]]
+          grep -q "Our School, your signature" /tmp/access.html
+          if [[ "$wrong" == "503" ]]; then
+            echo "::warning::Gateway is live and fails closed, but SIGNATURE_STUDIO_PASSWORD is not configured in Netlify Functions environment. Add a minimum 12 character secret and redeploy."
+          elif [[ "$wrong" == "401" ]]; then
+            echo "PASS: Invalid password rejected. Shared password is configured."
+          else
+            echo "::error::Unexpected password endpoint response: $wrong"
+            exit 1
+          fi
+          echo "PASS: Production app is access-controlled; email image remains available."
