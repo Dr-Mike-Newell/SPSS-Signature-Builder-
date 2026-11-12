@@ -13,9 +13,9 @@ window.SPSS_CONFIG = Object.freeze({
     logoNote:"University-supplied transparent RGB logo master, cropped and optimised for high-density email display."
   },
   pagesBase:"https://spss-signature-studio.netlify.app/",
-  // Email recipients must be able to fetch signature images without Netlify sign-in.
-  // The repository is public; export images use the public GitHub raw host instead.
-  emailImageBase:"https://raw.githubusercontent.com/Dr-Mike-Newell/SPSS-Signature-Builder-/main/",
+  // This public, stable Netlify domain hosts all images embedded in Outlook signatures.
+  // Keep Netlify visitor access Public so recipients can download them without sign-in.
+  emailImageBase:"https://spss-signature-studio.netlify.app/",
   orcidIcon:"https://info.orcid.org/wp-content/uploads/2020/12/ORCIDiD_icon16x16.png",
   supportIntro:"Students can contact these specialist support teams directly by email and request a telephone appointment where appropriate:",
   support:[
