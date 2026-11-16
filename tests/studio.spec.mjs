@@ -102,7 +102,7 @@ try{
     }));
   });
   assert.ok(imageHealth.every(x=>x.loaded&&x.visible),"All preview logos must load and have visible dimensions: "+JSON.stringify(imageHealth));
-  assert.equal(await page.locator('[data-logo-id="ahcs"]').isDisabled(),true);
+  assert.equal(await page.locator('[data-logo-id="ahcs"]').isEnabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
   await page.locator('[data-logo-id="cases"]').focus();
   await page.keyboard.press("Enter");
@@ -233,13 +233,13 @@ try{
   await page.locator("#discipline").selectOption("head");
   assert.equal(await page.locator('[data-logo-id="cases"]').isEnabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isEnabled(),true);
-  assert.equal(await page.locator('[data-logo-id="ahcs"]').isDisabled(),true,"Missing AHCS asset stays unavailable");
+  assert.equal(await page.locator('[data-logo-id="ahcs"]').isEnabled(),true,"Approved AHCS asset is available to the Head of School");
   for(const id of ["cases","qaa","people","psa","cimspa"]){
     await page.locator('[data-logo-id="'+id+'"]').click();
   }
   const grouped=await page.evaluate(()=>{
     const doc=new DOMParser().parseFromString(window.SPSS_QA.signature("standard",true),"text/html");
-    const alts=["CASES","QAA UK Quality Assured","People & Planet award (2023/24)",
+    const alts=["CASES","QAA UK Quality Assured","People & Planet First Class Award (2025/26)",
       "Professional Standards Authority Accredited Register","CIMSPA Higher Education Partner"];
     const images=alts.map(alt=>doc.querySelector('img[alt="'+alt+'"]'));
     return {
@@ -259,6 +259,50 @@ try{
   await page.locator("#discipline").selectOption("sport");
   assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
   assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
+ });
+ await check("Approved People & Planet, AHCS and BPS affiliation availability and export",async()=>{
+  const people=page.locator('[data-logo-id="people"]'),ahcs=page.locator('[data-logo-id="ahcs"]'),bps=page.locator('[data-logo-id="bps"]');
+  await page.locator("#discipline").selectOption("sport");
+  assert.equal(await people.isEnabled(),true);
+  assert.equal(await ahcs.isEnabled(),true);
+  assert.equal(await bps.isDisabled(),true);
+  assert.match(await people.innerText(),/2025\/26/);
+  assert.match(await ahcs.innerText(),/Approved/);
+  if(await people.getAttribute("aria-pressed")!=="true")await people.click();
+  if(await ahcs.getAttribute("aria-pressed")!=="true")await ahcs.click();
+  const data=await page.evaluate(async()=>{
+    const urls=["assets/logos/people-and-planet-2025-26.png","assets/logos/ahcs-approved.png"];
+    const preview=await Promise.all(urls.map(async src=>{
+      const img=document.querySelector('#preview img[src="'+src+'"]');
+      if(!img)return {loaded:false};
+      await img.decode().catch(()=>{});
+      return {loaded:img.complete&&img.naturalWidth>0,width:img.naturalWidth,height:img.naturalHeight};
+    }));
+    return {preview,standard:window.SPSS_QA.signature("standard",true),compact:window.SPSS_QA.signature("compact",true)};
+  });
+  assert.deepEqual(data.preview,[{loaded:true,width:225,height:132},{loaded:true,width:480,height:129}]);
+  for(const path of ["people-and-planet-2025-26.png","ahcs-approved.png"]){
+    assert.ok(data.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/"+path));
+    assert.ok(!data.compact.includes(path));
+  }
+  assert.ok(!data.standard.includes("people-and-planet.png"));
+  await page.locator("#discipline").selectOption("psychology");
+  assert.equal(await people.isEnabled(),true);
+  assert.equal(await ahcs.isDisabled(),true);
+  assert.equal(await bps.isEnabled(),true);
+  assert.match(await bps.innerText(),/Approved/);
+  if(await bps.getAttribute("aria-pressed")!=="true")await bps.click();
+  const psychology=await page.evaluate(()=>window.SPSS_QA.signature("standard",true));
+  assert.ok(psychology.includes("https://www.beds.ac.uk/media/j5nbse4p/bps-logo.png"));
+  assert.ok(!psychology.includes("ahcs-approved.png"));
+  await page.locator("#discipline").selectOption("criminology");
+  assert.equal(await people.isEnabled(),true);
+  assert.equal(await ahcs.isDisabled(),true);
+  assert.equal(await bps.isDisabled(),true);
+  await page.locator("#discipline").selectOption("head");
+  assert.equal(await people.isEnabled(),true);
+  assert.equal(await ahcs.isEnabled(),true);
+  assert.equal(await bps.isEnabled(),true);
  });
  await check("Mobile layout stays within viewport",async()=>{
   await page.setViewportSize({width:390,height:844});

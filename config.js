@@ -1,7 +1,7 @@
 // Central content registry: all staff-facing institutional content lives here.
 // Statuses describe pilot eligibility, not a claim of third-party accreditation approval.
 window.SPSS_CONFIG = Object.freeze({
-  version:"3.3.1-pilot",
+  version:"3.3.2-pilot",
   brand:{
     school:"School of Sport, Psychology and Social Science",
     faculty:"Faculty of Technologies, Education and Social Sciences",
@@ -47,12 +47,12 @@ window.SPSS_CONFIG = Object.freeze({
   affiliations:[
     {id:"cases",name:"CASES",path:"assets/logos/cases.png",w:533,h:382,audience:["sport"],status:"pilot-review",note:"Chartered Association of Sport and Exercise Sciences. Relevant staff only."},
     {id:"qaa",name:"QAA UK Quality Assured",path:"assets/logos/qaa.png",w:149,h:77,audience:["all"],status:"pilot-review",note:"Confirm institutional permission before school-wide use."},
-    {id:"people",name:"People & Planet award (2023/24)",path:"assets/logos/people-and-planet.png",w:388,h:177,audience:["all"],status:"historical",note:"Historical 2023/24 award. Must not be represented as a current award."},
+    {id:"people",name:"People & Planet First Class Award (2025/26)",path:"assets/logos/people-and-planet-2025-26.png",w:225,h:132,audience:["all"],status:"approved",note:"Approved University of Bedfordshire First Class award artwork for the 2025/26 University League. Available school-wide; retain the award year."},
     {id:"psa",name:"Professional Standards Authority Accredited Register",path:"assets/logos/psa.png",w:348,h:158,audience:["sport"],status:"restricted",note:"Only where the accredited-register endorsement genuinely applies."},
     {id:"basrat",name:"BASRaT",path:"assets/logos/basrat.png",w:314,h:171,audience:["sport"],status:"restricted",note:"Relevant sport rehabilitation programme only."},
     {id:"cimspa",name:"CIMSPA Higher Education Partner",path:"assets/logos/cimspa.jpg",w:506,h:126,audience:["sport"],status:"restricted",note:"Only where partner status is applicable."},
-    {id:"bps",name:"British Psychological Society (BPS) accreditation",path:"https://www.beds.ac.uk/media/j5nbse4p/bps-logo.png",w:1000,h:380,audience:["psychology"],status:"restricted",note:"For staff representing BPS-accredited Psychology programmes only. Official University of Bedfordshire course-page logo; course-level accreditation, not an individual credential. Asset is hosted by the University."},
-    {id:"ahcs",name:"AHCS (Academy for Healthcare Science)",path:null,w:0,h:0,audience:["sport"],status:"pending-asset",note:"Awaiting official logo and confirmation of permitted use for MSc Clinical Exercise Physiology."}
+    {id:"bps",name:"British Psychological Society (BPS) accreditation",path:"https://www.beds.ac.uk/media/j5nbse4p/bps-logo.png",w:1000,h:380,audience:["psychology"],status:"approved-restricted",note:"Approved for staff representing BPS-accredited Psychology programmes only. Official University of Bedfordshire course-page logo; course-level accreditation, not an individual credential. Asset is hosted by the University."},
+    {id:"ahcs",name:"AHCS (Academy for Healthcare Science)",path:"assets/logos/ahcs-approved.png",w:480,h:129,audience:["sport"],status:"approved-restricted",note:"Approved for relevant accredited Clinical Exercise Physiology programme staff; not an individual credential. Select only where applicable."}
   ],
   claims:[
     {id:"subject15",discipline:"sport",category:"Rankings",figure:"15th",headline:"in the UK for Sports Science",source:"Guardian University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:1},
