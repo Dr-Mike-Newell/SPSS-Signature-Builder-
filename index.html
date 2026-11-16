@@ -77,7 +77,14 @@ if(location.hostname.endsWith(".github.io") &&
       <small id="orcidHint">Paste your 16-digit identifier or ORCID profile URL.</small>
      </label>
     </div>
-    <div class="privacy-note"><span class="symbol" aria-hidden="true">✓</span> Your details stay in this browser. No account or sign-in is required.</div>
+    <section class="additional-roles" aria-labelledby="rolesTitle">
+     <div class="roles-heading"><h3 id="rolesTitle">Additional responsibilities <span class="optional">Optional</span></h3>
+      <p>Add portfolio, course or other leadership responsibilities. Each completed role appears on its own line in your signature.</p>
+     </div>
+     <div id="additionalRoles"></div>
+     <button type="button" class="btn btn-secondary add-role-btn" id="addRole">+ Add a role</button>
+    </section>
+    <div class="privacy-note"><span class="symbol" aria-hidden="true">✓</span> Your signature details stay in this browser and are not stored by the application.</div>
     <button type="button" class="preview-jump" data-jump-preview>View live preview ↓</button>
     <div id="stepError" class="error" role="alert" aria-live="polite"></div>
     <div class="step-footer">
@@ -90,8 +97,8 @@ if(location.hostname.endsWith(".github.io") &&
     <h2 id="step2Title">Show what makes your work distinctive.</h2>
     <p class="lead">Select relevant affiliations and achievements. This entire step is optional.</p>
     <div class="select-field">
-     <label for="discipline">Your subject area or role</label>
-     <select id="discipline"><option value="">Choose your subject or Head of School role</option></select>
+     <label for="discipline">Your portfolio or role</label>
+     <select id="discipline"><option value="">Choose your portfolio or Head of School role</option></select>
     </div>
     <div class="section-title"><h3>Professional affiliations</h3><span>Choose what applies to you</span></div>
     <div id="logoGrid" class="logo-grid" role="group" aria-label="Optional affiliation logos"></div>
