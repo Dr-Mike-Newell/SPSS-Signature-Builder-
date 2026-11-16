@@ -5,7 +5,7 @@ const C=window.SPSS_CONFIG;
 if(!C)throw new Error("Missing config.js");
 const $=x=>document.getElementById(x);
 let selectedLogos=[],selectedClaims=[];
-const fields=["name","postnominals","job","address","phone","email","website","orcid"];
+const fields=["name","postnominals","job","address","phone","extension","email","website","orcid"];
 const E=x=>String(x==null?"":x).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const val=x=>($(x)?.value||"").trim();
 const url=(text)=>{let s=(text||"").trim();if(!s)return "";if(!/^https?:\/\//i.test(s))s="https://"+s;try{const u=new URL(s);return u.protocol==="https:"&&u.hostname&&u.username===""&&u.password===""?u.href:"";}catch(_){return "";}};
@@ -124,19 +124,30 @@ function plainIdentity(){
  const roles=additionalRoles().map(role=>role.title+" | "+role.detail);
  return [val("job"),C.brand.school,...roles,C.brand.faculty].filter(Boolean);
 }
-function contact(){
- // Separate primary and secondary contact details to avoid unreadable
- // single-line runs on Outlook and narrow preview panels.
- const primary=[],secondary=[];
- if(val("phone"))primary.push('<span style="color:#717171;">T:</span> '+E(val("phone")));
- if(val("email"))primary.push('<span style="color:#717171;">E:</span> <a href="mailto:'+E(val("email"))+'" style="color:#252525;text-decoration:underline;">'+E(val("email"))+'</a>');
- if(url(val("website")))secondary.push('<span style="color:#717171;">W:</span> <a href="'+E(url(val("website")))+'" style="color:#252525;text-decoration:underline;">Staff profile</a>');
+// Two contact rows, with optional fields omitted cleanly.
+function contactParts(compact){
+ const first=[],second=[];
+ const add=(row,label,text,html)=>row.push({label,text,html});
+ const label=key=>'<strong style="color:#303030;font-weight:700;">'+key+':</strong> ';
+ if(!compact&&val("address"))add(first,"A",val("address"),label("A")+E(val("address")));
+ if(val("phone")){
+  const telephone=val("phone"),ext=val("extension");
+  add(first,"T",telephone+(ext?" Ext: "+ext:""),label("T")+E(telephone)+(ext?' <span style="font-style:italic;">Ext: '+E(ext)+'</span>':""));
+ }
+ if(url(val("website")))add(second,"W",url(val("website")),label("W")+'<a href="'+E(url(val("website")))+'" style="color:#252525;text-decoration:underline;">UoB Staff Weblink</a>');
+ if(val("email"))add(second,"E",val("email"),label("E")+'<a href="mailto:'+E(val("email"))+'" style="color:#252525;text-decoration:underline;">'+E(val("email"))+'</a>');
  const o=orcid(val("orcid"));
- if(o&&typeof o==="object")secondary.push('<a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;"><img src="'+E(C.orcidIcon)+'" alt="ORCID iD" width="16" height="16" style="display:inline-block;width:16px;height:16px;vertical-align:middle;border:0;margin-right:5px;">'+E(o.id)+'</a>');
- if(!primary.length&&!secondary.length)return "";
- const divider='<span style="color:#c8102e;padding:0 7px;"> | </span>';
- const line=(cells,padding)=>cells.length?'<tr><td style="padding-top:'+padding+'px;font:11px/17px Arial,Helvetica,sans-serif;color:#303030;word-wrap:break-word;">'+cells.join(divider)+'</td></tr>':"";
- return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">'+line(primary,9)+line(secondary,3)+'</table>';
+ if(o&&typeof o==="object")add(second,"ORCID",o.url,'<strong style="font-weight:700;color:#666;">ORC<span style="color:#668b24;">iD</span>:</strong> <a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;word-wrap:break-word;">'+E(o.url)+'</a>');
+ return [first,second].filter(row=>row.length);
+}
+function contact(compact){
+ const rows=contactParts(compact);
+ if(!rows.length)return "";
+ const divider='<span style="color:'+E(C.brand.colour)+';font-weight:700;"> | </span>';
+ return '<table role="presentation" data-contact-block="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;">'+rows.map((row,i)=>'<tr data-contact-row="true"><td style="padding-top:'+(i?3:9)+'px;font:11px/17px Arial,Helvetica,sans-serif;color:#303030;word-wrap:break-word;">'+row.map(part=>part.html).join(divider)+'</td></tr>').join("")+'</table>';
+}
+function plainContact(compact){
+ return contactParts(compact).map(row=>row.map(part=>part.label+": "+part.text).join(" | "));
 }
 function logos(exported){
  if(!selectedLogos.length)return "";
@@ -208,12 +219,11 @@ function signature(kind="standard",exported=false){
  const school='<div style="padding-top:4px;font:700 13px/18px Arial,Helvetica,sans-serif;color:'+b.colour+';word-wrap:break-word;">'+E(b.school)+'</div>';
  const additional=additionalRoles().map(r=>'<div style="padding-top:3px;font:13px/18px Arial,Helvetica,sans-serif;color:#262626;word-wrap:break-word;">'+E(r.title)+roleDivider+E(r.detail)+'</div>').join("");
  const faculty='<div style="padding-top:3px;font:12px/16px Arial,Helvetica,sans-serif;color:#555;">'+E(b.faculty)+'</div>';
- const address=(!compact&&val("address"))?'<div style="padding-top:6px;font:11px/15px Arial,Helvetica,sans-serif;color:#666;">'+E(val("address"))+'</div>':"";
  const top='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">'+
- '<tr><td style="vertical-align:top;padding-right:10px;">'+heading+role+school+additional+faculty+address+'</td>'+
+ '<tr><td style="vertical-align:top;padding-right:10px;">'+heading+role+school+additional+faculty+'</td>'+
  '<td width="'+(b.logoWidth+4)+'" style="width:'+(b.logoWidth+4)+'px;vertical-align:top;text-align:right;">'+image+'</td></tr></table>';
  const identity='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>'+
- '<td style="border-left:4px solid '+b.colour+';padding:0 0 0 13px;">'+top+contact()+'</td></tr></table>';
+ '<td style="border-left:4px solid '+b.colour+';padding:0 0 0 13px;">'+top+contact(compact)+'</td></tr></table>';
  const promo=compact?"":logos(exported)+promotionalClaims(exported);
  return '<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:560px;max-width:100%;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;background:#fff;"><tr><td>'+identity+promo+studentSupport()+'</td></tr></table>';
 }
@@ -234,7 +244,7 @@ function download(kind){
 }
 async function copy(kind){
  const invalid=staffValid();if(invalid){notice(invalid,true);return;}
- const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),...plainIdentity(),val("phone"),val("email"),url(val("website")),orcid(val("orcid"))?.url||"",...C.support.map(x=>x.email)].filter(Boolean).join("\n");
+ const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),...plainIdentity(),...plainContact(kind==="compact"),...C.support.map(x=>x.email)].filter(Boolean).join("\n");
  try {
   if(navigator.clipboard&&window.ClipboardItem&&navigator.clipboard.write){
    const item=new ClipboardItem({"text/html":new Blob([fileHtml(kind)],{type:"text/html"}),"text/plain":new Blob([plain],{type:"text/plain"})});
