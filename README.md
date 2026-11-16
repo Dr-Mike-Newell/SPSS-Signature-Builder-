@@ -54,7 +54,7 @@ The nine addresses and exact descriptions supplied by the Head of School are cen
 
 ### ORCID iDs
 
-Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Uses the official green ORCID iD icon URL, hyperlinked to the person's profile. Identifiers are manually entered and are not authenticated through ORCID OAuth; only the linked green icon and identifier appear in the signature, without an authentication label.
+Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Displays a grey and green ORCiD label followed by the full hyperlinked ORCID profile URL. Identifiers are manually entered and are not authenticated through ORCID OAuth; only the ORCiD label and linked profile URL appear in the signature, without an authentication label.
 
 ### Known pilot limitations
 
@@ -118,7 +118,7 @@ No passwords, full names, staff addresses or signature-builder inputs are transm
 
 ## Signature output quality
 
-Standard signatures include a clean two-line contact block, optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to four claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
+Standard signatures include a two-line contact block (address and telephone with optional extension; UoB Staff Weblink, email and full ORCID URL), optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to four claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
 
 
 ## Version 3.3.0-pilot
