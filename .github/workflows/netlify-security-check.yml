@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 6
     steps:
+      - uses: actions/checkout@v4
       - name: Probe published Netlify access control
         shell: bash
         run: |
@@ -44,3 +45,23 @@ jobs:
             exit 1
           fi
           echo "PASS: Production app is access-controlled; email image remains available."
+      - name: Verify published affiliation image bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://spss-signature-studio.netlify.app"
+          for path in assets/logos/people-and-planet-2025-26.png assets/logos/ahcs-approved.png; do
+            verified=false
+            for attempt in {1..18}; do
+              if curl --fail --silent --show-error --max-time 15 "$base/$path" -o /tmp/approved-logo.png && cmp -s "$path" /tmp/approved-logo.png; then
+                echo "PASS: Public asset matches repository bytes: $path"
+                verified=true
+                break
+              fi
+              sleep 6
+            done
+            if [[ "$verified" != true ]]; then
+              echo "::error::Published logo did not match repository: $path"
+              exit 1
+            fi
+          done
