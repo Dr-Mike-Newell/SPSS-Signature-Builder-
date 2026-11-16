@@ -27,6 +27,51 @@ try{
   assert.equal(await page.locator('[data-panel="2"]').isVisible(),true);
   assert.equal(await page.locator('[data-panel="1"]').isVisible(),false);
  });
+ await check("Multiple optional responsibilities, custom roles and portfolio names",async()=>{
+  await page.locator("#backToDetails").click();
+  await page.locator("#job").fill("Principal Lecturer in Sport");
+  await page.locator("#addRole").click();
+  await page.locator(".role-type").nth(0).selectOption("Portfolio Leader");
+  await page.locator(".role-detail").nth(0).fill("Sports Science and Physical Activity");
+  await page.locator("#addRole").click();
+  await page.locator(".role-type").nth(1).selectOption("Course Leader");
+  await page.locator(".role-detail").nth(1).fill("BSc Strength and Conditioning");
+  await page.locator("#addRole").click();
+  await page.locator(".role-type").nth(2).selectOption("Other");
+  assert.equal(await page.locator(".custom-role").nth(2).isVisible(),true);
+  await page.locator(".role-custom-input").nth(2).fill("Ethics Lead");
+  await page.locator(".role-detail").nth(2).fill("Research <review> & ethics");
+  await page.locator("#addRole").click();
+  await page.locator(".role-type").nth(3).selectOption("Research Lead");
+  const details=await page.evaluate(()=>{
+    const read=kind=>{
+      const html=window.SPSS_QA.signature(kind,true);
+      const doc=new DOMParser().parseFromString(html,"text/html");
+      return {html,lines:[...doc.querySelectorAll("div")].map(x=>x.textContent.trim())};
+    };
+    return {standard:read("standard"),compact:read("compact")};
+  });
+  for(const out of Object.values(details)){
+    assert.ok(out.lines.includes("Principal Lecturer in Sport | School of Sport, Psychology and Social Science"));
+    assert.ok(out.lines.includes("Portfolio Leader | Sports Science and Physical Activity"));
+    assert.ok(out.lines.includes("Course Leader | BSc Strength and Conditioning"));
+    assert.ok(out.lines.includes("Ethics Lead | Research <review> & ethics"));
+    assert.ok(out.html.includes("Research &lt;review&gt; &amp; ethics"));
+    assert.ok(!out.lines.some(x=>x.includes("Research Lead")));
+    assert.ok(out.html.includes("Academic skills, referencing, library resources and Microsoft Office"));
+    assert.ok(out.html.includes("Academic skills, e.g. writing, critical thinking, research and maths/statistics"));
+  }
+  await page.locator(".remove-role").nth(3).click();
+  await page.locator(".remove-role").nth(2).click();
+  assert.ok(!(await page.locator("#preview").innerText()).includes("Ethics Lead"));
+  await page.locator("#goPersonalise").click();
+  assert.equal(await page.locator('label[for="discipline"]').innerText(),"Your portfolio or role");
+  assert.equal(await page.locator('#discipline option[value="sport"]').innerText(),"Sports Science and Physical Activity");
+  assert.equal(await page.locator('#discipline option[value="head"]').innerText(),"Head of School (all portfolios)");
+  await page.locator("#backToDetails").click();
+  assert.equal(await page.locator(".role-detail").nth(1).inputValue(),"BSc Strength and Conditioning");
+  await page.locator("#goPersonalise").click();
+ });
  await check("Career Powered branding is fixed and hidden without claims",async()=>{
   assert.equal(await page.locator('[data-logo-id="career"]').count(),0);
   const empty=await page.evaluate(()=>({

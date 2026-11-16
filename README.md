@@ -105,7 +105,7 @@ The Studio uses a real Netlify Edge Function as a password gate. This is not a c
 
 **Essential Netlify set-up, once per site:**
 1. In Netlify, open `spss-signature-studio` then `Project configuration > Environment variables`.
-2. Add a new secret variable named `SIGNATURE_STUDIO_PASSWORD` with a strong shared password (minimum 12 characters). Use the **Functions** scope, and apply it to Production (and Deploy Previews if staff need to test previews). Do not put this value in GitHub, `netlify.toml`, a chat message, or source code.
+2. Add a new secret variable named `SIGNATURE_STUDIO_PASSWORD` with a strong shared password (minimum 12 characters). Use All scopes on the Free plan or the **Functions** scope if available, and apply it to Production (and Deploy Previews if staff need to test previews). Do not put this value in GitHub, `netlify.toml`, a chat message, or source code.
 3. Trigger a **new production deployment** after setting the variable. Edge functions only receive values applied at build/deploy time.
 4. Keep **Netlify project visibility Public**; otherwise its platform login gate will prevent staff entering the custom password and block images used by email recipients. The custom Edge gateway protects app pages, JS and CSS.
 5. Open a private/incognito browser: the root address must redirect to `/access.html`, incorrect passwords must fail, a correct password must open the builder, and `Sign out` must return to the landing page. Check direct requests to `/app.js` and `/config.js` also redirect when unauthenticated.
@@ -119,3 +119,8 @@ No passwords, full names, staff addresses or signature-builder inputs are transm
 ## Signature output quality
 
 Standard signatures include a clean two-line contact block, optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to three claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
+
+
+## Version 3.3.0-pilot
+
+Staff may add multiple optional professional responsibilities on the Your details screen, including Portfolio Leader, Course Leader, Research Lead, School Lead, Faculty Lead, or a custom role. Only completed role/detail pairs appear in the preview, standard and compact Outlook signatures. The primary job title and School share a line where space permits. The portfolio labels have been updated without changing the internal filtering IDs. The StudyHub and Learning Development descriptions have been shortened; all nine support addresses remain mandatory. People & Planet artwork and award year remain unchanged pending receipt of the replacement. Authentication and public email image hosting are unchanged.

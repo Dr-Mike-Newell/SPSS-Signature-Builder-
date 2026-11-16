@@ -1,7 +1,7 @@
 // Central content registry: all staff-facing institutional content lives here.
 // Statuses describe pilot eligibility, not a claim of third-party accreditation approval.
 window.SPSS_CONFIG = Object.freeze({
-  version:"3.2.0-pilot",
+  version:"3.3.0-pilot",
   brand:{
     school:"School of Sport, Psychology and Social Science",
     faculty:"Faculty of Technologies, Education and Social Sciences",
@@ -26,14 +26,14 @@ window.SPSS_CONFIG = Object.freeze({
     {email:"counselling@beds.ac.uk",description:"professional one-to-one counselling support"},
     {email:"chaplaincy@beds.ac.uk",description:"pastoral and emotional support"},
     {email:"disability@beds.ac.uk",description:"support with a range of disabilities"},
-    {email:"studyhub@beds.ac.uk",description:"support for academic skills (referencing, library resources, study skills, and Microsoft Office products)"},
-    {email:"learningdevelopment@beds.ac.uk",description:"academic skills (writing, critical thinking, researching, maths/statistics, assignment/dissertation support)"}
+    {email:"studyhub@beds.ac.uk",description:"Academic skills, referencing, library resources and Microsoft Office"},
+    {email:"learningdevelopment@beds.ac.uk",description:"Academic skills, e.g. writing, critical thinking, research and maths/statistics"}
   ],
   disciplines:[
-    {id:"sport",name:"Sport and Exercise Science"},
+    {id:"sport",name:"Sports Science and Physical Activity"},
     {id:"psychology",name:"Psychology"},
     {id:"criminology",name:"Criminology"},
-    {id:"head",name:"Head of School (all disciplines)"}
+    {id:"head",name:"Head of School (all portfolios)"}
   ],
   // Fixed institutional promotional branding, shown only beside selected marketing claims.
   promotionalBrand:{
