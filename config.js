@@ -1,7 +1,7 @@
 // Central content registry: all staff-facing institutional content lives here.
 // Statuses describe pilot eligibility, not a claim of third-party accreditation approval.
 window.SPSS_CONFIG = Object.freeze({
-  version:"3.3.2-pilot",
+  version:"3.3.3-pilot",
   brand:{
     school:"School of Sport, Psychology and Social Science",
     faculty:"Faculty of Technologies, Education and Social Sciences",
@@ -72,5 +72,5 @@ window.SPSS_CONFIG = Object.freeze({
     {id:"crim-teaching1",discipline:"criminology",category:"Teaching quality",figure:"1st",headline:"in the UK for teaching quality in Criminology",source:"The Times Good University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:22,sourceAsset:"UoB_Criminology_1st-in-the-uk-for-teaching-quality_Times-2027_Dark.png"},
     {id:"crim-teach-satisf3",discipline:"criminology",category:"Student experience",figure:"3rd",headline:"in the UK for satisfaction with teaching in Criminology",source:"Guardian University Guide 2027",year:2027,review:"2027 annual guide",status:"pilot-review",priority:23,sourceAsset:"UoB_Criminology_3rd-in-the-uk-for-satisfaction-with-teaching_Guardian-2027_Dark.png"}
   ],
-  maxClaims:3
+  maxClaims:4
 });

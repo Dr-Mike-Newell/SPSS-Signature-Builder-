@@ -90,7 +90,7 @@ try{
   await page.locator('[data-logo-id="cases"]').click();
   assert.equal(await page.locator('[data-logo-id="cases"]').getAttribute("aria-pressed"),"true");
   await page.locator('[data-claim-id="subject15"]').click();
-  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 4 claims selected");
   assert.match(await page.locator("#preview").innerText(),/15th/);
   assert.equal(await page.locator("#preview").locator('img[alt="CASES"]').count(),1);
   const imageHealth=await page.evaluate(async()=>{
@@ -147,7 +147,7 @@ try{
   assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/cases.png"));
   assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/university-of-bedfordshire-master.png"));
  });
- await check("Fixed Career Powered logo sits beside one, two or three marketing claims",async()=>{
+ await check("Fixed Career Powered logo sits beside one to four aligned marketing claims",async()=>{
   const inspect=async expected=>{
     const report=await page.evaluate(()=>{
       const standard=window.SPSS_QA.signature("standard",true);
@@ -168,8 +168,17 @@ try{
     });
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
     assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg");
-    assert.equal(report.imageWidth,String(expected===1?88:expected===2?100:112),"Campaign artwork scales with number of selected claims");
-    assert.equal(report.imageHeight,String(Math.round(Number(report.imageWidth)*167/160)),"2026 artwork keeps original proportions");
+    const height=expected*(expected===1?92:54)+(expected-1)*4;
+    assert.equal(Number(report.imageHeight),height,"Campaign artwork matches the combined statement heights");
+    assert.equal(Number(report.imageWidth),Math.round(height*160/167),"2026 artwork keeps original proportions");
+    const geometry=await page.evaluate(()=>{
+      const panel=document.querySelector("#preview [data-promo-panel]");
+      const image=panel.querySelector('img[alt="Career Powered Education"]').getBoundingClientRect();
+      const rows=[...panel.querySelectorAll("[data-promo-claim]")].map(r=>r.getBoundingClientRect());
+      return {top:image.top,bottom:image.bottom,first:rows[0].top,last:rows.at(-1).bottom,heights:rows.map(r=>r.height)};
+    });
+    assert.ok(Math.abs(geometry.top-geometry.first)<=2&&Math.abs(geometry.bottom-geometry.last)<=2,"Campaign image and statements align vertically: "+JSON.stringify(geometry));
+    assert.ok(geometry.heights.every(h=>Math.abs(h-geometry.heights[0])<=2),"Statements have equal rendered heights");
     assert.equal(report.imageSrc.endsWith("career-powered-2026.jpg"),true);
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
@@ -181,9 +190,16 @@ try{
   await inspect(2);
   await page.locator('[data-claim-id="career12"]').click();
   await inspect(3);
-  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
   await page.locator('[data-claim-id="graduate6"]').click();
-  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
+  await inspect(4);
+  assert.equal(await page.locator("#claimCounter").innerText(),"4 / 4 claims selected");
+  await page.locator('[data-claim-id="satisfaction13"]').click();
+  assert.equal(await page.locator("#claimCounter").innerText(),"4 / 4 claims selected");
+  assert.ok(!(await page.evaluate(()=>window.SPSS_QA.selectedClaims())).includes("satisfaction13"),"A fifth statement is rejected");
+  await page.locator('[data-claim-id="graduate6"]').click();
+  await inspect(3);
+  await page.locator('[data-claim-id="graduate6"]').click();
+  await inspect(4);
  });
  await check("Completion and Outlook actions",async()=>{
   await page.locator("#goReady").click();
@@ -220,7 +236,7 @@ try{
  await check("Changing subjects clears incompatible selections",async()=>{
   await page.locator("#backToPersonalise").click();
   await page.locator("#discipline").selectOption("psychology");
-  assert.equal(await page.locator("#claimCounter").innerText(),"0 / 3 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"0 / 4 claims selected");
   assert.equal(await page.locator('#preview img[alt="Career Powered Education"]').count(),0);
   assert.equal(await page.locator('[data-logo-id="cases"]').isDisabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isEnabled(),true);
@@ -253,11 +269,20 @@ try{
   await page.locator('[data-claim-id="subject15"]').click();
   await page.locator('[data-claim-id="psych-support96"]').click();
   await page.locator('[data-claim-id="crim-satisf4"]').click();
-  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
+  await page.locator('[data-claim-id="psych-teach-top10"]').click();
+  assert.equal(await page.locator("#claimCounter").innerText(),"4 / 4 claims selected");
+  const mixedGeometry=await page.evaluate(()=>{
+    const panel=document.querySelector("#preview [data-promo-panel]");
+    const img=panel.querySelector('img[alt="Career Powered Education"]').getBoundingClientRect();
+    const rows=[...panel.querySelectorAll("[data-promo-claim]")].map(r=>r.getBoundingClientRect());
+    return {top:img.top,bottom:img.bottom,first:rows[0].top,last:rows.at(-1).bottom,count:rows.length};
+  });
+  assert.equal(mixedGeometry.count,4);
+  assert.ok(Math.abs(mixedGeometry.top-mixedGeometry.first)<=2&&Math.abs(mixedGeometry.bottom-mixedGeometry.last)<=2,"Four mixed portfolio statements align: "+JSON.stringify(mixedGeometry));
   const html=await page.evaluate(()=>window.SPSS_QA.signature("standard",true));
   for(const figure of ["15th","96%","4th"])assert.ok(html.includes(figure));
   await page.locator("#discipline").selectOption("sport");
-  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 4 claims selected");
   assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
  });
  await check("Approved People & Planet, AHCS and BPS affiliation availability and export",async()=>{
