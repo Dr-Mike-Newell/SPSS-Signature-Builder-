@@ -52,7 +52,11 @@ try{
     return {standard:read("standard"),compact:read("compact")};
   });
   for(const out of Object.values(details)){
-    assert.ok(out.lines.includes("Principal Lecturer in Sport | School of Sport, Psychology and Social Science"));
+    const expectedLines=["Principal Lecturer in Sport","School of Sport, Psychology and Social Science","Portfolio Leader | Sports Science and Physical Activity","Course Leader | BSc Strength and Conditioning","Ethics Lead | Research <review> & ethics","Faculty of Technologies, Education and Social Sciences"];
+    const first=out.lines.indexOf(expectedLines[0]);
+    assert.ok(first>=0,"Primary job title must be on its own line");
+    assert.deepEqual(out.lines.slice(first,first+expectedLines.length),expectedLines,"Job title, School and responsibilities must be in order on separate lines");
+    assert.ok(!out.lines.includes("Principal Lecturer in Sport | School of Sport, Psychology and Social Science"));
     assert.ok(out.lines.includes("Portfolio Leader | Sports Science and Physical Activity"));
     assert.ok(out.lines.includes("Course Leader | BSc Strength and Conditioning"));
     assert.ok(out.lines.includes("Ethics Lead | Research <review> & ethics"));
