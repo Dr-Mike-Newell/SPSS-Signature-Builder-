@@ -76,6 +76,33 @@ try{
   assert.equal(await page.locator(".role-detail").nth(1).inputValue(),"BSc Strength and Conditioning");
   await page.locator("#goPersonalise").click();
  });
+ await check("Contact lines follow the requested address telephone and online contact order",async()=>{
+  await page.locator("#backToDetails").click();
+  await page.locator("#address").fill("T0.05, Polhill Avenue, Bedford, MK41 9EA");
+  await page.locator("#phone").fill("+44 (0)1234 793093");
+  await page.locator("#extension").fill("4093");
+  await page.locator("#website").fill("https://www.beds.ac.uk/staff/example/");
+  await page.locator("#orcid").fill("0000-0002-1825-0097");
+  const report=await page.evaluate(()=>{
+    const parse=kind=>{
+      const doc=new DOMParser().parseFromString(window.SPSS_QA.signature(kind,true),"text/html");
+      const rows=[...doc.querySelectorAll("[data-contact-row]")].map(r=>r.textContent.trim());
+      const links=[...doc.querySelectorAll("[data-contact-block] a")].map(a=>({text:a.textContent,href:a.getAttribute("href")}));
+      return {rows,links};
+    };
+    return {standard:parse("standard"),compact:parse("compact")};
+  });
+  assert.deepEqual(report.standard.rows,["A: T0.05, Polhill Avenue, Bedford, MK41 9EA | T: +44 (0)1234 793093 Ext: 4093","W: UoB Staff Weblink | E: alex.taylor@beds.ac.uk | ORCiD: https://orcid.org/0000-0002-1825-0097"]);
+  assert.deepEqual(report.compact.rows,["T: +44 (0)1234 793093 Ext: 4093",report.standard.rows[1]]);
+  assert.deepEqual(report.standard.links.map(l=>l.href),["https://www.beds.ac.uk/staff/example/","mailto:alex.taylor@beds.ac.uk","https://orcid.org/0000-0002-1825-0097"]);
+  await page.locator("#phone").fill("");
+  const withoutPhone=await page.evaluate(()=>new DOMParser().parseFromString(window.SPSS_QA.signature("standard",true),"text/html").querySelector("[data-contact-row]").textContent);
+  assert.equal(withoutPhone,"A: T0.05, Polhill Avenue, Bedford, MK41 9EA");
+  for(const id of ["address","extension","website","orcid"])await page.locator("#"+id).fill("");
+  const onlyEmail=await page.evaluate(()=>[...new DOMParser().parseFromString(window.SPSS_QA.signature("standard",true),"text/html").querySelectorAll("[data-contact-row]")].map(r=>r.textContent));
+  assert.deepEqual(onlyEmail,["E: alex.taylor@beds.ac.uk"]);
+  await page.locator("#goPersonalise").click();
+ });
  await check("Career Powered branding is fixed and hidden without claims",async()=>{
   assert.equal(await page.locator('[data-logo-id="career"]').count(),0);
   const empty=await page.evaluate(()=>({
