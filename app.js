@@ -77,7 +77,7 @@ function draw(){
  C.affiliations.forEach(x=>lg.appendChild(logoTile(x)));
  const cg=$("claimGrid");cg.replaceChildren();
  const visible=claimsVisible();
- if(!val("discipline"))cg.innerHTML='<p class="muted">Choose your discipline above to see applicable marketing claims. School-wide claims will be added as supplied.</p>';
+ if(!val("discipline"))cg.innerHTML='<p class="muted">Choose your portfolio above to see applicable marketing claims. School-wide claims will be added as supplied.</p>';
  else if(!visible.length)cg.innerHTML='<p class="muted">No marketing statistics have been supplied for this selection. The signature can still be generated without claims.</p>';
  else visible.forEach(x=>cg.appendChild(claimTile(x)));
  $("claimCounter").textContent=selectedClaims.length+" / "+C.maxClaims+" claims selected";
@@ -93,6 +93,36 @@ function draw(){
   }
   order.append(row);
  });
+}
+// Each optional role is edited independently; no personal details leave the browser.
+let nextRoleId=0;
+const roleTypes=["Portfolio Leader","Course Leader","Research Lead","School Lead","Faculty Lead","Other"];
+function additionalRoles(){
+ return [...$("additionalRoles").querySelectorAll(".role-entry")].map(row=>{
+  const type=row.querySelector(".role-type").value;
+  const title=(type==="Other"?row.querySelector(".role-custom-input").value:type).trim();
+  const detail=row.querySelector(".role-detail").value.trim();
+  return {title,detail};
+ }).filter(role=>role.title&&role.detail);
+}
+function addRole(){
+ const id=++nextRoleId,row=document.createElement("div");
+ row.className="role-entry";
+ row.innerHTML='<label class="field" for="role-type-'+id+'">Role<select id="role-type-'+id+'" class="role-type"><option value="">Select a role</option></select></label>'+
+ '<label class="field" for="role-detail-'+id+'">Responsibility / details<input id="role-detail-'+id+'" class="role-detail" type="text" placeholder="e.g. BSc Strength and Conditioning" maxlength="200"></label>'+
+ '<label class="field custom-role" for="role-custom-'+id+'" hidden>Custom role title<input id="role-custom-'+id+'" type="text" class="role-custom-input" maxlength="120" placeholder="e.g. Ethics Lead"></label>'+
+ '<button type="button" class="remove-role" aria-label="Remove additional role '+id+'">Remove role</button>';
+ const selector=row.querySelector(".role-type");
+ for(const role of roleTypes){const option=document.createElement("option");option.value=role;option.textContent=role;selector.append(option);}
+ selector.addEventListener("change",()=>{row.querySelector(".custom-role").hidden=selector.value!=="Other";notice("");render();});
+ row.querySelectorAll("input").forEach(input=>input.addEventListener("input",()=>{notice("");render();}));
+ row.querySelector(".remove-role").addEventListener("click",()=>{row.remove();notice("");render();$("addRole").focus({preventScroll:true});});
+ $("additionalRoles").append(row);
+ selector.focus({preventScroll:true});
+}
+function plainIdentity(){
+ const roles=additionalRoles().map(role=>role.title+" | "+role.detail);
+ return [val("job")?val("job")+" | "+C.brand.school:C.brand.school,...roles,C.brand.faculty];
 }
 function contact(){
  // Separate primary and secondary contact details to avoid unreadable
@@ -175,12 +205,14 @@ function signature(kind="standard",exported=false){
  const compact=kind==="compact",b=C.brand;
  const image='<img src="'+E(imageUrl(b.logoPath,exported))+'" alt="'+E(b.university)+'" width="'+b.logoWidth+'" height="'+b.logoHeight+'" style="display:block;width:'+b.logoWidth+'px;height:'+b.logoHeight+'px;border:0;">';
  const heading='<div style="font:700 17px/21px Arial,Helvetica,sans-serif;color:#151515;">'+E(val("name")||"Your name")+' <span style="font:400 12px Arial,Helvetica,sans-serif;color:#666;">'+E(val("postnominals"))+'</span></div>';
- const role='<div style="padding-top:4px;font:13px/17px Arial,Helvetica,sans-serif;color:#262626;">'+E(val("job"))+'</div>';
- const school='<div style="padding-top:5px;font:700 12px/17px Arial,Helvetica,sans-serif;color:'+b.colour+';">'+E(b.school)+'</div>';
+ const roleDivider='<span style="color:'+b.colour+';font-weight:700;"> | </span>';
+ const role='<div style="padding-top:4px;font:13px/18px Arial,Helvetica,sans-serif;color:#262626;word-wrap:break-word;">'+
+ (val("job")?E(val("job"))+roleDivider:"")+'<span style="font-weight:700;color:'+b.colour+';">'+E(b.school)+'</span></div>';
+ const additional=additionalRoles().map(r=>'<div style="padding-top:3px;font:13px/18px Arial,Helvetica,sans-serif;color:#262626;word-wrap:break-word;">'+E(r.title)+roleDivider+E(r.detail)+'</div>').join("");
  const faculty='<div style="padding-top:3px;font:12px/16px Arial,Helvetica,sans-serif;color:#555;">'+E(b.faculty)+'</div>';
  const address=(!compact&&val("address"))?'<div style="padding-top:6px;font:11px/15px Arial,Helvetica,sans-serif;color:#666;">'+E(val("address"))+'</div>':"";
  const top='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">'+
- '<tr><td style="vertical-align:top;padding-right:10px;">'+heading+role+school+faculty+address+'</td>'+
+ '<tr><td style="vertical-align:top;padding-right:10px;">'+heading+role+additional+faculty+address+'</td>'+
  '<td width="'+(b.logoWidth+4)+'" style="width:'+(b.logoWidth+4)+'px;vertical-align:top;text-align:right;">'+image+'</td></tr></table>';
  const identity='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>'+
  '<td style="border-left:4px solid '+b.colour+';padding:0 0 0 13px;">'+top+contact()+'</td></tr></table>';
@@ -204,7 +236,7 @@ function download(kind){
 }
 async function copy(kind){
  const invalid=staffValid();if(invalid){notice(invalid,true);return;}
- const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),val("job"),C.brand.school,C.brand.faculty,val("phone"),val("email"),url(val("website")),orcid(val("orcid"))?.url||"",...C.support.map(x=>x.email)].filter(Boolean).join("\n");
+ const html=signature(kind,true),plain=[val("name")+(val("postnominals")?" "+val("postnominals"):""),...plainIdentity(),val("phone"),val("email"),url(val("website")),orcid(val("orcid"))?.url||"",...C.support.map(x=>x.email)].filter(Boolean).join("\n");
  try {
   if(navigator.clipboard&&window.ClipboardItem&&navigator.clipboard.write){
    const item=new ClipboardItem({"text/html":new Blob([fileHtml(kind)],{type:"text/html"}),"text/plain":new Blob([plain],{type:"text/plain"})});
@@ -240,6 +272,7 @@ function start(){
  });
  cats.addEventListener("change",render);
  fields.forEach(id=>$(id).addEventListener("input",()=>{notice("");render();}));
+ $("addRole").addEventListener("click",addRole);
  $("copyStandard").addEventListener("click",()=>copy("standard"));
  $("copyCompact").addEventListener("click",()=>copy("compact"));
  $("downloadStandard").addEventListener("click",()=>{const warning=staffValid();if(warning){notice(warning,true);return;}download("standard");});
