@@ -122,7 +122,7 @@ function addRole(){
 }
 function plainIdentity(){
  const roles=additionalRoles().map(role=>role.title+" | "+role.detail);
- return [val("job")?val("job")+" | "+C.brand.school:C.brand.school,...roles,C.brand.faculty];
+ return [val("job"),C.brand.school,...roles,C.brand.faculty].filter(Boolean);
 }
 function contact(){
  // Separate primary and secondary contact details to avoid unreadable
@@ -206,13 +206,13 @@ function signature(kind="standard",exported=false){
  const image='<img src="'+E(imageUrl(b.logoPath,exported))+'" alt="'+E(b.university)+'" width="'+b.logoWidth+'" height="'+b.logoHeight+'" style="display:block;width:'+b.logoWidth+'px;height:'+b.logoHeight+'px;border:0;">';
  const heading='<div style="font:700 17px/21px Arial,Helvetica,sans-serif;color:#151515;">'+E(val("name")||"Your name")+' <span style="font:400 12px Arial,Helvetica,sans-serif;color:#666;">'+E(val("postnominals"))+'</span></div>';
  const roleDivider='<span style="color:'+b.colour+';font-weight:700;"> | </span>';
- const role='<div style="padding-top:4px;font:13px/18px Arial,Helvetica,sans-serif;color:#262626;word-wrap:break-word;">'+
- (val("job")?E(val("job"))+roleDivider:"")+'<span style="font-weight:700;color:'+b.colour+';">'+E(b.school)+'</span></div>';
+ const role=val("job")?'<div style="padding-top:4px;font:13px/18px Arial,Helvetica,sans-serif;color:#262626;word-wrap:break-word;">'+E(val("job"))+'</div>':"";
+ const school='<div style="padding-top:4px;font:700 13px/18px Arial,Helvetica,sans-serif;color:'+b.colour+';word-wrap:break-word;">'+E(b.school)+'</div>';
  const additional=additionalRoles().map(r=>'<div style="padding-top:3px;font:13px/18px Arial,Helvetica,sans-serif;color:#262626;word-wrap:break-word;">'+E(r.title)+roleDivider+E(r.detail)+'</div>').join("");
  const faculty='<div style="padding-top:3px;font:12px/16px Arial,Helvetica,sans-serif;color:#555;">'+E(b.faculty)+'</div>';
  const address=(!compact&&val("address"))?'<div style="padding-top:6px;font:11px/15px Arial,Helvetica,sans-serif;color:#666;">'+E(val("address"))+'</div>':"";
  const top='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">'+
- '<tr><td style="vertical-align:top;padding-right:10px;">'+heading+role+additional+faculty+address+'</td>'+
+ '<tr><td style="vertical-align:top;padding-right:10px;">'+heading+role+school+additional+faculty+address+'</td>'+
  '<td width="'+(b.logoWidth+4)+'" style="width:'+(b.logoWidth+4)+'px;vertical-align:top;text-align:right;">'+image+'</td></tr></table>';
  const identity='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>'+
  '<td style="border-left:4px solid '+b.colour+';padding:0 0 0 13px;">'+top+contact()+'</td></tr></table>';
