@@ -82,7 +82,7 @@ function draw(){
  else visible.forEach(x=>cg.appendChild(claimTile(x)));
  $("claimCounter").textContent=selectedClaims.length+" / "+C.maxClaims+" claims selected";
  const order=$("claimOrder");order.replaceChildren();
- if(!selectedClaims.length)order.innerHTML='<span class="muted">No claims selected. Select up to three above.</span>';
+ if(!selectedClaims.length)order.innerHTML='<span class="muted">No claims selected. Select up to '+C.maxClaims+' above.</span>';
  selectedClaims.forEach((id,i)=>{
   const c=C.claims.find(x=>x.id===id),row=document.createElement("div");row.className="order-row";
   const name=document.createElement("span");name.className="order-label";name.textContent=(i+1)+". "+c.figure+" "+c.headline;row.append(name);
@@ -161,31 +161,29 @@ function logos(exported){
  }
  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:10px;">'+rows+'</table>';
 }
-function claims(){
+// Equal-height statement cards and a proportionate campaign image share
+// a single top-aligned table row. Explicit dimensions support Outlook.
+function claims(rowHeight,gap,numberWidth=76){
  if(!selectedClaims.length)return "";
- let html='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;">';
+ let html='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;table-layout:fixed;">';
  for(const [i,id] of selectedClaims.entries()){
   const c=C.claims.find(x=>x.id===id);if(!c)continue;
-  html+='<tr><td style="padding-top:'+(i?5:0)+'px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;background-color:#151519;"><tr>'+
-  '<td width="90" style="width:90px;background-color:#c8102e;color:#fff;vertical-align:middle;text-align:center;padding:9px 7px;font:900 25px Arial,Helvetica,sans-serif;">'+E(c.figure)+'</td>'+
-  '<td style="vertical-align:middle;padding:8px 12px;color:#fff;font:700 12px/16px Arial,Helvetica,sans-serif;">'+E(c.headline)+'<div style="padding-top:3px;color:#d8d8d8;font:10px/14px Arial,Helvetica,sans-serif;">'+E(c.source)+'</div></td></tr></table></td></tr>';
+  if(i)html+='<tr><td colspan="2" height="'+gap+'" style="height:'+gap+'px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td></tr>';
+  html+='<tr data-promo-claim="true" style="background-color:#151519;">'+
+   '<td width="'+numberWidth+'" height="'+rowHeight+'" valign="middle" style="width:'+numberWidth+'px;height:'+rowHeight+'px;background-color:#c8102e;color:#fff;text-align:center;vertical-align:middle;font:900 21px/24px Arial,Helvetica,sans-serif;white-space:nowrap;">'+E(c.figure)+'</td>'+
+   '<td height="'+rowHeight+'" valign="middle" style="height:'+rowHeight+'px;background-color:#151519;vertical-align:middle;padding:0 9px;color:#fff;font:700 12px/15px Arial,Helvetica,sans-serif;">'+E(c.headline)+'<div style="padding-top:2px;color:#d8d8d8;font:10px/13px Arial,Helvetica,sans-serif;">'+E(c.source)+'</div></td></tr>';
  }
  return html+'</table>';
 }
-// The University promotional campaign is fixed alongside the selected claims,
-// rather than offered as a selectable professional affiliation. The layout uses
-// nested presentation tables and inline CSS for classic and modern Outlook.
 function promotionalClaims(exported){
- if(!selectedClaims.length)return "";
- const brand=C.promotionalBrand;
- // Match artwork size to one, two or three ranking bars so one chosen
- // achievement does not leave a large empty black promo column.
- const w=selectedClaims.length===1?88:selectedClaims.length===2?100:brand.displayWidth;
- const h=Math.round(w*brand.nativeHeight/brand.nativeWidth),colWidth=w+16;
+ const count=selectedClaims.length;
+ if(!count)return "";
+ const brand=C.promotionalBrand,gap=4,rowHeight=count===1?92:54;
+ const h=count*rowHeight+(count-1)*gap,w=Math.round(h*brand.nativeWidth/brand.nativeHeight);
  const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;">';
- return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;margin-top:12px;">'+
-  '<tr><td width="'+colWidth+'" valign="middle" style="width:'+colWidth+'px;background-color:#090909;padding:8px;vertical-align:middle;text-align:center;">'+artwork+'</td>'+
-  '<td valign="middle" style="vertical-align:middle;padding:0 0 0 7px;">'+claims()+'</td></tr></table>';
+ return '<table role="presentation" data-promo-panel="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;table-layout:fixed;margin-top:12px;">'+
+  '<tr><td width="'+w+'" valign="top" style="width:'+w+'px;vertical-align:top;padding:0;">'+artwork+'</td>'+
+  '<td valign="top" style="vertical-align:top;padding:0 0 0 7px;">'+claims(rowHeight,gap)+'</td></tr></table>';
 }
 function studentSupport(){
  // Single-column contact directory, readable in Outlook and mobile email.
