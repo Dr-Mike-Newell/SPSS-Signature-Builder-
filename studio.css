@@ -157,3 +157,13 @@ a{color:var(--brand-dark)}
  .site-footer{padding:0 15px 25px}
 }
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
+
+/* Optional additional professional responsibilities. */
+.additional-roles{margin-top:24px;padding:18px;border:1px solid var(--line);border-radius:12px;background:#fafafa;min-width:0}
+.roles-heading h3{font-size:15px;margin:0 0 7px;color:#252529}
+.roles-heading p{font-size:13px;color:#666d73;line-height:1.5;margin:0 0 13px}
+.role-entry{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:11px;margin:0 0 12px;padding:12px;border:1px solid var(--line);border-radius:9px;background:white;min-width:0}
+.role-entry .custom-role{grid-column:1/-1}.role-entry .custom-role[hidden]{display:none}
+.role-entry .remove-role{grid-column:1/-1;justify-self:end;background:none;border:0;color:#a91b30;font-size:12px;padding:3px;text-decoration:underline}
+.add-role-btn{font-size:13px;padding:9px 13px}
+@media(max-width:600px){.additional-roles{padding:13px}.role-entry{grid-template-columns:minmax(0,1fr)}}
