@@ -11,7 +11,7 @@ Live site: https://spss-signature-studio.netlify.app/
 1. Enter your name, job title, contact details, and optional profile/ORCID links.
 2. Choose the subject area relevant to your role. The School and Faculty names are fixed.
 3. Select optional professional affiliation logos that genuinely apply to your role.
-4. Select and reorder up to four appropriate marketing claims. Sport, Psychology and Criminology claims are subject-specific and must never be presented as school-wide. Criminology is a separate subject from general Social Science.
+4. Select and reorder up to three appropriate marketing claims. Sport, Psychology and Criminology claims are subject-specific and must never be presented as school-wide. Criminology is a separate subject from general Social Science.
 5. Select **Copy my signature** for new messages, or **Copy compact reply signature** for replies. Both versions contain all nine mandatory student-support contacts.
 6. Paste into Outlook > Settings > Accounts > Signatures (new Outlook / web) or File > Options > Mail > Signatures (classic Outlook).
 7. Send a test message to an external address. Check layout, images, links and mobile display. You may use the HTML download fallback if your browser blocks clipboard access.
@@ -37,7 +37,7 @@ The source branch is \`main\`, publishing from repository root via GitHub Pages.
 
 Upload the original colour logo to \`assets/logos/\` and add an entry to \`config.js > affiliations\`, supplying a unique \`id\`, \`name\`, \`path\`, \`w\`, \`h\`, \`audience\`, \`status\` and \`note\`. Use \`status: "pending-asset"\` and \`path: null\` until the official asset and permission are confirmed. Rendered logos preserve aspect ratio, display in compact groups of up to five per row and use Outlook-compatible tables.
 
-The Career Powered Education logo is not a selectable affiliation. It is a fixed promotional image (the supplied 2026 artwork, email-optimised at 160 × 167 pixels and hosted at `assets/logos/career-powered-2026.jpg`) displayed on the left of a table-based promotional panel only when one to four marketing claims are selected. No claims means no promotional panel; the compact reply signature never includes it. The logo and claims appear side-by-side in both the preview and Outlook HTML. Equal-height claim cards and a proportionately scaled campaign image share the same total height, including 4 px gaps, for one to four selected statements. The image URL is absolute HTTPS in exported signatures.
+The Career Powered Education logo is not a selectable affiliation. It is a fixed promotional image (the supplied 2026 artwork, email-optimised at 160 × 167 pixels and hosted at `assets/logos/career-powered-2026.jpg`) displayed on the left of a table-based promotional panel only when one to three marketing claims are selected. No claims means no promotional panel; the compact reply signature never includes it. The logo and claims appear side-by-side in both the preview and Outlook HTML. Equal-height claim cards and a proportionately scaled campaign image share the same total height, including 4 px gaps, for one to three selected statements. The image URL is absolute HTTPS in exported signatures.
 
 The BASES Accredited Laboratory claim/logo has been withdrawn pending a review of accreditation, and its obsolete file was deleted from the repository. The CASES logo remains available. The British Psychological Society (BPS) accreditation logo is available to staff working with BPS-accredited Psychology programmes; the artwork currently comes from the University's Psychology course page (https://www.beds.ac.uk/media/j5nbse4p/bps-logo.png), and can be moved to a locally hosted approved asset if supplied. It does not imply individual accreditation. BPS and AHCS artwork have been approved for relevant programme staff. AHCS is enabled for Clinical Exercise Physiology staff within Sports Science and Physical Activity. The school-wide People & Planet logo now states the First Class Award for 2025/26. The previous hosted image file is retained for previously generated signatures. The Head of School option can select all approved affiliations.
 
@@ -54,7 +54,7 @@ The nine addresses and exact descriptions supplied by the Head of School are cen
 
 ### ORCID iDs
 
-Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Displays a grey and green ORCiD label followed by the full hyperlinked ORCID profile URL. Identifiers are manually entered and are not authenticated through ORCID OAuth; only the ORCiD label and linked profile URL appear in the signature, without an authentication label.
+Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Displays the official green ORCID iD badge and linked 16-character identifier, not a full URL. Identifiers are manually entered and are not authenticated through ORCID OAuth; only the linked ORCID iD badge and identifier appear in the signature, without an authentication label.
 
 ### Known pilot limitations
 
@@ -118,7 +118,7 @@ No passwords, full names, staff addresses or signature-builder inputs are transm
 
 ## Signature output quality
 
-Standard signatures include a two-line contact block (address and telephone with optional extension; UoB Staff Weblink, email and full ORCID URL), optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to four claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
+Standard signatures include a two-line contact block (address and telephone with optional extension; UoB Staff Weblink, email and linked ORCID iD badge and identifier), optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to three claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
 
 
 ## Version 3.3.0-pilot
@@ -128,3 +128,8 @@ Staff may add multiple optional professional responsibilities on the Your detail
 ## Version 3.3.2-pilot
 
 Includes the approved People & Planet First Class Award (2025/26) and AHCS artwork supplied by the School, and marks the existing BPS logo as approved for programme-specific use. The supplied PNG proportions are maintained, and earlier asset paths are retained for previously sent emails. Authentication, logo row sizing, identity formatting and student support contacts remain unchanged.
+
+
+## 3.3.5 Outlook feedback adjustments
+
+Restored a maximum of three promotional claims. The Career Powered Education artwork and stacked claim cards have a matched nominal total height. The image table cell uses explicit pixel dimensions, zero font-size and line-height, and Outlook-specific line-height rules to avoid a Word/Outlook baseline offset. The ORCID contact now displays the official iD badge alongside the linked identifier, not a full profile URL. Desktop Outlook still requires a final manual paste-and-send check due to differences between Outlook rendering engines.
