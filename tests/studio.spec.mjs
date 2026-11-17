@@ -88,13 +88,16 @@ try{
       const doc=new DOMParser().parseFromString(window.SPSS_QA.signature(kind,true),"text/html");
       const rows=[...doc.querySelectorAll("[data-contact-row]")].map(r=>r.textContent.trim());
       const links=[...doc.querySelectorAll("[data-contact-block] a")].map(a=>({text:a.textContent,href:a.getAttribute("href")}));
-      return {rows,links};
+      return {rows,links,orcid:doc.querySelector('[data-contact-block] img[alt="ORCID iD"]')?.getAttribute("src")};
     };
     return {standard:parse("standard"),compact:parse("compact")};
   });
-  assert.deepEqual(report.standard.rows,["A: T0.05, Polhill Avenue, Bedford, MK41 9EA | T: +44 (0)1234 793093 Ext: 4093","W: UoB Staff Weblink | E: alex.taylor@beds.ac.uk | ORCiD: https://orcid.org/0000-0002-1825-0097"]);
+  assert.deepEqual(report.standard.rows,["A: T0.05, Polhill Avenue, Bedford, MK41 9EA | T: +44 (0)1234 793093 Ext: 4093","W: UoB Staff Weblink | E: alex.taylor@beds.ac.uk | 0000-0002-1825-0097"]);
   assert.deepEqual(report.compact.rows,["T: +44 (0)1234 793093 Ext: 4093",report.standard.rows[1]]);
   assert.deepEqual(report.standard.links.map(l=>l.href),["https://www.beds.ac.uk/staff/example/","mailto:alex.taylor@beds.ac.uk","https://orcid.org/0000-0002-1825-0097"]);
+  assert.equal(report.standard.links.at(-1).text,"0000-0002-1825-0097","ORCID text must be the iD, never the full URL");
+  assert.equal(report.standard.orcid,"https://info.orcid.org/wp-content/uploads/2020/12/ORCIDiD_icon16x16.png");
+  assert.equal(report.compact.orcid,report.standard.orcid,"Reply signature also uses iD badge");
   await page.locator("#phone").fill("");
   const withoutPhone=await page.evaluate(()=>new DOMParser().parseFromString(window.SPSS_QA.signature("standard",true),"text/html").querySelector("[data-contact-row]").textContent);
   assert.equal(withoutPhone,"A: T0.05, Polhill Avenue, Bedford, MK41 9EA");
@@ -117,7 +120,7 @@ try{
   await page.locator('[data-logo-id="cases"]').click();
   assert.equal(await page.locator('[data-logo-id="cases"]').getAttribute("aria-pressed"),"true");
   await page.locator('[data-claim-id="subject15"]').click();
-  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 4 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
   assert.match(await page.locator("#preview").innerText(),/15th/);
   assert.equal(await page.locator("#preview").locator('img[alt="CASES"]').count(),1);
   const imageHealth=await page.evaluate(async()=>{
@@ -174,7 +177,7 @@ try{
   assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/cases.png"));
   assert.ok(generated.standard.includes("https://spss-signature-studio.netlify.app/assets/logos/university-of-bedfordshire-master.png"));
  });
- await check("Fixed Career Powered logo sits beside one to four aligned marketing claims",async()=>{
+ await check("Fixed Career Powered logo sits beside one to three Outlook-aligned marketing claims",async()=>{
   const inspect=async expected=>{
     const report=await page.evaluate(()=>{
       const standard=window.SPSS_QA.signature("standard",true);
@@ -207,6 +210,20 @@ try{
     assert.ok(Math.abs(geometry.top-geometry.first)<=2&&Math.abs(geometry.bottom-geometry.last)<=2,"Campaign image and statements align vertically: "+JSON.stringify(geometry));
     assert.ok(geometry.heights.every(h=>Math.abs(h-geometry.heights[0])<=2),"Statements have equal rendered heights");
     assert.equal(report.imageSrc.endsWith("career-powered-2026.jpg"),true);
+    assert.ok(report.standard.includes("mso-line-height-rule:exactly"),"Outlook requires explicit image-cell line box reset");
+    const cell=await page.evaluate(()=>{
+      const panel=document.querySelector("#preview [data-promo-panel]");
+      const artwork=panel.querySelector('img[alt="Career Powered Education"]');
+      const td=artwork.parentElement;
+      return {fontSize:td.style.fontSize,lineHeight:td.style.lineHeight,
+        valign:td.getAttribute("valign"),height:td.getAttribute("height"),
+        imgHeight:artwork.getAttribute("height")};
+    });
+    assert.ok(["0","0px"].includes(cell.fontSize),"Image cell fontSize must be zero");
+    assert.ok(["0","0px"].includes(cell.lineHeight),"Image cell lineHeight must be zero");
+    assert.equal(cell.valign,"top");
+    assert.equal(cell.height,cell.imgHeight);
+
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
     assert.ok(!report.compact.includes('alt="Career Powered Education"'));
@@ -218,15 +235,9 @@ try{
   await page.locator('[data-claim-id="career12"]').click();
   await inspect(3);
   await page.locator('[data-claim-id="graduate6"]').click();
-  await inspect(4);
-  assert.equal(await page.locator("#claimCounter").innerText(),"4 / 4 claims selected");
-  await page.locator('[data-claim-id="satisfaction13"]').click();
-  assert.equal(await page.locator("#claimCounter").innerText(),"4 / 4 claims selected");
-  assert.ok(!(await page.evaluate(()=>window.SPSS_QA.selectedClaims())).includes("satisfaction13"),"A fifth statement is rejected");
-  await page.locator('[data-claim-id="graduate6"]').click();
+  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
+  assert.ok(!(await page.evaluate(()=>window.SPSS_QA.selectedClaims())).includes("graduate6"),"A fourth statement is rejected");
   await inspect(3);
-  await page.locator('[data-claim-id="graduate6"]').click();
-  await inspect(4);
  });
  await check("Completion and Outlook actions",async()=>{
   await page.locator("#goReady").click();
@@ -263,7 +274,7 @@ try{
  await check("Changing subjects clears incompatible selections",async()=>{
   await page.locator("#backToPersonalise").click();
   await page.locator("#discipline").selectOption("psychology");
-  assert.equal(await page.locator("#claimCounter").innerText(),"0 / 4 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"0 / 3 claims selected");
   assert.equal(await page.locator('#preview img[alt="Career Powered Education"]').count(),0);
   assert.equal(await page.locator('[data-logo-id="cases"]').isDisabled(),true);
   assert.equal(await page.locator('[data-logo-id="bps"]').isEnabled(),true);
@@ -296,20 +307,19 @@ try{
   await page.locator('[data-claim-id="subject15"]').click();
   await page.locator('[data-claim-id="psych-support96"]').click();
   await page.locator('[data-claim-id="crim-satisf4"]').click();
-  await page.locator('[data-claim-id="psych-teach-top10"]').click();
-  assert.equal(await page.locator("#claimCounter").innerText(),"4 / 4 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"3 / 3 claims selected");
   const mixedGeometry=await page.evaluate(()=>{
     const panel=document.querySelector("#preview [data-promo-panel]");
     const img=panel.querySelector('img[alt="Career Powered Education"]').getBoundingClientRect();
     const rows=[...panel.querySelectorAll("[data-promo-claim]")].map(r=>r.getBoundingClientRect());
     return {top:img.top,bottom:img.bottom,first:rows[0].top,last:rows.at(-1).bottom,count:rows.length};
   });
-  assert.equal(mixedGeometry.count,4);
-  assert.ok(Math.abs(mixedGeometry.top-mixedGeometry.first)<=2&&Math.abs(mixedGeometry.bottom-mixedGeometry.last)<=2,"Four mixed portfolio statements align: "+JSON.stringify(mixedGeometry));
+  assert.equal(mixedGeometry.count,3);
+  assert.ok(Math.abs(mixedGeometry.top-mixedGeometry.first)<=2&&Math.abs(mixedGeometry.bottom-mixedGeometry.last)<=2,"Three mixed portfolio statements align: "+JSON.stringify(mixedGeometry));
   const html=await page.evaluate(()=>window.SPSS_QA.signature("standard",true));
   for(const figure of ["15th","96%","4th"])assert.ok(html.includes(figure));
   await page.locator("#discipline").selectOption("sport");
-  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 4 claims selected");
+  assert.equal(await page.locator("#claimCounter").innerText(),"1 / 3 claims selected");
   assert.equal(await page.locator('[data-logo-id="bps"]').isDisabled(),true);
  });
  await check("Approved People & Planet, AHCS and BPS affiliation availability and export",async()=>{

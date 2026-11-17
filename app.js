@@ -137,7 +137,7 @@ function contactParts(compact){
  if(url(val("website")))add(second,"W",url(val("website")),label("W")+'<a href="'+E(url(val("website")))+'" style="color:#252525;text-decoration:underline;">UoB Staff Weblink</a>');
  if(val("email"))add(second,"E",val("email"),label("E")+'<a href="mailto:'+E(val("email"))+'" style="color:#252525;text-decoration:underline;">'+E(val("email"))+'</a>');
  const o=orcid(val("orcid"));
- if(o&&typeof o==="object")add(second,"ORCID",o.url,'<strong style="font-weight:700;color:#666;">ORC<span style="color:#668b24;">iD</span>:</strong> <a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;word-wrap:break-word;">'+E(o.url)+'</a>');
+ if(o&&typeof o==="object")add(second,"ORCID",o.id,'<a href="'+E(o.url)+'" style="color:#303030;text-decoration:underline;white-space:nowrap;"><img src="'+E(C.orcidIcon)+'" alt="ORCID iD" width="16" height="16" border="0" style="display:inline-block;width:16px;height:16px;border:0;vertical-align:middle;margin-right:3px;">'+E(o.id)+'</a>');
  return [first,second].filter(row=>row.length);
 }
 function contact(compact){
@@ -163,7 +163,7 @@ function logos(exported){
    const scale=Math.min(96/l.w,44/l.h,1);
    const w=Math.max(1,Math.round(l.w*scale)),h=Math.max(1,Math.round(l.h*scale));
    cells+='<td valign="middle" style="vertical-align:middle;padding:0 8px 0 0;white-space:nowrap;">'+
-    '<img src="'+E(imageUrl(l.path,exported))+'" alt="'+E(l.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;"></td>';
+    '<img src="'+E(imageUrl(l.path,exported))+'" alt="'+E(l.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;vertical-align:top;margin:0;padding:0;mso-line-height-rule:exactly;"></td>';
   }
   // Separate nested table per row prevents a sparse final row from spreading
   // the other columns; tables and inline styles remain Outlook compatible.
@@ -193,8 +193,8 @@ function promotionalClaims(exported){
  const h=count*rowHeight+(count-1)*gap,w=Math.round(h*brand.nativeWidth/brand.nativeHeight);
  const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;">';
  return '<table role="presentation" data-promo-panel="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;table-layout:fixed;margin-top:12px;">'+
-  '<tr><td width="'+w+'" valign="top" style="width:'+w+'px;vertical-align:top;padding:0;">'+artwork+'</td>'+
-  '<td valign="top" style="vertical-align:top;padding:0 0 0 7px;">'+claims(rowHeight,gap)+'</td></tr></table>';
+  '<tr><td width="'+w+'" height="'+h+'" align="left" valign="top" style="width:'+w+'px;height:'+h+'px;vertical-align:top;padding:0;font-size:0;line-height:0;mso-line-height-rule:exactly;">'+artwork+'</td>'+
+  '<td height="'+h+'" valign="top" style="height:'+h+'px;vertical-align:top;padding:0 0 0 7px;">'+claims(rowHeight,gap)+'</td></tr></table>';
 }
 function studentSupport(){
  // Single-column contact directory, readable in Outlook and mobile email.
