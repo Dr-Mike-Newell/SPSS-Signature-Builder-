@@ -211,12 +211,18 @@ try{
     assert.ok(geometry.heights.every(h=>Math.abs(h-geometry.heights[0])<=2),"Statements have equal rendered heights");
     assert.equal(report.imageSrc.endsWith("career-powered-2026.jpg"),true);
     assert.ok(report.standard.includes("mso-line-height-rule:exactly"),"Outlook requires explicit image-cell line box reset");
-    const markup=new DOMParser().parseFromString(report.standard,"text/html");
-    const artwork=markup.querySelector('img[alt="Career Powered Education"]');
-    assert.equal(artwork.parentElement.style.fontSize,"0px");
-    assert.equal(artwork.parentElement.style.lineHeight,"0px");
-    assert.equal(artwork.parentElement.getAttribute("valign"),"top");
-    assert.equal(artwork.parentElement.getAttribute("height"),artwork.getAttribute("height"));
+    const cell=await page.evaluate(()=>{
+      const panel=document.querySelector("#preview [data-promo-panel]");
+      const artwork=panel.querySelector('img[alt="Career Powered Education"]');
+      const td=artwork.parentElement;
+      return {fontSize:td.style.fontSize,lineHeight:td.style.lineHeight,
+        valign:td.getAttribute("valign"),height:td.getAttribute("height"),
+        imgHeight:artwork.getAttribute("height")};
+    });
+    assert.equal(cell.fontSize,"0px");
+    assert.equal(cell.lineHeight,"0px");
+    assert.equal(cell.valign,"top");
+    assert.equal(cell.height,cell.imgHeight);
 
     assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
     assert.equal(report.selected.length,expected);
