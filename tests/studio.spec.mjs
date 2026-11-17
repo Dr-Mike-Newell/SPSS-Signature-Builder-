@@ -219,8 +219,8 @@ try{
         valign:td.getAttribute("valign"),height:td.getAttribute("height"),
         imgHeight:artwork.getAttribute("height")};
     });
-    assert.equal(cell.fontSize,"0px");
-    assert.equal(cell.lineHeight,"0px");
+    assert.ok(["0","0px"].includes(cell.fontSize),"Image cell fontSize must be zero");
+    assert.ok(["0","0px"].includes(cell.lineHeight),"Image cell lineHeight must be zero");
     assert.equal(cell.valign,"top");
     assert.equal(cell.height,cell.imgHeight);
 
