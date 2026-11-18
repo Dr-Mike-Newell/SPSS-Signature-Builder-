@@ -192,13 +192,17 @@ try{
         imageSrc:image?.getAttribute("src"),
         imageWidth:image?.getAttribute("width"),
         imageHeight:image?.getAttribute("height"),
-        sameRow:cells.length===2 && cells[1].textContent.includes("15th"),
+        sameRow:cells.length===3 && cells[1].textContent.includes("15th") && cells[2].textContent.includes("Sports Science"),
+        rowspan:image?.parentElement.getAttribute("rowspan"),
+        panelTableCount:element.querySelector('[data-promo-panel]')?.querySelectorAll("table").length,
+        claimRowCount:element.querySelectorAll('[data-promo-panel] [data-promo-claim]').length,
+        spacerCount:element.querySelectorAll('[data-promo-panel] [data-promo-spacer]').length,
         selected:window.SPSS_QA.selectedClaims()
       };
     });
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
     assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg");
-    const height=expected*(expected===1?92:54)+(expected-1)*4;
+    const height=expected*(expected===1?92:64)+(expected-1)*4;
     assert.equal(Number(report.imageHeight),height,"Campaign artwork matches the combined statement heights");
     assert.equal(Number(report.imageWidth),Math.round(height*160/167),"2026 artwork keeps original proportions");
     const geometry=await page.evaluate(()=>{
@@ -223,8 +227,14 @@ try{
     assert.ok(["0","0px"].includes(cell.lineHeight),"Image cell lineHeight must be zero");
     assert.equal(cell.valign,"top");
     assert.equal(cell.height,cell.imgHeight);
+    assert.ok(report.standard.includes("mso-table-lspace:0pt"),"Word must not add table spacing");
+    assert.ok(report.standard.includes("mso-table-rspace:0pt"),"Word must not add table spacing");
 
-    assert.ok(report.sameRow,"Career Powered logo and claims must be in one two-column table row");
+    assert.ok(report.sameRow,"Career Powered logo and first claim share one three-column table row");
+    assert.equal(report.rowspan,String(2*expected-1),"Single logo cell spans all statement and spacer rows");
+    assert.equal(report.panelTableCount,0,"No nested presentation tables within promotional panel");
+    assert.equal(report.claimRowCount,expected);
+    assert.equal(report.spacerCount,expected-1);
     assert.equal(report.selected.length,expected);
     assert.ok(!report.compact.includes('alt="Career Powered Education"'));
     assert.ok(!report.compact.includes("career-powered-2026.jpg"));
