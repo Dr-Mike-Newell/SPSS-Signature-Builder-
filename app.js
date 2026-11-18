@@ -174,27 +174,26 @@ function logos(exported){
 }
 // Equal-height statement cards and a proportionate campaign image share
 // a single top-aligned table row. Explicit dimensions support Outlook.
-function claims(rowHeight,gap,numberWidth=76){
- if(!selectedClaims.length)return "";
- let html='<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;table-layout:fixed;">';
- for(const [i,id] of selectedClaims.entries()){
-  const c=C.claims.find(x=>x.id===id);if(!c)continue;
-  if(i)html+='<tr><td colspan="2" height="'+gap+'" style="height:'+gap+'px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td></tr>';
-  html+='<tr data-promo-claim="true" style="background-color:#151519;">'+
-   '<td width="'+numberWidth+'" height="'+rowHeight+'" valign="middle" style="width:'+numberWidth+'px;height:'+rowHeight+'px;background-color:#c8102e;color:#fff;text-align:center;vertical-align:middle;font:900 21px/24px Arial,Helvetica,sans-serif;white-space:nowrap;">'+E(c.figure)+'</td>'+
-   '<td height="'+rowHeight+'" valign="middle" style="height:'+rowHeight+'px;background-color:#151519;vertical-align:middle;padding:0 9px;color:#fff;font:700 12px/15px Arial,Helvetica,sans-serif;">'+E(c.headline)+'<div style="padding-top:2px;color:#d8d8d8;font:10px/13px Arial,Helvetica,sans-serif;">'+E(c.source)+'</div></td></tr>';
- }
- return html+'</table>';
-}
+// One three-column presentation table with a single image cell spanning all
+// achievement and spacer rows. Classic Outlook for Windows uses Word's layout
+// engine and can independently expand nested tables, offsetting the image.
 function promotionalClaims(exported){
- const count=selectedClaims.length;
- if(!count)return "";
- const brand=C.promotionalBrand,gap=4,rowHeight=count===1?92:54;
+ const chosen=selectedClaims.map(id=>C.claims.find(c=>c.id===id)).filter(Boolean);
+ if(!chosen.length)return "";
+ const brand=C.promotionalBrand,count=chosen.length,gap=4,rowHeight=count===1?92:64;
  const h=count*rowHeight+(count-1)*gap,w=Math.round(h*brand.nativeWidth/brand.nativeHeight);
- const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" style="display:block;width:'+w+'px;height:'+h+'px;border:0;">';
- return '<table role="presentation" data-promo-panel="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;table-layout:fixed;margin-top:12px;">'+
-  '<tr><td width="'+w+'" height="'+h+'" align="left" valign="top" style="width:'+w+'px;height:'+h+'px;vertical-align:top;padding:0;font-size:0;line-height:0;mso-line-height-rule:exactly;">'+artwork+'</td>'+
-  '<td height="'+h+'" valign="top" style="height:'+h+'px;vertical-align:top;padding:0 0 0 7px;">'+claims(rowHeight,gap)+'</td></tr></table>';
+ const imageCellWidth=w+7,numberWidth=76;
+ const artwork='<img src="'+E(imageUrl(brand.path,exported))+'" alt="'+E(brand.name)+'" width="'+w+'" height="'+h+'" border="0" style="display:block;width:'+w+'px;height:'+h+'px;border:0;margin:0;padding:0;vertical-align:top;">';
+ const imageCell='<td data-promo-artwork="true" rowspan="'+(2*count-1)+'" width="'+imageCellWidth+'" height="'+h+'" align="left" valign="top" style="width:'+imageCellWidth+'px;height:'+h+'px;vertical-align:top;text-align:left;padding:0 7px 0 0;font-size:0;line-height:0;mso-line-height-rule:exactly;mso-padding-alt:0 7px 0 0;">'+artwork+'</td>';
+ let html='<table role="presentation" data-promo-panel="true" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;table-layout:fixed;margin-top:12px;mso-table-lspace:0pt;mso-table-rspace:0pt;">';
+ chosen.forEach((c,i)=>{
+  if(i)html+='<tr data-promo-spacer="true"><td colspan="2" height="'+gap+'" style="height:'+gap+'px;font-size:0;line-height:0;mso-line-height-rule:exactly;padding:0;">&nbsp;</td></tr>';
+  html+='<tr data-promo-claim="true" style="background-color:#151519;">'+
+   (i===0?imageCell:"")+
+   '<td width="'+numberWidth+'" height="'+rowHeight+'" align="center" valign="middle" bgcolor="#c8102e" style="width:'+numberWidth+'px;height:'+rowHeight+'px;background-color:#c8102e;color:#fff;vertical-align:middle;text-align:center;padding:0;font:900 21px/24px Arial,Helvetica,sans-serif;white-space:nowrap;mso-line-height-rule:exactly;">'+E(c.figure)+'</td>'+
+   '<td height="'+rowHeight+'" valign="middle" bgcolor="#151519" style="height:'+rowHeight+'px;background-color:#151519;color:#fff;vertical-align:middle;padding:0 9px;font:700 12px/15px Arial,Helvetica,sans-serif;mso-line-height-rule:exactly;">'+E(c.headline)+'<div style="padding-top:2px;color:#d8d8d8;font:10px/13px Arial,Helvetica,sans-serif;mso-line-height-rule:exactly;">'+E(c.source)+'</div></td></tr>';
+ });
+ return html+'</table>';
 }
 function studentSupport(){
  // Single-column contact directory, readable in Outlook and mobile email.
