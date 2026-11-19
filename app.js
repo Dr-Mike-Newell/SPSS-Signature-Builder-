@@ -41,7 +41,7 @@ function logoTile(l){
  b.disabled=disabled;b.dataset.logoId=l.id;b.setAttribute("aria-pressed",String(picked));b.title=l.note;
  const img=l.path?'<img src="'+E(imageUrl(l.path,false))+'" alt="" loading="lazy">':'<span class="logo-text">Image pending</span>';
  b.innerHTML='<span class="tick" aria-hidden="true">'+(picked?"✓":disabled?"–":"+")+'</span>'+img+
- '<span class="tile-name">'+E(l.name)+'</span><span class="tile-sub">'+E(l.status==="pending-asset"?"Awaiting approved logo":l.status==="historical"?"Historical 2023/24":l.status==="approved-restricted"?"Approved · programme-specific":l.status==="approved"?"Approved":l.status==="restricted"?"Restricted use":"For pilot review")+'</span>';
+ '<span class="tile-name">'+E(l.name)+'</span><span class="tile-sub">'+E(l.status==="pending-asset"?"Awaiting approved logo":l.status==="historical"?"Historical 2023/24":l.status==="approved-restricted"?"Approved · programme-specific":l.status==="approved"?"Approved":l.status==="restricted"?"Restricted use":"Check applicability")+'</span>';
  const image=b.querySelector("img");if(image)image.addEventListener("error",()=>{image.style.display="none";b.insertAdjacentHTML("afterbegin",'<span class="logo-text">'+E(l.name)+'</span>');});
  b.addEventListener("click",()=>{
   if(selectedLogos.includes(l.id))selectedLogos=selectedLogos.filter(x=>x!==l.id);
@@ -58,7 +58,7 @@ function claimTile(c){
  const picked=selectedClaims.includes(c.id);
  const b=document.createElement("button");b.type="button";
  b.className="claim"+(picked?" selected":"");b.dataset.claimId=c.id;b.setAttribute("aria-pressed",String(picked));
- b.innerHTML='<strong>'+E(c.figure)+'</strong><span class="claim-text"><b>'+E(c.headline)+'</b><span class="claim-source">'+E(c.source)+' · '+E(C.disciplines.find(d=>d.id===c.discipline)?.name || "School-wide")+" · "+E(c.status==="pilot-review"?"Pilot review":"Approved")+'</span></span><span class="tick" aria-hidden="true">'+(picked?"✓":"+")+'</span>';
+ b.innerHTML='<strong>'+E(c.figure)+'</strong><span class="claim-text"><b>'+E(c.headline)+'</b><span class="claim-source">'+E(c.source)+' · '+E(C.disciplines.find(d=>d.id===c.discipline)?.name || "School-wide")+" · "+E(c.status==="review-required"?"Check applicability":c.status==="approved"?"Approved":"Check applicability")+'</span></span><span class="tick" aria-hidden="true">'+(picked?"✓":"+")+'</span>';
  b.addEventListener("click",()=>{
   if(picked)selectedClaims=selectedClaims.filter(x=>x!==c.id);
   else if(selectedClaims.length<C.maxClaims)selectedClaims.push(c.id);
