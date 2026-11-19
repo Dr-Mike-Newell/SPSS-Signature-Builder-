@@ -1,6 +1,6 @@
 # SPSS Email Signature Builder
 
-School-wide signature pilot for the University of Bedfordshire School of Sport, Psychology and Social Science.
+Staff email-signature generator for the University of Bedfordshire School of Sport, Psychology and Social Science. Current version: 4.0.
 
 The current interface is the **University Signature Studio**, a three-stage guided journey: Your details → Personalise → Ready to copy. The live preview continues using the existing Outlook-compatible renderer.
 
@@ -16,7 +16,7 @@ Live site: https://spss-signature-studio.netlify.app/
 6. Paste into Outlook > Settings > Accounts > Signatures (new Outlook / web) or File > Options > Mail > Signatures (classic Outlook).
 7. Send a test message to an external address. Check layout, images, links and mobile display. You may use the HTML download fallback if your browser blocks clipboard access.
 
-This website is a pilot pending approval from the Head of School. It is not evidence of current accreditation or institutional marketing approval.
+Only select affiliations and marketing claims applicable to your role or programme. Use of the builder does not confer individual accreditation.
 
 ## Maintainers
 
@@ -27,8 +27,8 @@ This website is a pilot pending approval from the Head of School. It is not evid
 - \`studio.js\`: step navigation, accessible focus, inline guidance and restrained selection feedback. Does not change the signature HTML renderer.
 - \`tests/studio.spec.mjs\`: Chromium regression checks for the journey, subject filters, required support contacts, signature HTML and mobile layout.
 - \`.github/workflows/studio-qa.yml\`: automatic browser QA for the feature branch and pull requests.
-- \`assets/logos/\`: approved or pilot branding assets. The current wordmark is \`university-of-bedfordshire-master.png\`. The legacy logo file is retained so existing emails do not break. Never rename an image file already used in sent email signatures.
-- \`PILOT_CHECKLIST.md\`: test plan for staff and University Marketing.
+- \`assets/logos/\`: approved or use-restricted branding assets. The current wordmark is \`university-of-bedfordshire-master.png\`. The legacy logo file is retained so existing emails do not break. Never rename an image file already used in sent email signatures.
+- \`RELEASE_CHECKLIST.md\`: release checks for maintainers and University Marketing.
 - \`MARKETING_CLAIMS.md\`: source-by-source provenance for the new Psychology and Criminology figures, including marketing artwork filenames.
 
 The source branch is \`main\`, publishing from repository root via GitHub Pages. Do not change the repository name or the GitHub Pages path.
@@ -46,7 +46,7 @@ The BASES Accredited Laboratory claim/logo has been withdrawn pending a review o
 Add a new item to \`config.js > claims\` with:
 \`id\`, \`discipline\` (one of \`all\`, \`sport\`, \`psychology\`, \`criminology\`; selecting Head of School in the UI exposes all permitted disciplines without creating new claim categories), \`category\`, \`figure\`, \`headline\`, \`source\`, \`year\`, \`review\`, \`status\`, \`priority\`.
 
-Do not invent claims, conflate competing guide categories, or treat a discipline ranking as school-wide. The existing figures come from University marketing graphics and are labelled \`pilot-review\`. Confirm the appropriateness, accuracy and current status before rollout. \`status: "withdrawn"\` hides a claim from the selector.
+Do not invent claims, conflate competing guide categories, or treat a discipline ranking as school-wide. The existing figures come from University marketing graphics and retain an internal \`review-required\` status. Confirm their accuracy and appropriate use before circulation. \`status: "withdrawn"\` hides a claim from the selector.
 
 ### Student support information
 
@@ -56,17 +56,17 @@ The nine addresses and exact descriptions supplied by the Head of School are cen
 
 Accepts the complete identifier or a full ORCID profile link; validates the ISO 7064 Mod 11-2 check digit. Displays the official green ORCID iD badge and linked 16-character identifier, not a full URL. Identifiers are manually entered and are not authenticated through ORCID OAuth; only the linked ORCID iD badge and identifier appear in the signature, without an authentication label.
 
-### Known pilot limitations
+### Compatibility and usage notes
 
 - The university wordmark now uses the University-supplied transparent master PNG, trimmed of its surrounding transparent margins and optimised at **1024 × 318 px**, displayed at **176 × 55 px** for sharp high-density rendering. Test image display after pasting into each Outlook client.
 - Approval is still required for applicable programme and institutional accreditation logos, marketing claims and any additional school-wide material.
-- A real desktop/Mac Outlook and external Gmail pilot is needed. The builder generates HTML tables with inline styles and absolute hosted HTTPS asset URLs, but browser testing does not substitute for Outlook paste and send tests.
+- Real desktop/Mac Outlook and external Gmail compatibility checks are recommended. The builder generates HTML tables with inline styles and absolute hosted HTTPS asset URLs, but browser testing does not substitute for Outlook paste and send tests.
 - Web browser clipboard behaviour and images being blocked by recipient mail clients cannot be entirely controlled by the site.
 - Form entries are generated client-side and not stored or transmitted to an application backend; normal remote image requests still occur.
 
 ## Change control
 
-Staff pilot sign-off: Head of School and University Marketing.
+Content governance: Head of School and University Marketing.
 Update the marketing claim registry and institutional images whenever a new annual guide or survey is released.
 
 Do not announce the signature as an officially approved institution-wide standard until approval has been explicitly granted.
@@ -82,7 +82,7 @@ The original 2048-pixel artwork was supplied by the requester but is not hosted 
 
 The interactive builder adopts the **Guided Signature Journey** concept with editorial typography informed by the Editorial Signature Studio. Staff work through details, optional personalisation and a clear final copy step. The Outlook HTML itself retains one institutionally consistent design. The email-style preview frame is interface-only and is never part of the copied signature. No personal data storage has been added. The application is protected by a Netlify Edge password gate using a short-lived, signed, HTTP-only session cookie; staff details and the generated signature remain in the browser.
 
-The application uses a small named token scale in `studio.css`, explicit responsive breakpoints and a reduced-motion fallback. All nine support contacts are mandatory and remain in both outputs. The School-wide pilot notice remains until approval.
+The application uses a small named token scale in `studio.css`, explicit responsive breakpoints and a reduced-motion fallback. All nine support contacts are mandatory and remain in both outputs. The launch-stage notices are removed from the interface, without changing eligibility restrictions.
 
 Browser tests run in the feature branch and on pull requests. Passing automated browser checks does not substitute for an Outlook Windows/Mac and external-recipient test before general staff rollout.
 
@@ -121,11 +121,11 @@ No passwords, full names, staff addresses or signature-builder inputs are transm
 Standard signatures include a two-line contact block (address and telephone with optional extension; UoB Staff Weblink, email and linked ORCID iD badge and identifier), optional affiliation imagery, a scaled fixed Career Powered Education emblem beside up to three claims, and a single-column directory containing all nine student support contacts, with email links in University red. Reply signatures omit claims and affiliations but retain University branding and support contacts. Images in copied or downloaded HTML use the public Netlify domain; preview images use local relative paths.
 
 
-## Version 3.3.0-pilot
+## Version 3.3.0
 
-Staff may add multiple optional professional responsibilities on the Your details screen, including Portfolio Leader, Course Leader, Research Lead, School Lead, Faculty Lead, or a custom role. Only completed role/detail pairs appear in the preview, standard and compact Outlook signatures. The primary job title and School always occupy separate lines, with additional responsibilities beneath the School and above the Faculty. The portfolio labels have been updated without changing the internal filtering IDs. The StudyHub and Learning Development descriptions have been shortened; all nine support addresses remain mandatory. People & Planet artwork and award year were subsequently updated in 3.3.2-pilot. Authentication and public email image hosting are unchanged.
+Staff may add multiple optional professional responsibilities on the Your details screen, including Portfolio Leader, Course Leader, Research Lead, School Lead, Faculty Lead, or a custom role. Only completed role/detail pairs appear in the preview, standard and compact Outlook signatures. The primary job title and School always occupy separate lines, with additional responsibilities beneath the School and above the Faculty. The portfolio labels have been updated without changing the internal filtering IDs. The StudyHub and Learning Development descriptions have been shortened; all nine support addresses remain mandatory. People & Planet artwork and award year were subsequently updated in 3.3.2. Authentication and public email image hosting are unchanged.
 
-## Version 3.3.2-pilot
+## Version 3.3.2
 
 Includes the approved People & Planet First Class Award (2025/26) and AHCS artwork supplied by the School, and marks the existing BPS logo as approved for programme-specific use. The supplied PNG proportions are maintained, and earlier asset paths are retained for previously sent emails. Authentication, logo row sizing, identity formatting and student support contacts remain unchanged.
 
@@ -143,3 +143,8 @@ Replaced the nested marketing campaign layout with a single three-column HTML pr
 ## 3.3.7 Higher-resolution campaign artwork
 
 Replaced the low-resolution 160 × 167 JPEG used by the Career Powered Education promotional panel with a new lossless 640 × 669 PNG derived from the supplied original high-resolution artwork. The signature renderer still calculates its visible dimensions from the number of chosen claims (maximum three), so image display size and the Windows Outlook single-table/rowspan alignment fix remain unchanged. The old JPEG file and URL are preserved for previously sent signatures. Email image URLs point to the public Netlify domain. Automated regression tests verify the PNG's natural size, actual rendering size and exported URL.
+
+
+## Version 4.0
+
+The School-wide staff release removes launch-stage labels and banners from the interface and uses version `4.0` throughout. Approval restrictions on programme-specific logos and review guidance for marketing claims remain. This presentation update does not modify signature HTML, image hosting, Outlook compatibility logic, or server-side password protection.
