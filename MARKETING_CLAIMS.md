@@ -1,6 +1,6 @@
 # Psychology and Criminology marketing claim register
 
-Claims received 11 November 2026 from University of Bedfordshire marketing graphics. All entries remain `pilot-review` until final Head of School/Marketing approval. The website uses compact, Outlook-compatible ranking strips, not the full square social-media promotional artwork.
+Claims received 11 November 2026 from University of Bedfordshire marketing graphics. Entries retain the internal `review-required` designation so accuracy and permitted use can be checked before circulation. The website uses compact, Outlook-compatible ranking strips, not the full square social-media promotional artwork.
 
 ## Psychology
 
@@ -34,4 +34,4 @@ Image filenames are referenced in `config.js` under `sourceAsset` for traceabili
 
 `assets/logos/bases-accredited-lab.jpg` was removed from the repository because the laboratory accreditation is under review. CASES remains the sport and exercise sciences professional association option.
 
-Approval is still required before general distribution to staff.
+Check figures and permitted uses with the Head of School and University Marketing as part of normal content governance.
