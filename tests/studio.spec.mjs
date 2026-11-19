@@ -18,6 +18,20 @@ try{
   assert.equal(await page.locator('#preview a[href^="mailto:"]').count(),9);
   assert.equal(await page.locator("#preview img").first().getAttribute("src"),"assets/logos/university-of-bedfordshire-master.png");
  });
+ await check("Version 4.0 release contains no transitional labels",async()=>{
+   const pageState=await page.evaluate(()=>({
+     version:window.SPSS_QA.config.version,
+     text:document.body.innerText,
+     configStatuses:[...window.SPSS_QA.config.claims.map(c=>c.status),...window.SPSS_QA.config.affiliations.map(a=>a.status)]
+   }));
+   assert.equal(pageState.version,"4.0");
+   assert.match(await page.locator(".site-footer").innerText(),/Version 4\.0/,"Footer clearly identifies the clean release");
+   assert.ok(!/(?:pre-)?pilo[t]/i.test(pageState.text),"Launch-stage labels must not appear in the builder");
+   assert.ok(!pageState.configStatuses.some(status=>/pilo[t]/i.test(status)),"Launch-stage statuses must be retired");
+   assert.equal(await page.locator(".header-actions span").count(),0,"No launch badge in the site header");
+   assert.ok(pageState.configStatuses.includes("review-required"),"Unverified marketing permissions remain explicitly flagged");
+
+ });
  await check("Guided form validates required details",async()=>{
   await page.locator("#goPersonalise").click();
   assert.match(await page.locator("#stepError").innerText(),/full name/i);
@@ -26,6 +40,11 @@ try{
   await page.locator("#goPersonalise").click();
   assert.equal(await page.locator('[data-panel="2"]').isVisible(),true);
   assert.equal(await page.locator('[data-panel="1"]').isVisible(),false);
+  await page.locator("#discipline").selectOption("sport");
+  const claims=await page.locator("#claimGrid").innerText();
+  assert.ok(!/(?:pre-)?pilo[t]/i.test(claims),"Marketing choices must be free of transitional labels");
+  assert.match(claims,/Check applicability/,"Retain marketing applicability guidance");
+
  });
  await check("Multiple optional responsibilities, custom roles and portfolio names",async()=>{
   await page.locator("#backToDetails").click();
@@ -407,6 +426,7 @@ try{
   assert.equal(await page.locator('input[type="password"]').getAttribute("minlength"),"12");
   const html=await page.content();
   assert.ok(!html.includes("SIGNATURE_STUDIO_PASSWORD"),"Netlify secret name must not be exposed to visitors");
+  assert.ok(!/(?:pre-)?pilo[t]/i.test(await page.locator("body").innerText()),"Access page must not display launch-stage wording");
  });
  assert.deepEqual(errors,[],"Browser errors");
  console.log("PASS: No uncaught browser errors");
