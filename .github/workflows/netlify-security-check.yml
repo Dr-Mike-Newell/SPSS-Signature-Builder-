@@ -50,7 +50,7 @@ jobs:
         run: |
           set -euo pipefail
           base="https://spss-signature-studio.netlify.app"
-          for path in assets/logos/people-and-planet-2025-26.png assets/logos/ahcs-approved.png; do
+          for path in assets/logos/people-and-planet-2025-26.png assets/logos/ahcs-approved.png assets/logos/career-powered-2026-hires.png; do
             verified=false
             for attempt in {1..18}; do
               if curl --fail --silent --show-error --max-time 15 "$base/$path" -o /tmp/approved-logo.png && cmp -s "$path" /tmp/approved-logo.png; then
