@@ -25,6 +25,11 @@
 # paths are the sign-in page and hosted logos used by delivered email signatures.
 # Configure SIGNATURE_STUDIO_PASSWORD (Functions scope) in the Netlify UI,
 # with at least 12 characters, and redeploy. When unset the app fails closed.
+# Rate-limit POST requests to the login endpoint before the general gateway.
+[[edge_functions]]
+  function = "studio-auth-limit"
+  path = "/studio-auth"
+
 [[edge_functions]]
   function = "studio-gate"
   path = "/*"
