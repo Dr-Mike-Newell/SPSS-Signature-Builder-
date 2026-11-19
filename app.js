@@ -167,7 +167,7 @@ function logos(exported){
   }
   // Separate nested table per row prevents a sparse final row from spreading
   // the other columns; tables and inline styles remain Outlook compatible.
-  rows+='<tr><td style="padding:6px 0 2px 0;vertical-align:middle;">'+
+  rows+='<tr><td style="padding:'+(i===0?18:6)+'px 0 2px 0;vertical-align:middle;">'+
    '<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;table-layout:auto;"><tr>'+cells+'</tr></table></td></tr>';
  }
  return '<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="width:100%;border-collapse:collapse;border-top:1px solid #e5e5e5;margin-top:10px;">'+rows+'</table>';
