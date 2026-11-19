@@ -28,13 +28,8 @@ try{
    assert.ok(!/pilot|pre-pilot/i.test(pageState.text),"Launch-stage labels must not appear in the builder");
    assert.ok(!pageState.configStatuses.some(status=>/pilot/i.test(status)),"Launch-stage statuses must be retired");
    assert.equal(await page.locator(".pilot-pill, .pilot-note").count(),0);
-   await page.locator("#goPersonalise").click().catch(()=>{});
-   const select=page.locator("#discipline");
-   await select.selectOption("sport");
-   const claims=await page.locator("#claimGrid").innerText();
-   assert.ok(!/pilot|pre-pilot/i.test(claims),"Marketing choices must be free of transitional labels");
-   assert.match(claims,/Check applicability/,"Retain marketing applicability guidance");
-   await page.locator("#backToDetails").click();
+   assert.ok(pageState.configStatuses.includes("review-required"),"Unverified marketing permissions remain explicitly flagged");
+
  });
  await check("Guided form validates required details",async()=>{
   await page.locator("#goPersonalise").click();
@@ -44,6 +39,11 @@ try{
   await page.locator("#goPersonalise").click();
   assert.equal(await page.locator('[data-panel="2"]').isVisible(),true);
   assert.equal(await page.locator('[data-panel="1"]').isVisible(),false);
+  await page.locator("#discipline").selectOption("sport");
+  const claims=await page.locator("#claimGrid").innerText();
+  assert.ok(!/pilot|pre-pilot/i.test(claims),"Marketing choices must be free of transitional labels");
+  assert.match(claims,/Check applicability/,"Retain marketing applicability guidance");
+
  });
  await check("Multiple optional responsibilities, custom roles and portfolio names",async()=>{
   await page.locator("#backToDetails").click();
