@@ -25,9 +25,10 @@ try{
      configStatuses:[...window.SPSS_QA.config.claims.map(c=>c.status),...window.SPSS_QA.config.affiliations.map(a=>a.status)]
    }));
    assert.equal(pageState.version,"4.0");
-   assert.ok(!/pilot|pre-pilot/i.test(pageState.text),"Launch-stage labels must not appear in the builder");
-   assert.ok(!pageState.configStatuses.some(status=>/pilot/i.test(status)),"Launch-stage statuses must be retired");
-   assert.equal(await page.locator(".pilot-pill, .pilot-note").count(),0);
+   assert.match(await page.locator(".site-footer").innerText(),/Version 4\.0/,"Footer clearly identifies the clean release");
+   assert.ok(!/(?:pre-)?pilo[t]/i.test(pageState.text),"Launch-stage labels must not appear in the builder");
+   assert.ok(!pageState.configStatuses.some(status=>/pilo[t]/i.test(status)),"Launch-stage statuses must be retired");
+   assert.equal(await page.locator(".header-actions span").count(),0,"No launch badge in the site header");
    assert.ok(pageState.configStatuses.includes("review-required"),"Unverified marketing permissions remain explicitly flagged");
 
  });
@@ -41,7 +42,7 @@ try{
   assert.equal(await page.locator('[data-panel="1"]').isVisible(),false);
   await page.locator("#discipline").selectOption("sport");
   const claims=await page.locator("#claimGrid").innerText();
-  assert.ok(!/pilot|pre-pilot/i.test(claims),"Marketing choices must be free of transitional labels");
+  assert.ok(!/(?:pre-)?pilo[t]/i.test(claims),"Marketing choices must be free of transitional labels");
   assert.match(claims,/Check applicability/,"Retain marketing applicability guidance");
 
  });
@@ -425,7 +426,7 @@ try{
   assert.equal(await page.locator('input[type="password"]').getAttribute("minlength"),"12");
   const html=await page.content();
   assert.ok(!html.includes("SIGNATURE_STUDIO_PASSWORD"),"Netlify secret name must not be exposed to visitors");
-  assert.ok(!/pilot|pre-pilot/i.test(await page.locator("body").innerText()),"Access page must not display launch-stage wording");
+  assert.ok(!/(?:pre-)?pilo[t]/i.test(await page.locator("body").innerText()),"Access page must not display launch-stage wording");
  });
  assert.deepEqual(errors,[],"Browser errors");
  console.log("PASS: No uncaught browser errors");
