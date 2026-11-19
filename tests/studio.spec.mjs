@@ -201,10 +201,10 @@ try{
       };
     });
     assert.equal(report.count,1,"Exactly one fixed promotional logo");
-    assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg");
+    assert.equal(report.imageSrc,"https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026-hires.png");
     const height=expected*(expected===1?92:64)+(expected-1)*4;
     assert.equal(Number(report.imageHeight),height,"Campaign artwork matches the combined statement heights");
-    assert.equal(Number(report.imageWidth),Math.round(height*160/167),"2026 artwork keeps original proportions");
+    assert.equal(Number(report.imageWidth),Math.round(height*640/669),"2026 artwork keeps original proportions");
     const geometry=await page.evaluate(()=>{
       const panel=document.querySelector("#preview [data-promo-panel]");
       const image=panel.querySelector('img[alt="Career Powered Education"]').getBoundingClientRect();
@@ -213,7 +213,20 @@ try{
     });
     assert.ok(Math.abs(geometry.top-geometry.first)<=2&&Math.abs(geometry.bottom-geometry.last)<=2,"Campaign image and statements align vertically: "+JSON.stringify(geometry));
     assert.ok(geometry.heights.every(h=>Math.abs(h-geometry.heights[0])<=2),"Statements have equal rendered heights");
-    assert.equal(report.imageSrc.endsWith("career-powered-2026.jpg"),true);
+    assert.equal(report.imageSrc.endsWith("career-powered-2026-hires.png"),true);
+    const imageQuality=await page.evaluate(async()=>{
+      const img=document.querySelector('#preview img[alt="Career Powered Education"]');
+      if(!img)return null;
+      await img.decode().catch(()=>{});
+      return {naturalWidth:img.naturalWidth,naturalHeight:img.naturalHeight,
+        displayedWidth:img.getBoundingClientRect().width,
+        displayedHeight:img.getBoundingClientRect().height};
+    });
+    assert.deepEqual([imageQuality?.naturalWidth,imageQuality?.naturalHeight],[640,669],
+      "Campaign artwork must use the high-resolution PNG source");
+    assert.ok(imageQuality.naturalWidth>=imageQuality.displayedWidth*2,
+      "Source must have at least 2x displayed resolution");
+
     assert.ok(report.standard.includes("mso-line-height-rule:exactly"),"Outlook requires explicit image-cell line box reset");
     const cell=await page.evaluate(()=>{
       const panel=document.querySelector("#preview [data-promo-panel]");
@@ -237,7 +250,7 @@ try{
     assert.equal(report.spacerCount,expected-1);
     assert.equal(report.selected.length,expected);
     assert.ok(!report.compact.includes('alt="Career Powered Education"'));
-    assert.ok(!report.compact.includes("career-powered-2026.jpg"));
+    assert.ok(!report.compact.includes("career-powered-2026-hires.png"));
   };
   await inspect(1);
   await page.locator('[data-claim-id="graduate11"]').click();
@@ -269,10 +282,10 @@ try{
   // Chromium's execCommand compatibility copy can expose only text/plain
   // when running a local CI HTTP server; exported HTML is tested directly.
   const exported=await page.evaluate(()=>window.SPSS_QA.signature("standard",true));
-  assert.ok(exported.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg"),"Generated Outlook HTML must use public assets");
+  assert.ok(exported.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026-hires.png"),"Generated Outlook HTML must use public assets");
   assert.ok(!exported.includes("mikelnewell.github.io"));
   if(clipboard.html){
-    assert.ok(clipboard.html.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026.jpg"));
+    assert.ok(clipboard.html.includes("https://spss-signature-studio.netlify.app/assets/logos/career-powered-2026-hires.png"));
   }
   if(clipboard.plain){
     assert.ok(clipboard.plain.includes("Dr Alex Taylor"));
