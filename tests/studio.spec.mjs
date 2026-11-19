@@ -18,6 +18,24 @@ try{
   assert.equal(await page.locator('#preview a[href^="mailto:"]').count(),9);
   assert.equal(await page.locator("#preview img").first().getAttribute("src"),"assets/logos/university-of-bedfordshire-master.png");
  });
+ await check("Version 4.0 release contains no transitional labels",async()=>{
+   const pageState=await page.evaluate(()=>({
+     version:window.SPSS_QA.config.version,
+     text:document.body.innerText,
+     configStatuses:[...window.SPSS_QA.config.claims.map(c=>c.status),...window.SPSS_QA.config.affiliations.map(a=>a.status)]
+   }));
+   assert.equal(pageState.version,"4.0");
+   assert.ok(!/pilot|pre-pilot/i.test(pageState.text),"Launch-stage labels must not appear in the builder");
+   assert.ok(!pageState.configStatuses.some(status=>/pilot/i.test(status)),"Launch-stage statuses must be retired");
+   assert.equal(await page.locator(".pilot-pill, .pilot-note").count(),0);
+   await page.locator("#goPersonalise").click().catch(()=>{});
+   const select=page.locator("#discipline");
+   await select.selectOption("sport");
+   const claims=await page.locator("#claimGrid").innerText();
+   assert.ok(!/pilot|pre-pilot/i.test(claims),"Marketing choices must be free of transitional labels");
+   assert.match(claims,/Check applicability/,"Retain marketing applicability guidance");
+   await page.locator("#backToDetails").click();
+ });
  await check("Guided form validates required details",async()=>{
   await page.locator("#goPersonalise").click();
   assert.match(await page.locator("#stepError").innerText(),/full name/i);
@@ -407,6 +425,7 @@ try{
   assert.equal(await page.locator('input[type="password"]').getAttribute("minlength"),"12");
   const html=await page.content();
   assert.ok(!html.includes("SIGNATURE_STUDIO_PASSWORD"),"Netlify secret name must not be exposed to visitors");
+  assert.ok(!/pilot|pre-pilot/i.test(await page.locator("body").innerText()),"Access page must not display launch-stage wording");
  });
  assert.deepEqual(errors,[],"Browser errors");
  console.log("PASS: No uncaught browser errors");
