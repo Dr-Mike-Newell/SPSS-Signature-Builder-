@@ -52,6 +52,7 @@ window.SPSS_CONFIG = Object.freeze({
     {id:"basrat",name:"BASRaT",path:"assets/logos/basrat.png",w:314,h:171,audience:["sport"],status:"restricted",note:"Relevant sport rehabilitation programme only."},
     {id:"cimspa",name:"CIMSPA Higher Education Partner",path:"assets/logos/cimspa.jpg",w:506,h:126,audience:["sport"],status:"restricted",note:"Only where partner status is applicable."},
     {id:"bps",name:"British Psychological Society (BPS) accreditation",path:"https://www.beds.ac.uk/media/j5nbse4p/bps-logo.png",w:1000,h:380,audience:["psychology"],status:"approved-restricted",note:"Approved for staff representing BPS-accredited Psychology programmes only. Official University of Bedfordshire course-page logo; course-level accreditation, not an individual credential. Asset is hosted by the University."},
+    {id:"hcpc",name:"Health and Care Professions Council (HCPC)",path:"assets/logos/hcpc-psychology.png",w:240,h:82,audience:["psychology"],status:"approved-restricted",note:"For Psychology staff. Select only where appropriate to your role or programme; individuals are responsible for appropriate use."},
     {id:"ahcs",name:"AHCS (Academy for Healthcare Science)",path:"assets/logos/ahcs-approved.png",w:480,h:129,audience:["sport"],status:"approved-restricted",note:"Approved for relevant accredited Clinical Exercise Physiology programme staff; not an individual credential. Select only where applicable."}
   ],
   claims:[
